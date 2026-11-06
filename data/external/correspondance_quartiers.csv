@@ -1,0 +1,86 @@
+ville,nom_booking,quartier,methode,nb_hotels,commentaire
+Berlin,Charlottenburg,Charlottenburg-Wilmersdorf,contenance,1,Ortsteil
+Berlin,Charlottenburg-Wilmersdorf,Charlottenburg-Wilmersdorf,identique,117,
+Berlin,Friedrichshain-Kreuzberg,Friedrichshain-Kreuzberg,identique,64,
+Berlin,Lichtenberg,Lichtenberg,identique,16,
+Berlin,Marzahn-Hellersdorf,Marzahn-Hellersdorf,identique,6,
+Berlin,Mitte,Mitte,identique,153,
+Berlin,Neukölln,Neukölln,identique,17,
+Berlin,Pankow,Pankow,identique,7,
+Berlin,Prenzlauer Berg,Pankow,contenance,28,Ortsteil
+Berlin,Reinickendorf,Reinickendorf,identique,12,
+Berlin,Spandau,Spandau,identique,12,
+Berlin,Steglitz-Zehlendorf,Steglitz-Zehlendorf,identique,7,
+Berlin,Tempelhof-Schöneberg,Tempelhof-Schöneberg,identique,37,
+Berlin,Treptow-Köpenick,Treptow-Köpenick,identique,21,
+Londres,Acton,Ealing,contenance,2,
+Londres,Bayswater,Westminster,contenance,1,
+Londres,Brent,Brent,identique,7,
+Londres,Camden,Camden,identique,68,
+Londres,Chiswick,Hounslow,contenance,3,
+Londres,City of London,City of London,identique,20,
+Londres,Ealing,Ealing,identique,8,
+Londres,Greenwich,Greenwich,identique,3,
+Londres,Hackney,Hackney,identique,15,
+Londres,Hammersmith and Fulham,Hammersmith and Fulham,identique,21,
+Londres,Islington,Islington,identique,19,
+Londres,Kensington and Chelsea,Kensington and Chelsea,identique,71,
+Londres,Lambeth,Lambeth,identique,15,
+Londres,Lewisham,Lewisham,identique,2,
+Londres,Muswell Hill,Haringey,contenance,1,
+Londres,Newham,Newham,identique,30,
+Londres,Southwark,Southwark,identique,20,
+Londres,Tower Hamlets,Tower Hamlets,identique,41,
+Londres,Walthamstow,Waltham Forest,contenance,2,
+Londres,Wandsworth,Wandsworth,identique,6,
+Londres,West End,Westminster,approximation,1,"quartier informel, surtout dans Westminster (une petite partie dans Camden)"
+Londres,Westminster Borough,Westminster,identique,136,nom Booking avec « Borough »
+Londres,Wimbledon,Merton,contenance,1,
+Paris,10e arrondissement,10e arrondissement,identique,51,
+Paris,11e arrondissement,11e arrondissement,identique,29,
+Paris,12e arrondissement,12e arrondissement,identique,42,
+Paris,13e arrondissement,13e arrondissement,identique,20,
+Paris,14e arrondissement,14e arrondissement,identique,41,
+Paris,15e arrondissement,15e arrondissement,identique,40,
+Paris,16e arrondissement,16e arrondissement,identique,12,
+Paris,17e arrondissement,17e arrondissement,identique,34,
+Paris,18e arrondissement,18e arrondissement,identique,32,
+Paris,19e arrondissement,19e arrondissement,identique,15,
+Paris,1er arrondissement,1er arrondissement,identique,12,
+Paris,20e arrondissement,20e arrondissement,identique,11,
+Paris,2e arrondissement,2e arrondissement,identique,16,
+Paris,3e arrondissement,3e arrondissement,identique,13,
+Paris,4e arrondissement,4e arrondissement,identique,6,
+Paris,5e arrondissement,5e arrondissement,identique,14,
+Paris,6e arrondissement,6e arrondissement,identique,12,
+Paris,7e arrondissement,7e arrondissement,identique,10,
+Paris,8e arrondissement,8e arrondissement,identique,28,
+Paris,9e arrondissement,9e arrondissement,identique,59,
+Rome,Appio Latino,Municipio VII,contenance,3,quartiere Q.IX
+Rome,Aurelio,Municipio XIII,contenance,8,quartiere Q.XIII
+Rome,Aventino,Municipio I,contenance,1,rione Ripa
+Rome,Central Station,Municipio I,approximation,28,"gare Termini, rioni Esquilino / Castro Pretorio"
+Rome,Colosseo,Municipio I,contenance,3,rione Monti / Celio
+Rome,Eur,Municipio IX,contenance,5,quartiere Q.XXXII Europa
+Rome,Gianicolense,Municipio XII,contenance,2,quartiere Q.XII
+Rome,Giuliano-Dalmata,Municipio IX,contenance,2,quartiere Q.XXXI
+Rome,Monte Sacro,Municipio III,contenance,2,quartiere Q.XVI
+Rome,Navona,Municipio I,contenance,6,rione Parione
+Rome,Ostiense,Municipio VIII,contenance,1,quartiere Q.X
+Rome,Pantheon,Municipio I,contenance,9,rione Pigna / Sant'Eustachio
+Rome,Portuense,Municipio XI,contenance,1,quartiere Q.XI
+Rome,Prenestino Labicano,Municipio V,contenance,2,quartiere Q.VII
+Rome,Rione Monti,Municipio I,contenance,19,rione Monti
+Rome,Rome City Center,Municipio I,approximation,1,« centre-ville » générique : centre historique
+Rome,San Giovanni,Municipio VII,approximation,1,quartier résidentiel de l'Appio-Latino ; la basilique est en limite du Municipio I
+Rome,San Lorenzo,Municipio II,contenance,1,"quartier dans le quartiere Tiburtino, partie Municipio II"
+Rome,Spagna,Municipio I,contenance,33,rione Campo Marzio
+Rome,Tiburtino,Municipio IV,approximation,3,"le quartiere Tiburtino s'étend sur les municipi II, IV et V"
+Rome,Tor Di Quinto,Municipio XV,contenance,2,quartiere Q.XVIII
+Rome,Torrino,Municipio IX,contenance,1,zona Torrino
+Rome,Trastevere,Municipio I,contenance,3,rione Trastevere
+Rome,Trevi,Municipio I,contenance,7,rione Trevi
+Rome,Trionfale,Municipio XIV,approximation,3,"le quartiere Trionfale est surtout dans le Municipio XIV, en partie dans le I"
+Rome,Vaticano Prati,Municipio I,contenance,20,rione Prati / Borgo
+Rome,Via Veneto,Municipio I,contenance,26,rione Ludovisi
+Rome,Villa Borghese Parioli,Municipio II,contenance,4,quartiere Q.III Parioli

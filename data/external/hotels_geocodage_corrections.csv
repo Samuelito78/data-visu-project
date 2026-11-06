@@ -1,0 +1,96 @@
+link,lat,lon,methode,nom_trouve,similarite,note
+https://www.booking.com/hotel/de/artotelberlin.html?lang=en-us,52.512544,13.410335,nominatim,art’otel Berlin Mitte (Wallstr. 70-73),17.9,"recherche Nominatim par nom, ecart_km=0.021, objet OSM tourism nomme"
+https://www.booking.com/hotel/de/b-amp-b-berlin-charlottenburg.html?lang=en-us,52.510545,13.295944,nominatim,B&B Hôtel (Kaiserdamm 117),27.8,"recherche Nominatim par nom, ecart_km=0.008, objet OSM tourism nomme"
+https://www.booking.com/hotel/de/bbberlin.html?lang=en-us,52.503665,13.351681,nominatim,"Hotel Berlin, Berlin (Lützowplatz 17)",2.7,"recherche Nominatim par nom, ecart_km=0.088, objet OSM tourism nomme"
+https://www.booking.com/hotel/de/berlin-apartments.html?lang=en-us,52.537569,13.373539,nominatim,limehome (Chausseestr. 85),71.1,"recherche Nominatim par nom, ecart_km=0.017, objet OSM tourism nomme"
+https://www.booking.com/hotel/de/bestwesternmichelshotelamschlosskopenick.html?lang=en-us,52.442699,13.56999,nominatim,Hotel am Schloss Köpenick (Grünauer Str. 17-21),21.1,"recherche Nominatim par nom, ecart_km=0.041, objet OSM tourism nomme"
+https://www.booking.com/hotel/de/bleibtreuberlin.html?lang=en-us,52.500186,13.319478,nominatim,Bleibtreu Berlin (Bleibtreustr. 31),31.9,"recherche Nominatim par nom, ecart_km=0.045, objet OSM tourism nomme"
+https://www.booking.com/hotel/de/central-tegel.html?lang=en-us,52.575937,13.295429,nominatim,Central Hotel (Holzhauser Str. 2),1.9,"recherche Nominatim par nom, ecart_km=0.014, objet OSM tourism nomme"
+https://www.booking.com/hotel/de/centrovital.html?lang=en-us,52.546655,13.210728,nominatim,centrovital SPA & Sport Hotel (Brauereihof 6),25.6,"recherche Nominatim par nom, ecart_km=0.017, objet OSM tourism nomme"
+https://www.booking.com/hotel/de/domicilhotelberlin.html?lang=en-us,52.506433,13.306418,nominatim,Hotel Domicil (Kantstr. 111a),26.0,"recherche Nominatim par nom, ecart_km=0.029, objet OSM tourism nomme"
+https://www.booking.com/hotel/de/flower-s-boardinghouse-mitte.html?lang=en-us,52.52709,13.40767,nominatim,Flower's Boardinghause (Mulackstr. 1),29.7,"recherche Nominatim par nom, ecart_km=0.027, objet OSM tourism nomme"
+https://www.booking.com/hotel/de/h24-berlin-lichtenberg.html?lang=en-us,52.526862,13.48761,nominatim,H24 Hotel DXC (Herzbergstr. 138),26.5,"recherche Nominatim par nom, ecart_km=0.005, objet OSM tourism nomme"
+https://www.booking.com/hotel/de/indigo.html?lang=en-us,52.507873,13.327887,nominatim,Hotel Indigo Berlin Ku'damm (Hardenbergstr. 15),21.4,"recherche Nominatim par nom, ecart_km=0.023, objet OSM tourism nomme"
+https://www.booking.com/hotel/de/provocateur-berlin.html?lang=en-us,52.495743,13.308769,nominatim,Provocateur (Brandenburgische Str. 21),22.2,"recherche Nominatim par nom, ecart_km=0.023, objet OSM tourism nomme"
+https://www.booking.com/hotel/de/schlosshotel-berlin-by-patrick-hellmann.html?lang=en-us,52.480396,13.274351,nominatim,Schlosshotel im Grunewald (Brahmsstr. 10),22.2,"recherche Nominatim par nom, ecart_km=0.016, objet OSM tourism nomme"
+https://www.booking.com/hotel/de/the-weinmeister.html?lang=en-us,52.525566,13.40445,nominatim,The Weinmeister (Weinmeisterstr. 2),27.9,"recherche Nominatim par nom, ecart_km=0.054, objet OSM tourism nomme"
+https://www.booking.com/hotel/de/zoe-by-amano-group.html?lang=en-us,52.523052,13.400939,nominatim,Hotel ZOE (Große Präsidentenstr. 6-7),20.0,"recherche Nominatim par nom, ecart_km=0.015, objet OSM tourism nomme"
+https://www.booking.com/hotel/fr/campanile-paris-xv-tour-eiffel.html?lang=en-us,48.850531,2.288755,nominatim,"Campanile Paris XV - Tour Eiffel, Rue Saint-Charles (tourism=hotel)",38.0,"ecart 0.028 km, recherche Nominatim par nom"
+https://www.booking.com/hotel/fr/campparmainemontpar.html?lang=en-us,48.834414,2.323784,nominatim,"Campanile, Passage de la Tour de Vanves (tourism=hotel)",20.6,"ecart 0.027 km, recherche Nominatim par nom"
+https://www.booking.com/hotel/fr/glasgowmonceauparis.html?lang=en-us,48.886537,2.309369,nominatim,"Hotel Glasgow Monceau, 3 Rue de la Felicite (tourism=hotel)",31.3,"ecart 0.045 km, recherche Nominatim par nom"
+https://www.booking.com/hotel/fr/hotel-the-playce-by-happyculture.html?lang=en-us,48.888633,2.349895,nominatim,"The Playce Hotel, Boulevard Barbes (tourism=hotel)",24.8,"ecart 0.016 km, recherche Nominatim par nom"
+https://www.booking.com/hotel/fr/kyriad-paris-10-canal-saint-martin-ra-c-publique-xml.html?lang=en-us,48.872797,2.361518,nominatim,"Kyriad, 30 rue Lucien Sampaix (tourism=hotel)",17.9,"ecart 0.066 km, recherche Nominatim par nom"
+https://www.booking.com/hotel/fr/kyriad-paris-xix-la-villette.html?lang=en-us,48.89339,2.379879,nominatim,"Campanile Prime Paris La Villette, Avenue de Flandre (tourism=hotel)",34.0,"ecart 0.009 km, recherche Nominatim par nom"
+https://www.booking.com/hotel/fr/london.html?lang=en-us,48.871451,2.335303,nominatim,"Hotel London, 32 Boulevard des Italiens (tourism=hotel)",0.0,"ecart 0.044 km, recherche Nominatim par nom"
+https://www.booking.com/hotel/gb/citadinesholborn.html?lang=en-us,51.517853,-0.118525,nominatim,"Citadines, 94-99 High Holborn",35.7,recherche nom Nominatim; ecart 0.002
+https://www.booking.com/hotel/gb/expressbyholidayinnsouthwark.html?lang=en-us,51.506096,-0.102055,nominatim,"Holiday Inn Express, 103-109 Southwark Street",55.1,recherche nom Nominatim; ecart 0.003
+https://www.booking.com/hotel/gb/expresslondonchingford.html?lang=en-us,51.603066,-0.019409,nominatim,"Holiday Inn Express, 5 Walthamstow Avenue",41.5,recherche nom Nominatim; ecart 0.015
+https://www.booking.com/hotel/gb/holiday-inn-express-wandsworth.html?lang=en-us,51.462095,-0.188907,nominatim,"Holiday Inn Express, Smugglers Way",47.4,recherche nom Nominatim; ecart 0.004
+https://www.booking.com/hotel/gb/ibis-london-city.html?lang=en-us,51.515593,-0.072942,nominatim,"Ibis London City, 5 Commercial Street",25.2,recherche nom Nominatim; ecart 0.002
+https://www.booking.com/hotel/gb/kensingtoncourthotel.html?lang=en-us,51.492609,-0.196218,nominatim,"Kensington Court Hotel, 33 Nevern Place",38.0,recherche nom Nominatim; ecart 0.020
+https://www.booking.com/hotel/gb/marlin-apartments-canary-south.html?lang=en-us,51.500646,-0.025279,nominatim,"Marlin Apartments, 11 Byng Street",23.3,recherche nom Nominatim; ecart 0.046
+https://www.booking.com/hotel/gb/middle-eight.html?lang=en-us,51.515825,-0.120125,nominatim,"Middle Eight Hotel, 61-65 Great Queen Street",29.1,recherche nom Nominatim; ecart 0.053
+https://www.booking.com/hotel/gb/the-academy.html?lang=en-us,51.520533,-0.130772,nominatim,"The Academy, 21 Gower Street",19.2,recherche nom Nominatim; ecart 0.064
+https://www.booking.com/hotel/gb/z-covent-garden.html?lang=en-us,51.510004,-0.125397,nominatim,"The Z Hotel Trafalgar, 53 Chandos Place",19.8,"recherche nom Nominatim; ecart 0.145; nom OSM different (Z Hotel Trafalgar, probablement renomme) - douteux"
+https://www.booking.com/hotel/it/albergo-cesari.html?lang=en-us,41.899936,12.479928,manuel,"Cesari's Terrace (bar de l'hotel), 89 Via di Pietra",,https://www.9-hotel-cesari-rome.it/en/ ; ecart 0.002; objet OSM = bar au meme numero
+https://www.booking.com/hotel/it/alimandivaticanoroma.html?lang=en-us,41.906954,12.452847,manuel,"Alimandi, 99 Viale Vaticano",,https://tmarkhotelvaticano.it adresse concordante ; ecart 0.066
+https://www.booking.com/hotel/it/ambasciatori-palace.html?lang=en-us,41.906279,12.489535,manuel,"Hotel Ambasciatori Palace, 62 Via Vittorio Veneto",,adresse connue + nom OSM identique ; ecart 0.008
+https://www.booking.com/hotel/it/anagnina-luxury-rooms.html?lang=en-us,41.852587,12.589571,manuel,"Yesushi, 200/a Viale Bruno Rizzieri (restaurant meme immeuble)",,hotels-lazio/kayak adresse concordante ; ecart 0.001; douteux: objet OSM = restaurant
+https://www.booking.com/hotel/it/andreotti.html?lang=en-us,41.905428,12.502164,manuel,"Andreotti Hotel, 55 Via Castelfidardo",,tripadvisor/trivago adresse concordante ; ecart 0.061
+https://www.booking.com/hotel/it/art-by-the-spanish-steps.html?lang=en-us,41.907691,12.480722,manuel,"Hotel Art by the Spanish Steps, 56 Via Margutta",,turismo/dayuse adresse concordante ; ecart 0.026
+https://www.booking.com/hotel/it/art-deluxe-rooms-vatican.html?lang=en-us,41.904832,12.463134,manuel,19 Via Alberico II (OSM place=house),,https://www.turismoroma.it ; ecart 0.024
+https://www.booking.com/hotel/it/art-noba.html?lang=en-us,41.931657,12.527527,nominatim,"Noba Art Hotel, 547 Via Nomentana",20.3,nominatim nom; ecart 0.067
+https://www.booking.com/hotel/it/beking-rome.html?lang=en-us,41.897553,12.504122,manuel,107 Via Filippo Turati (OSM place=house),,mapquest/trivago adresse concordante ; ecart 0.016
+https://www.booking.com/hotel/it/botel-inn.html?lang=en-us,41.897454,12.504804,manuel,46 Via Alfredo Cappellini (OSM place=house),,https://www.turismoroma.it ; ecart 0.029
+https://www.booking.com/hotel/it/bqhouse.html?lang=en-us,41.90414,12.463498,manuel,6 Via delle Fosse di Castello (shop au meme numero),,https://www.bqhouse.it/Castello_en.html ; ecart 0.01
+https://www.booking.com/hotel/it/cappellini.html?lang=en-us,41.897299,12.504853,manuel,29 Via Alfredo Cappellini (OSM place=house),,bb-cappellini listings adresse concordante ; ecart 0.026
+https://www.booking.com/hotel/it/champagne-palace.html?lang=en-us,41.898682,12.500741,manuel,82 Via Principe Amedeo (OSM place=house),,https://www.hotelchampagne.it/en/contacts ; ecart 0.059
+https://www.booking.com/hotel/it/darival.html?lang=en-us,41.946176,12.566686,manuel,"Hotel Darival, 11 Via del Casale di San Basilio",,https://www.hoteldarival.it/en ; ecart 0.05; quartier False
+https://www.booking.com/hotel/it/de-la-ville-rome.html?lang=en-us,41.905707,12.48421,manuel,"Hotel de la Ville, 69 Via Sistina",,adresse connue + nom OSM identique ; ecart 0.011
+https://www.booking.com/hotel/it/de-russie.html?lang=en-us,41.90997,12.477472,manuel,"Stravinsky (bar de l'hotel), 9 Via del Babuino",,"adresse connue (non reverifiee web), objet OSM = bar au numero 9 ; ecart 0.023"
+https://www.booking.com/hotel/it/della-croce-rooms-roma.html?lang=en-us,41.90599,12.478587,manuel,56 Via della Croce (OSM place=house),,https://boutiquesuitesdellacroce.com/contact/ ; ecart 0.028
+https://www.booking.com/hotel/it/dimora-frattina.html?lang=en-us,41.904296,12.481443,manuel,128 Via Frattina (OSM place=house),,https://www.dimorafrattina.it/en/location/ ; ecart 0.045
+https://www.booking.com/hotel/it/domus-carrozze.html?lang=en-us,41.905981,12.481515,manuel,55 Via delle Carrozze (OSM place=house),,https://www.youroom.com/where-we-are/ ; ecart 0.032
+https://www.booking.com/hotel/it/domus-romantica.html?lang=en-us,41.898414,12.500731,nominatim,"Hotel RomAntica, 77 Via Principe Amedeo",23.5,nominatim nom; ecart 0.347; quartier False (Rome indicatif)
+https://www.booking.com/hotel/it/eden-roma.html?lang=en-us,41.906625,12.486307,manuel,"Hotel Eden, 49 Via Ludovisi",,"adresse connue + nom OSM identique, non reverifiee par web ; ecart 0.054"
+https://www.booking.com/hotel/it/eitch-borromini.html?lang=en-us,41.899065,12.472431,manuel,"Eitch Borromini, 30 Via di Santa Maria dell'Anima",,trivago/corner.inc adresse concordante ; ecart 0.007
+https://www.booking.com/hotel/it/escape-suite.html?lang=en-us,41.902486,12.49,manuel,"15 Via delle Quattro Fontane (guest_house OSM autre nom, meme numero)",,trivago/trip adresse concordante ; ecart 0.022; douteux: nom OSM different
+https://www.booking.com/hotel/it/eurostars-roma-aeterna.html?lang=en-us,41.888876,12.523204,manuel,125 Via Casilina,,google hotels/trivago adresse concordante ; ecart 0.073
+https://www.booking.com/hotel/it/gladiatori.html?lang=en-us,41.890136,12.49553,manuel,"Aroma (restaurant de l'hotel), 125 Via Labicana",,https://www.yelp.com/biz/hotel-palazzo-manfredi-roma ; ecart 0.064
+https://www.booking.com/hotel/it/hotelmediterraneoroma.html?lang=en-us,41.900324,12.498881,nominatim,"Hotel Mediterraneo, 15 Via Cavour",28.2,nominatim nom; ecart 0.039
+https://www.booking.com/hotel/it/ibis-styles-roma-aurelia.html?lang=en-us,41.891681,12.417492,manuel,"Ergife, 33 Via Andrea Ferrara (meme numero que l'hotel)",,https://all.accor.com/hotel/B5E1/index.en.shtml ; ecart 0.084; objet OSM = Hotel Ergife au meme numero; quartier False
+https://www.booking.com/hotel/it/il-campo-marzio.html?lang=en-us,41.90294,12.477862,manuel,46 Via di Campo Marzio,,https://www.ilcampomarzio.it/en/contacts ; ecart 0.027
+https://www.booking.com/hotel/it/la-residenza-del-principe-roma.html?lang=en-us,41.893993,12.510178,manuel,85 Via Principe Umberto (OSM place=house),,https://www.yelp.com/biz/la-residenza-del-principe-roma ; ecart 0.016
+https://www.booking.com/hotel/it/lifestyle-suites-rome.html?lang=en-us,41.898888,12.473418,manuel,93 Piazza Navona (OSM place=house),,https://www.lifestylesuitesrome.com/en/contacts ; ecart 0.01
+https://www.booking.com/hotel/it/luxury-eros-wellness.html?lang=en-us,41.854402,12.477131,manuel,353 Via Ostiense (OSM place=house),,https://www.erossuite.com/dove-siamo/ ; ecart 0.025
+https://www.booking.com/hotel/it/marcellaroyal.html?lang=en-us,41.907804,12.497977,manuel,"Hotel Marcella Royal, 106 Via Flavia",,https://www.marcellaroyalhotel.com/ ; ecart 0.06
+https://www.booking.com/hotel/it/nakissa-inn.html?lang=en-us,41.893759,12.490113,manuel,266 Via Cavour (OSM place=house),,http://www.nakissainn.com/ ; ecart 0.014
+https://www.booking.com/hotel/it/palazzo-montemartini.html?lang=en-us,41.903849,12.500162,nominatim,"Palazzo Montemartini, Largo Giovanni Montemartini",38.9,https://www.palazzomontemartini.com/en ; ecart 0.027
+https://www.booking.com/hotel/it/palazzo-naiadi-the-dedica-anthology.html?lang=en-us,41.90195,12.49612,manuel,"Boscolo Exedra (ancien nom), 47 Piazza della Repubblica",,"adresse connue (non reverifiee web), meme batiment ; ecart 0.032"
+https://www.booking.com/hotel/it/palm-suite.html?lang=en-us,41.892138,12.490591,manuel,20 Via del Colosseo (OSM place=house),,https://slh.com/hotels/palm-suite ; ecart 0.001
+https://www.booking.com/hotel/it/raphael.html?lang=en-us,41.899898,12.472122,nominatim,"Raphael Hotel, Largo Febo 2",21.6,nominatim nom; ecart 0.043
+https://www.booking.com/hotel/it/reginahotelbaglioni.html?lang=en-us,41.907089,12.489811,manuel,"Baglioni Hotel Regina, 72 Via Vittorio Veneto",,adresse connue + nom OSM identique ; ecart 0.001
+https://www.booking.com/hotel/it/roma-story.html?lang=en-us,41.895796,12.502387,manuel,26 Via Carlo Alberto (OSM place=house),,"romehotelstart (Roma Story, Via Carlo Alberto 26) ; ecart 0.063; douteux: existe aussi Roma Story 2 (Via Ferruccio 10)"
+https://www.booking.com/hotel/it/rome-cavalieri-hilton.html?lang=en-us,41.918876,12.446681,nominatim,"Rome Cavalieri, 101 Via Alberto Cadlolo",22.5,nominatim nom; ecart 0.093
+https://www.booking.com/hotel/it/rome-times.html?lang=en-us,41.898568,12.490497,manuel,42 Via Milano (OSM place=house),,https://www.rometimeshotel.com/en/location/ ; ecart 0.044
+https://www.booking.com/hotel/it/rome-vatican-inn.html?lang=en-us,41.90414,12.463498,manuel,"Happy Service (shop), 6 Via delle Fosse di Castello",,https://www.romevaticaninn.com/ ; ecart 0.01; meme point que bqhouse (meme immeuble)
+https://www.booking.com/hotel/it/royal-bissolati.html?lang=en-us,41.905436,12.491719,manuel,40 Via Leonida Bissolati,,https://www.hotelroyalbissolati.com/en/company-data ; ecart 0.023
+https://www.booking.com/hotel/it/santamaria-inn.html?lang=en-us,41.896178,12.501757,manuel,2 Via Urbano Rattazzi (OSM place=house),,hotelmix/trip adresse concordante ; ecart 0.011
+https://www.booking.com/hotel/it/sentho-urbana-158.html?lang=en-us,41.898097,12.495606,manuel,158 Via Urbana (OSM place=house),,https://sentho.it/en/where-we-are/ ; ecart 0.03
+https://www.booking.com/hotel/it/shangri-la-roma-roma.html?lang=en-us,41.819566,12.464701,nominatim,"Shangri La Corsetti, 141 Viale Algeria",21.8,nominatim nom; ecart 0.003
+https://www.booking.com/hotel/it/sina-bernini-bristo.html?lang=en-us,41.903918,12.489301,manuel,"Il Vizio, 23 Piazza Barberini (restaurant au numero de l'hotel)",,adresse connue (non reverifiee web) ; ecart 0.029
+https://www.booking.com/hotel/it/spagna-royal-suite.html?lang=en-us,41.904558,12.481878,manuel,3 Via Mario de' Fiori (OSM place=house),,trivago/yelp adresse concordante ; ecart 0.028
+https://www.booking.com/hotel/it/splendide-royal.html?lang=en-us,41.907889,12.486792,manuel,"Splendide Royal, 14 Via di Porta Pinciana",,https://www.hotelplanner.com (adresse concordante) ; ecart 0.007
+https://www.booking.com/hotel/it/springhouseroma.html?lang=en-us,41.907324,12.451641,manuel,"Spring House Hotel Rome Vatican, 7 Via Mocenigo",,https://www.hotelspringhouse.com/ ; ecart 0.058
+https://www.booking.com/hotel/it/sweety-rome-termini-roma.html?lang=en-us,41.897816,12.504689,manuel,199 Via Giovanni Giolitti (OSM place=house),,trip.com/hotels-lazio adresse la plus frequente mais sources divergentes ; ecart 0.066; douteux
+https://www.booking.com/hotel/it/the-first-luxury-art-roma.html?lang=en-us,41.908656,12.475591,manuel,"All'oro (restaurant de l'hotel), 14 Via del Vantaggio",,https://www.yelp.com/biz/the-pavilions-roma-the-first-arte-roma ; ecart 0.031
+https://www.booking.com/hotel/it/the-first-roma-dolce.html?lang=en-us,41.907157,12.477968,manuel,"The First Dolce, 63 Via del Corso",,travelweekly/web adresse concordante ; ecart 0.011
+https://www.booking.com/hotel/it/the-inn-apartments-spagna-roma.html?lang=en-us,41.905644,12.481515,manuel,"The Inn At The Spanish Steps, 85 Via dei Condotti",,https://www.theinnapartments.com/en/ ; ecart 0.006
+https://www.booking.com/hotel/it/una-roma.html?lang=en-us,41.899903,12.49972,manuel,"Hotel Deco, 57 Via Giovanni Amendola",,https://www.unaitalianhospitality.com/en/hotels/una-hotels-deco-roma ; ecart 0.012
+https://www.booking.com/hotel/it/vatican-tourist-inn-roma2.html?lang=en-us,41.906048,12.460697,manuel,82 Via Crescenzio (OSM place=house),,yelp/trip adresse concordante ; ecart 0.081
+https://www.booking.com/hotel/it/vibe-giolli-nazionale.html?lang=en-us,41.899278,12.491275,manuel,"Hotel Giolli Nazionale (ancien nom), 69 Via Nazionale",,https://vibenazionale.com-rome.com/ adresse concordante ; ecart 0.036
+https://www.booking.com/hotel/it/villa-agrippina-gran-melia.html?lang=en-us,41.89862,12.461125,manuel,"Gran Melia Rome, 3 Via del Gianicolo",,hotelplanner adresse concordante ; ecart 0.02
+https://www.booking.com/hotel/it/villa-maria-regina.html?lang=en-us,41.949388,12.454966,manuel,687 Via della Camilluccia (OSM amenity),,https://www.villamariaregina.com/en ; ecart 0.029; quartier False (Rome indicatif)
+https://www.booking.com/hotel/it/virtus-prestige-suite-amp-apartments.html?lang=en-us,41.838681,12.596731,manuel,81 Via Leopoldo Micucci (OSM place=house),,https://virtusprestige.com/ ; ecart 0.009
+https://www.booking.com/hotel/it/visconti-palace.html?lang=en-us,41.907525,12.470937,manuel,"Visconti Palace Hotel, 37 Via Federico Cesi",,https://www.marriott.com/en-us/hotels/rommd-le-meridien-visconti-rome/overview/ ; ecart 0.006
+https://www.booking.com/hotel/it/vivaldi-luxury-rooms.html?lang=en-us,41.907019,12.477963,manuel,75 Via del Corso (OSM place=house),,kayak/trivago adresse concordante (check-in Via dei Greci 23) ; ecart 0.004

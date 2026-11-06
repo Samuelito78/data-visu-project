@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Projet de visualisation : hôtel ou Airbnb ?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBFCFD; --ink:#1D2733; --muted:#566271; --line:#D9DEE5; --soft:#EEF2F6;
+  --airbnb:#2E9AA1; --hotel:#353B85; --mark:#C9D9E8;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#141A21; --ink:#E6EBF0; --muted:#9DA9B6; --line:#2C3743; --soft:#1C242D;
+    --airbnb:#5CC3C9; --hotel:#9EA4F0; --mark:#2E4256;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141A21; --ink:#E6EBF0; --muted:#9DA9B6; --line:#2C3743; --soft:#1C242D;
+  --airbnb:#5CC3C9; --hotel:#9EA4F0; --mark:#2E4256;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.55}
+a{color:var(--hotel)}
+a:focus-visible{outline:2px solid var(--hotel);outline-offset:2px}
+.wrap{max-width:980px;margin:0 auto;padding:40px 24px 80px}
+h1,h2,h3{font-family:"Newsreader",Georgia,serif;font-weight:600;line-height:1.15}
+h1{font-size:clamp(34px,6vw,54px);margin:0 0 16px;letter-spacing:-.01em;max-width:16ch}
+h2{font-size:30px;margin:64px 0 12px}
+h3{font-size:21px;margin:0 0 6px}
+p{max-width:68ch}
+.lead{font-size:19px;max-width:62ch}
+.vs{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 0}
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:5px 14px;font-size:14px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
+.a{background:var(--airbnb)} .h{background:var(--hotel)}
+nav{margin:28px 0 0;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:6px 20px;font-size:14px}
+nav a{color:var(--muted);text-decoration:none}
+nav a:hover{color:var(--ink);text-decoration:underline}
+
+.question{border-left:4px solid var(--hotel);padding:4px 0 4px 18px;margin:24px 0;font-family:"Newsreader",Georgia,serif;font-size:24px;line-height:1.3;max-width:34ch}
+
+.sources{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:20px}
+.src{border:1px solid var(--line);border-radius:10px;padding:20px}
+.src header{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.src .tag{font-size:13px;color:var(--muted)}
+.src ul{padding-left:18px;margin:10px 0}
+.src li{margin:3px 0}
+.limits{background:var(--soft);border-radius:8px;padding:10px 14px;font-size:14px;margin-top:12px}
+.limits b{display:block;margin-bottom:2px}
+
+.tablebox{overflow-x:auto;margin-top:16px;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:15px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;background:var(--soft)}
+tr:last-child td{border-bottom:0}
+td.k{font-weight:500;white-space:nowrap}
+.na{color:var(--muted)}
+
+.pipe{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:0;counter-reset:s}
+.pipe li{counter-increment:s;display:grid;grid-template-columns:44px 1fr;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.pipe li::before{content:counter(s);font-family:"Newsreader",Georgia,serif;font-size:26px;color:var(--hotel);line-height:1}
+.pipe b{display:block}
+
+.plan dt{font-weight:600;margin-top:18px}
+.plan dd{margin:4px 0 0;max-width:68ch}
+
+.tech{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px;margin-top:20px}
+.card{border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.card svg{width:100%;height:auto;background:var(--soft);border-radius:6px}
+.card p{margin:0;font-size:15px}
+.meta{font-size:14px;color:var(--muted)}
+.meta b{color:var(--ink);font-weight:500}
+
+.todo{padding-left:0;list-style:none}
+.todo li{padding:8px 0 8px 30px;position:relative;border-bottom:1px solid var(--line);max-width:70ch}
+.todo li::before{content:"";position:absolute;left:0;top:12px;width:16px;height:16px;border:1.5px solid var(--muted);border-radius:3px}
+footer{margin-top:64px;font-size:14px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Hôtel ou Airbnb : où dormir au meilleur prix ?</h1>
+<p class="lead">Notre projet de visualisation compare l'offre Airbnb et l'offre hôtelière dans quatre capitales européennes, pour aider un voyageur à choisir où et comment se loger.</p>
+<div class="vs">
+  <span class="pill"><i class="dot a"></i>Annonces Airbnb</span>
+  <span class="pill"><i class="dot h"></i>Hôtels (Booking)</span>
+  <span class="pill">Londres, Berlin, Paris, Rome</span>
+</div>
+
+<nav aria-label="Sommaire">
+  <a href="#probleme">La problématique</a>
+  <a href="#donnees">Les données</a>
+  <a href="#lien">Relier les deux sources</a>
+  <a href="#pipeline">Le pipeline</a>
+  <a href="#plan">Le plan, consigne par consigne</a>
+  <a href="#techniques">Pistes de visualisation</a>
+  <a href="#valider">À valider</a>
+</nav>
+
+<section id="probleme">
+  <h2>La problématique</h2>
+  <p class="question">Pour une ville et un budget donnés, vaut-il mieux réserver un hôtel ou un Airbnb, et dans quel secteur de la ville ?</p>
+  <p>L'utilisateur est un voyageur non expert en données, qui prépare un séjour en couple ou en petit groupe. Il veut comparer les deux types d'hébergement sur ce qui compte pour lui : le prix par nuit, la note des clients, la distance au centre et l'accès au métro.</p>
+  <p>La problématique reste descriptive : on montre où et comment les deux offres diffèrent, sans chercher à expliquer pourquoi.</p>
+</section>
+
+<section id="donnees">
+  <h2>Les données</h2>
+  <p>Deux jeux de données Kaggle, avec quatre villes en commun.</p>
+  <div class="sources">
+    <article class="src">
+      <header><i class="dot a"></i><h3>Airbnb Prices in European Cities</h3></header>
+      <div class="tag"><a href="https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities">Voir sur Kaggle</a>, 51 707 annonces, 10 villes, CSV</div>
+      <ul>
+        <li>Prix total pour 2 personnes et 2 nuits (€)</li>
+        <li>Type de logement, capacité, nombre de chambres</li>
+        <li>Note de satisfaction (/100) et de propreté (/10)</li>
+        <li>Distance au centre et au métro (km)</li>
+        <li>Indices d'attractions et de restaurants</li>
+        <li>Latitude, longitude ; fichiers séparés semaine et week-end</li>
+      </ul>
+      <div class="limits"><b>Limites</b>Pas de dates précises de collecte dans le fichier. Seules 4 des 10 villes existent aussi côté hôtels.</div>
+    </article>
+    <article class="src">
+      <header><i class="dot h"></i><h3>7500 hotels from Airbnb, Booking and Hotels.com</h3></header>
+      <div class="tag"><a href="https://www.kaggle.com/datasets/mykhailozub/500-hotels-from-airbnb-booking-and-hotelscom">Voir sur Kaggle</a>, environ 500 établissements par site et par ville, JSON, collecte 2023</div>
+      <ul>
+        <li>Prix (USD)</li>
+        <li>Nombre d'étoiles</li>
+        <li>Note sur 10 et nombre d'avis</li>
+        <li>Quartier, distance au centre (km), accès au métro (oui/non)</li>
+        <li>Villes : Londres, Berlin, Paris, Madrid, Rome</li>
+      </ul>
+      <div class="limits"><b>Limites</b>Pas de latitude ni de longitude. Prix en dollars, pour des dates de séjour non précisées (à vérifier : par nuit ou pour le séjour). Madrid n'existe pas côté Airbnb.</div>
+    </article>
+  </div>
+</section>
+
+<section id="lien">
+  <h2>Relier les deux sources</h2>
+  <p>On construit une table commune, une ligne par hébergement, avec les variables présentes des deux côtés.</p>
+  <div class="tablebox">
+    <table>
+      <thead><tr><th>Variable commune</th><th>Côté Airbnb</th><th>Côté hôtels</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Ville</td><td>Nom du fichier</td><td>Ville de recherche</td></tr>
+        <tr><td class="k">Type d'hébergement</td><td>Logement entier, chambre privée, chambre partagée</td><td>Hôtel (et nombre d'étoiles)</td></tr>
+        <tr><td class="k">Prix par nuit (€)</td><td>Prix total divisé par 2</td><td>Prix converti de USD en EUR</td></tr>
+        <tr><td class="k">Note (/100)</td><td>Satisfaction, déjà sur 100</td><td>Note sur 10, multipliée par 10</td></tr>
+        <tr><td class="k">Distance au centre (km)</td><td>Distance au centre</td><td>Distance au centre</td></tr>
+        <tr><td class="k">Métro proche</td><td>Distance au métro sous un seuil (par exemple 500 m)</td><td>Accès au métro</td></tr>
+        <tr><td class="k">Position GPS</td><td>Latitude, longitude</td><td class="na">Absente</td></tr>
+        <tr><td class="k">Période</td><td>Semaine ou week-end</td><td class="na">Absente</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Conséquence : les comparaisons entre hôtels et Airbnb se font par ville et par tranche de distance au centre. La carte précise, avec des points, n'est possible que pour Airbnb.</p>
+</section>
+
+<section id="pipeline">
+  <h2>Le pipeline de visualisation</h2>
+  <ol class="pipe">
+    <li><div><b>Données brutes</b>8 fichiers CSV Airbnb (4 villes, semaine et week-end) et les fichiers JSON des hôtels.</div></li>
+    <li><div><b>Transformation</b>Aplatir le JSON en table, ne garder que les résultats Booking des 4 villes communes, convertir les prix en euros par nuit, ramener les notes sur 100, créer la variable métro proche, retirer les doublons et les prix aberrants.</div></li>
+    <li><div><b>Table commune</b>Une table unique avec une colonne source (Airbnb ou hôtel) et les variables communes, plus des tranches de distance (0-1 km, 1-2 km, 2-4 km, plus de 4 km).</div></li>
+    <li><div><b>Filtrage</b>La table est réduite selon les choix de l'utilisateur : ville, budget, type d'hébergement, note minimale, étoiles.</div></li>
+    <li><div><b>Mapping visuel</b>Source vers la teinte, prix et distance vers des positions sur des axes, note vers la taille ou un axe, latitude et longitude vers la carte pour Airbnb.</div></li>
+    <li><div><b>Rendu et interaction</b>Vues reliées entre elles, filtres, sélection, détails à la demande.</div></li>
+  </ol>
+</section>
+
+<section id="plan">
+  <h2>Le plan, consigne par consigne</h2>
+  <dl class="plan">
+    <dt>Analyze data from a list of datasets from Kaggle</dt>
+    <dd>Nous avons comparé plusieurs jeux Airbnb, immobiliers et hôteliers sur Kaggle, et retenu <i>Airbnb Prices in European Cities</i> et <i>7500 hotels from Airbnb, Booking and Hotels.com</i>, qui partagent quatre villes.</dd>
+    <dt>Choose a dataset that contains multivariate data</dt>
+    <dd>La table commune mêle des variables quantitatives (prix, note, distance), catégorielles (source, type de logement, étoiles, ville), booléennes (métro proche, superhost) et spatiales (coordonnées Airbnb).</dd>
+    <dt>Validate the choice with supervisor</dt>
+    <dd>À faire : accord sur le croisement des deux sources et sur leurs limites (dates différentes, pas de GPS pour les hôtels).</dd>
+    <dt>Describe the visualization pipeline</dt>
+    <dd>Voir la section précédente : transformation, table commune, filtrage, mapping visuel, rendu.</dd>
+    <dt>Describe the target users</dt>
+    <dd>Des voyageurs non experts qui préparent un séjour en couple ou en petit groupe et hésitent entre hôtel et Airbnb.</dd>
+    <dt>Describe the visualization goals and the user tasks</dt>
+    <dd>Comparer le prix et la qualité des hôtels et des Airbnb selon la ville et la distance au centre, puis trouver l'hébergement au meilleur rapport qualité-prix.</dd>
+    <dt>Propose 1 visualization technique by student</dt>
+    <dd>Chaque étudiant choisit une technique ; des pistes sont listées plus bas, sans ordre de préférence.</dd>
+    <dt>Include interactive tasks</dt>
+    <dd>Filtres (budget, type d'hébergement, note minimale, étoiles), sélection d'une ville ou d'une tranche de distance, sélection liée entre les vues, zoom sur la carte Airbnb, info-bulles au survol.</dd>
+    <dt>Include two levels of visualization (overview + details)</dt>
+    <dd>Vue d'ensemble : la comparaison des deux offres par ville et par tranche de distance. Détails à la demande, dans un panneau séparé : la distribution des prix d'une tranche, puis la fiche d'un hôtel ou d'une annonce.</dd>
+    <dt>Allow to change the dataset</dt>
+    <dd>Un menu change de ville parmi les quatre communes. Côté Airbnb, on peut aussi passer de semaine à week-end ; côté hôtels, le même format JSON permet de charger une autre ville.</dd>
+    <dt>User tasks</dt>
+    <dd>Comparer le prix médian des hôtels et des Airbnb dans une ville ; repérer à quelle distance du centre un type devient moins cher que l'autre ; trouver les hébergements bien notés sous un budget ; consulter le détail d'un hébergement ; comparer les villes entre elles.</dd>
+  </dl>
+</section>
+
+<section id="techniques">
+  <h2>Pistes de visualisation</h2>
+  <p>Des suggestions pour lancer la discussion, sans ordre de préférence. Chacun peut en proposer d'autres.</p>
+  <div class="tech">
+
+    <article class="card">
+      <svg viewBox="0 0 200 110" aria-hidden="true">
+        <ellipse cx="100" cy="55" rx="85" ry="44" fill="none" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <path d="M14 62 C60 40, 120 80, 186 50" fill="none" stroke="var(--mark)" stroke-width="7" stroke-linecap="round"/>
+        <g fill="var(--airbnb)">
+          <circle cx="92" cy="48" r="3"/><circle cx="102" cy="58" r="3"/><circle cx="110" cy="44" r="3"/><circle cx="84" cy="62" r="3"/><circle cx="118" cy="66" r="3"/><circle cx="96" cy="36" r="3"/><circle cx="72" cy="50" r="3"/><circle cx="130" cy="52" r="3"/><circle cx="60" cy="70" r="3"/><circle cx="146" cy="38" r="3"/><circle cx="106" cy="76" r="3"/><circle cx="80" cy="30" r="3"/>
+        </g>
+      </svg>
+      <h3>Carte des annonces Airbnb</h3>
+      <p>Points ou zones agrégées colorés par prix, avec un zoom qui passe des zones aux annonces.</p>
+      <div class="meta"><b>Sert à :</b> repérer les secteurs chers ou bon marché. <b>Attention :</b> les hôtels n'ont pas de coordonnées.</div>
+    </article>
+
+    <article class="card">
+      <svg viewBox="0 0 200 110" aria-hidden="true">
+        <g fill="none" stroke="var(--line)" stroke-width="1.5"><circle cx="100" cy="55" r="14"/><circle cx="100" cy="55" r="28"/><circle cx="100" cy="55" r="42"/><circle cx="100" cy="55" r="52"/></g>
+        <path d="M100 55 L100 41 A14 14 0 0 1 114 55 Z" fill="var(--airbnb)"/>
+        <path d="M100 55 L114 55 A14 14 0 0 1 100 69 Z" fill="var(--hotel)"/>
+        <path d="M100 27 A28 28 0 0 1 128 55 L114 55 A14 14 0 0 0 100 41 Z" fill="var(--airbnb)" opacity=".7"/>
+        <path d="M128 55 A28 28 0 0 1 100 83 L100 69 A14 14 0 0 0 114 55 Z" fill="var(--hotel)" opacity=".7"/>
+        <path d="M100 13 A42 42 0 0 1 142 55 L128 55 A28 28 0 0 0 100 27 Z" fill="var(--airbnb)" opacity=".45"/>
+        <path d="M142 55 A42 42 0 0 1 100 97 L100 83 A28 28 0 0 0 128 55 Z" fill="var(--hotel)" opacity=".45"/>
+      </svg>
+      <h3>Anneaux de distance au centre</h3>
+      <p>Une vue radiale schématique : chaque anneau est une tranche de distance, chaque secteur montre une valeur pour Airbnb et pour les hôtels.</p>
+      <div class="meta"><b>Sert à :</b> une vue d'ensemble spatiale commune aux deux sources. <b>Attention :</b> représentation abstraite, pas une vraie carte.</div>
+    </article>
+
+    <article class="card">
+      <svg viewBox="0 0 200 110" aria-hidden="true">
+        <line x1="20" y1="95" x2="190" y2="95" stroke="var(--line)"/><line x1="20" y1="10" x2="20" y2="95" stroke="var(--line)"/>
+        <g fill="var(--airbnb)" opacity=".8"><circle cx="34" cy="40" r="3"/><circle cx="46" cy="52" r="3"/><circle cx="60" cy="48" r="3"/><circle cx="76" cy="62" r="3"/><circle cx="92" cy="66" r="3"/><circle cx="110" cy="72" r="3"/><circle cx="130" cy="76" r="3"/><circle cx="150" cy="80" r="3"/><circle cx="170" cy="82" r="3"/><circle cx="54" cy="34" r="3"/><circle cx="120" cy="68" r="3"/></g>
+        <g fill="var(--hotel)"><rect x="36" y="22" width="6" height="6"/><rect x="58" y="30" width="6" height="6"/><rect x="80" y="44" width="6" height="6"/><rect x="104" y="54" width="6" height="6"/><rect x="128" y="62" width="6" height="6"/><rect x="156" y="70" width="6" height="6"/><rect x="70" y="26" width="6" height="6"/></g>
+      </svg>
+      <h3>Nuage de points prix par distance</h3>
+      <p>Chaque hébergement est un point, la forme ou la couleur indique la source. Une sélection au rectangle peut piloter les autres vues.</p>
+      <div class="meta"><b>Sert à :</b> voir comment le prix évolue en s'éloignant du centre, pour chaque source. <b>Attention :</b> beaucoup de points superposés.</div>
+    </article>
+
+    <article class="card">
+      <svg viewBox="0 0 200 110" aria-hidden="true">
+        <line x1="20" y1="95" x2="190" y2="95" stroke="var(--line)"/>
+        <g stroke="var(--muted)" stroke-width="1.2">
+          <line x1="40" y1="30" x2="40" y2="85"/><line x1="58" y1="18" x2="58" y2="75"/>
+          <line x1="88" y1="40" x2="88" y2="88"/><line x1="106" y1="28" x2="106" y2="80"/>
+          <line x1="136" y1="25" x2="136" y2="82"/><line x1="154" y1="12" x2="154" y2="70"/>
+        </g>
+        <g><rect x="34" y="48" width="12" height="22" fill="var(--airbnb)"/><rect x="52" y="34" width="12" height="24" fill="var(--hotel)"/>
+        <rect x="82" y="56" width="12" height="20" fill="var(--airbnb)"/><rect x="100" y="44" width="12" height="22" fill="var(--hotel)"/>
+        <rect x="130" y="42" width="12" height="24" fill="var(--airbnb)"/><rect x="148" y="28" width="12" height="26" fill="var(--hotel)"/></g>
+      </svg>
+      <h3>Boîtes à moustaches ou violons</h3>
+      <p>La distribution des prix, ou des notes, côte à côte pour Airbnb et hôtels, dans chaque ville.</p>
+      <div class="meta"><b>Sert à :</b> comparer les fourchettes de prix entre sources et entre villes. <b>Attention :</b> cache le détail de la forme pour les boîtes.</div>
+    </article>
+
+    <article class="card">
+      <svg viewBox="0 0 200 110" aria-hidden="true">
+        <g>
+          <rect x="40" y="12" width="36" height="20" fill="var(--hotel)" opacity=".9"/><rect x="78" y="12" width="36" height="20" fill="var(--hotel)" opacity=".6"/><rect x="116" y="12" width="36" height="20" fill="var(--airbnb)" opacity=".5"/><rect x="154" y="12" width="36" height="20" fill="var(--airbnb)" opacity=".85"/>
+          <rect x="40" y="34" width="36" height="20" fill="var(--hotel)" opacity=".6"/><rect x="78" y="34" width="36" height="20" fill="var(--airbnb)" opacity=".4"/><rect x="116" y="34" width="36" height="20" fill="var(--airbnb)" opacity=".7"/><rect x="154" y="34" width="36" height="20" fill="var(--airbnb)" opacity=".9"/>
+          <rect x="40" y="56" width="36" height="20" fill="var(--hotel)" opacity=".8"/><rect x="78" y="56" width="36" height="20" fill="var(--hotel)" opacity=".4"/><rect x="116" y="56" width="36" height="20" fill="var(--airbnb)" opacity=".6"/><rect x="154" y="56" width="36" height="20" fill="var(--airbnb)" opacity=".7"/>
+          <rect x="40" y="78" width="36" height="20" fill="var(--airbnb)" opacity=".4"/><rect x="78" y="78" width="36" height="20" fill="var(--airbnb)" opacity=".6"/><rect x="116" y="78" width="36" height="20" fill="var(--airbnb)" opacity=".8"/><rect x="154" y="78" width="36" height="20" fill="var(--airbnb)" opacity=".9"/>
+        </g>
+        <g fill="var(--muted)" font-size="9" font-family="sans-serif"><text x="4" y="25">Lon.</text><text x="4" y="47">Ber.</text><text x="4" y="69">Par.</text><text x="4" y="91">Rom.</text></g>
+      </svg>
+      <h3>Matrice ville par tranche de distance</h3>
+      <p>Une grille où chaque case indique quelle offre est la moins chère, et de combien, pour une ville et une tranche de distance.</p>
+      <div class="meta"><b>Sert à :</b> une vue d'ensemble compacte des 4 villes. <b>Attention :</b> agrège fortement, les détails viennent à la demande.</div>
+    </article>
+
+    <article class="card">
+      <svg viewBox="0 0 200 110" aria-hidden="true">
+        <g stroke="var(--line)" stroke-width="2">
+          <line x1="60" y1="22" x2="150" y2="22"/><line x1="70" y1="44" x2="120" y2="44"/><line x1="88" y1="66" x2="160" y2="66"/><line x1="50" y1="88" x2="96" y2="88"/>
+        </g>
+        <g fill="var(--airbnb)"><circle cx="60" cy="22" r="5"/><circle cx="70" cy="44" r="5"/><circle cx="88" cy="66" r="5"/><circle cx="50" cy="88" r="5"/></g>
+        <g fill="var(--hotel)"><circle cx="150" cy="22" r="5"/><circle cx="120" cy="44" r="5"/><circle cx="160" cy="66" r="5"/><circle cx="96" cy="88" r="5"/></g>
+        <g fill="var(--muted)" font-size="9" font-family="sans-serif"><text x="4" y="25">Lon.</text><text x="4" y="47">Ber.</text><text x="4" y="69">Par.</text><text x="4" y="91">Rom.</text></g>
+      </svg>
+      <h3>Graphique en haltères</h3>
+      <p>Pour chaque ville, deux points reliés : le prix médian Airbnb et le prix médian hôtel.</p>
+      <div class="meta"><b>Sert à :</b> lire d'un coup d'œil l'écart entre les deux offres. <b>Attention :</b> ne montre qu'une valeur par source.</div>
+    </article>
+
+    <article class="card">
+      <svg viewBox="0 0 200 110" aria-hidden="true">
+        <g stroke="var(--line)" stroke-width="1.5"><line x1="25" y1="12" x2="25" y2="98"/><line x1="75" y1="12" x2="75" y2="98"/><line x1="125" y1="12" x2="125" y2="98"/><line x1="175" y1="12" x2="175" y2="98"/></g>
+        <g fill="none" stroke="var(--airbnb)" stroke-width="1.4" opacity=".8">
+          <polyline points="25,70 75,30 125,60 175,40"/><polyline points="25,80 75,40 125,70 175,30"/><polyline points="25,60 75,50 125,80 175,55"/>
+        </g>
+        <g fill="none" stroke="var(--hotel)" stroke-width="1.4">
+          <polyline points="25,30 75,25 125,40 175,70"/><polyline points="25,40 75,20 125,30 175,80"/>
+        </g>
+        <g fill="var(--muted)" font-size="8" font-family="sans-serif"><text x="14" y="108">Prix</text><text x="66" y="108">Note</text><text x="108" y="108">Distance</text><text x="163" y="108">Métro</text></g>
+      </svg>
+      <h3>Coordonnées parallèles</h3>
+      <p>Un axe par variable commune ; chaque hébergement est une ligne. Filtrer sur un axe met en évidence les profils correspondants.</p>
+      <div class="meta"><b>Sert à :</b> comparer des profils sur plusieurs critères à la fois. <b>Attention :</b> demande un temps d'apprentissage.</div>
+    </article>
+
+    <article class="card">
+      <svg viewBox="0 0 200 110" aria-hidden="true">
+        <g fill="var(--airbnb)" opacity=".75"><rect x="14" y="70" width="8" height="25"/><rect x="24" y="50" width="8" height="45"/><rect x="34" y="40" width="8" height="55"/><rect x="44" y="58" width="8" height="37"/><rect x="54" y="78" width="8" height="17"/></g>
+        <g fill="var(--hotel)" opacity=".75"><rect x="34" y="80" width="8" height="15" transform="translate(30 0)"/><rect x="44" y="62" width="8" height="33" transform="translate(30 0)"/><rect x="54" y="52" width="8" height="43" transform="translate(30 0)"/><rect x="64" y="70" width="8" height="25" transform="translate(30 0)"/></g>
+        <line x1="10" y1="95" x2="100" y2="95" stroke="var(--line)"/>
+        <g fill="var(--airbnb)" opacity=".75"><rect x="114" y="62" width="8" height="33"/><rect x="124" y="44" width="8" height="51"/><rect x="134" y="58" width="8" height="37"/><rect x="144" y="80" width="8" height="15"/></g>
+        <g fill="var(--hotel)" opacity=".75"><rect x="154" y="70" width="8" height="25"/><rect x="164" y="48" width="8" height="47"/><rect x="174" y="66" width="8" height="29"/></g>
+        <line x1="110" y1="95" x2="190" y2="95" stroke="var(--line)"/>
+      </svg>
+      <h3>Petits multiples d'histogrammes</h3>
+      <p>Un petit histogramme des prix par ville, avec les deux sources superposées ou juxtaposées.</p>
+      <div class="meta"><b>Sert à :</b> comparer la forme des distributions entre villes. <b>Attention :</b> la place disponible limite le nombre de panneaux.</div>
+    </article>
+
+  </div>
+</section>
+
+<section id="valider">
+  <h2>À valider</h2>
+  <ul class="todo">
+    <li>Le superviseur accepte le croisement des deux datasets et leurs limites.</li>
+    <li>Vérifier dans le JSON des hôtels si le prix est par nuit ou pour la durée du séjour, et pour quelles dates.</li>
+    <li>Choisir le taux de change USD vers EUR et l'indiquer dans le rapport.</li>
+    <li>Fixer le seuil de distance au métro côté Airbnb pour l'aligner sur l'accès au métro des hôtels.</li>
+    <li>Répartir les techniques entre les membres du groupe.</li>
+  </ul>
+</section>
+
+<footer>Document de travail interne au groupe.</footer>
+</div>
+</body>
+</html>
