@@ -1,0 +1,13 @@
+# Données brutes Kaggle : récupérées par scripts/download_data.sh, jamais versionnées
+data/raw/
+
+# Environnement Python
+.venv/
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Système
+.DS_Store
