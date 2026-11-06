@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from .common import METRO_SEUIL_KM, VILLES, generer_ids, tranche_distance
+from .common import METRO_SEUIL_KM, VILLES, distance_au_centre, generer_ids, tranche_distance
 from .schema import conformer
 
 PERIODES = {"weekdays": "semaine", "weekends": "weekend"}
@@ -44,7 +44,10 @@ def transformer(brut: pd.DataFrame) -> pd.DataFrame:
         "prix_nuit_eur": brut["realSum"] / 2,
         "prix_comparable": True,
         "note_100": brut["guest_satisfaction_overall"],
-        "dist_centre_km": brut["dist"],
+        # Distance recalculée depuis le centre Booking, pour que les deux sources partagent la même
+        # référence (D18). La distance d'origine `dist` part d'un autre point à Berlin et à Rome.
+        "dist_centre_km": distance_au_centre(
+            brut["ville_brut"].map({k: v[0] for k, v in VILLES.items()}), brut["lat"], brut["lng"]),
         "metro_proche": brut["metro_dist"] < METRO_SEUIL_KM,
         "lat": brut["lat"],
         "lon": brut["lng"],

@@ -12,9 +12,10 @@ Le découpage suit le modèle de pipeline du cours (Ward, Grinstein et Keim) :
 
 | Étape du modèle | Ici | Sortie |
 |---|---|---|
-| Raw data | `scripts/download_data.sh` | `data/raw/` (non versionné) |
+| Raw data | `scripts/download_data.sh`, `scripts/download_geo.sh` | `data/raw/` (non versionné) |
 | Data transformation | `notebooks/01_airbnb.ipynb`, `notebooks/02_hotels_booking.ipynb` | `data/interim/*.parquet` |
-| Data tables | `notebooks/03_table_commune.ipynb` | `data/processed/offres*.csv` |
+| Data transformation (espace) | `notebooks/03_quartiers.ipynb`, `notebooks/04_geocodage_hotels.ipynb` | `data/external/` |
+| Data tables | `notebooks/05_table_commune.ipynb` | `data/processed/offres*.csv`, `data/processed/quartiers_*.geojson` |
 | Visual mapping → Views | `viz/` (application D3, à venir) | |
 
 La logique est dans `src/prep/`. Les notebooks l'importent, explorent les données et documentent chaque choix. Le schéma de la table commune est défini dans `src/prep/schema.py` (contrôlé par `valider()`) et décrit dans `docs/schema.md`. Les choix de nettoyage sont justifiés dans `docs/decisions.md`.
@@ -25,7 +26,8 @@ La logique est dans `src/prep/`. Les notebooks l'importent, explorent les donné
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/nbstripout --install      # une fois par poste : retire les sorties des notebooks au commit
-./scripts/build_data.sh             # télécharge les données si besoin puis exécute les 3 notebooks
+./scripts/build_data.sh             # télécharge les données si besoin puis exécute les notebooks
+                                    # (GEOCODER=1 ./scripts/build_data.sh rejoue aussi le géocodage, ~15 min)
 .venv/bin/jupyter lab               # pour explorer
 ```
 
@@ -37,9 +39,11 @@ Le téléchargement Kaggle est anonyme : aucun jeton n'est nécessaire.
 |---|---|
 | `data/processed/offres.csv` | table complète, une ligne par hébergement |
 | `data/processed/offres_<ville>.csv` | une ville (`londres`, `berlin`, `paris`, `rome`) : sert à « changer de dataset » |
+| `data/processed/quartiers_<ville>.geojson` | contours simplifiés des quartiers, orientés pour `d3.geoPath` |
 
 ```js
 const offres = await d3.csv("data/processed/offres_paris.csv", d3.autoType);
+const zones = await d3.json("data/processed/quartiers_paris.geojson");  // relier par offres.quartier = feature.properties.quartier
 ```
 
 ## Organisation
@@ -47,8 +51,9 @@ const offres = await d3.csv("data/processed/offres_paris.csv", d3.autoType);
 ```
 data/raw/        données Kaggle brutes (ignorées par Git)
 data/interim/    une table par source, au schéma commun
+data/external/   contours de quartiers normalisés et correspondance des noms Booking
 data/processed/  table commune, chargée par D3
-notebooks/       01 Airbnb, 02 Booking, 03 fusion et contrôles qualité
+notebooks/       01 Airbnb, 02 Booking, 03 quartiers, 04 géocodage des hôtels, 05 fusion et contrôles qualité
 src/prep/        code partagé : schéma, transformations, fusion
 scripts/         téléchargement et exécution de la préparation
 docs/            schéma, décisions, sources, plan du projet

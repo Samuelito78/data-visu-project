@@ -17,7 +17,8 @@ from .schema import conformer
 
 FICHIERS = {"london": "London", "berlin": "Berlin", "paris": "Paris", "rome": "Rome"}
 
-# Villes dont les prix Booking ne sont pas comparables aux autres (voir docs/decisions.md, D7).
+# Villes dont les prix Booking divergent des autres : gardées, mais signalées par
+# prix_comparable = False pour afficher un avertissement (voir docs/decisions.md, D7).
 VILLES_PRIX_NON_COMPARABLES = {"Rome"}
 
 
@@ -84,6 +85,14 @@ def normaliser_quartier(location: str, ville_en: str) -> str | None:
 
 def transformer(brut: pd.DataFrame) -> pd.DataFrame:
     """Passe du format brut Booking au schéma commun (voir docs/schema.md)."""
+    return transformer_avec_liens(brut)[0]
+
+
+def transformer_avec_liens(brut: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Comme `transformer`, et renvoie aussi la table id -> lien Booking.
+
+    Le lien est la clé du géocodage (data/external/hotels_geocodage.csv) ; il n'est pas dans le schéma.
+    """
     ville = brut["ville_brut"].map({k: v[0] for k, v in VILLES.items()})
     # Prix affiché seul : `taxesAndCharges` manque pour 95 % des hôtels de Londres et 58 % de
     # Berlin, et vaut 2 à 5 % du prix ailleurs (taxe de séjour). Voir docs/decisions.md, D4.
@@ -103,8 +112,10 @@ def transformer(brut: pd.DataFrame) -> pd.DataFrame:
         "metro_proche": brut["subwayAccess"].astype(bool),
         "quartier": [normaliser_quartier(loc, FICHIERS[v]) for loc, v in
                      zip(brut["location"], brut["ville_brut"])],
+        "link": brut["link"],
     })
     out["tranche_dist"] = tranche_distance(out["dist_centre_km"])
     out = out.sort_values("ville", kind="stable").reset_index(drop=True)
     out["id"] = generer_ids(out, "H")
-    return conformer(out)
+    liens = out[["id", "link"]].astype("string")
+    return conformer(out), liens

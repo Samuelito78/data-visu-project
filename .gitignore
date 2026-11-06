@@ -11,3 +11,6 @@ __pycache__/
 
 # Système
 .DS_Store
+
+# Cache des réponses OSM / Nominatim / contours (géocodage des hôtels)
+data/external/cache/

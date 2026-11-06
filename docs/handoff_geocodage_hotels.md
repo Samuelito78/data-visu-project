@@ -9,7 +9,7 @@ Lire d'abord `README.md`, `docs/schema.md` et `docs/decisions.md` (surtout D2, D
 ## 1. État du dépôt au moment du handoff
 
 - Dépôt : `github.com/Samuelito78/data-visu-project`, clone local dans `projet-1_DATA-VIS/data-visu-project/`.
-- La préparation est sur la branche `data/collecte` : téléchargement, notebooks 01 à 03, `src/prep/`, docs et `data/processed/offres*.csv`.
+- La préparation est sur la branche `data/collecte` : téléchargement, notebooks 01, 02, 03 (quartiers) et 05 (table commune), `src/prep/`, docs et `data/processed/offres*.csv`.
 - **Ne pas travailler dans le même dossier que la session principale.** Utiliser un worktree, une fois la branche `data/collecte` commitée :
   ```bash
   cd projet-1_DATA-VIS/data-visu-project
@@ -101,7 +101,7 @@ La session écrit **un seul fichier de données**, versionné :
 
 **Fichiers à ne pas modifier**, car la session principale y travaille :
 - `src/prep/hotels.py`, `schema.py`, `fusion.py`, `common.py` ;
-- les notebooks 01 à 03 ;
+- les notebooks 01, 02, 03 et 05 (l'ancien `03_table_commune` est devenu `05_table_commune`, et `03_quartiers` a été ajouté) ;
 - `data/processed/` ;
 - `docs/decisions.md`.
 
@@ -155,4 +155,64 @@ Correspondances non triviales entre les noms Booking et les contours :
 
 ## Géocodage
 
-(Section à remplir par la session de géocodage : décisions, seuils retenus, taux obtenus.)
+Session du 6 novembre 2026. Code : `src/prep/geocodage.py` ; exploration et contrôles : `notebooks/04_geocodage_hotels.ipynb`.
+
+### Résultats
+
+| Ville | Hôtels | OSM | Nominatim | Manuel | **Fiables** | Taux |
+|---|---|---|---|---|---|---|
+| Londres | 499 | 307 | 34 | 0 | **341** | 68 % |
+| Berlin | 499 | 334 | 28 | 0 | **362** | 73 % |
+| Paris | 500 | 320 | 17 | 0 | **337** | 67 % |
+| Rome | 207 | 75 | 14 | 54 | **143** | 69 % |
+| **Total** | 1 705 | 1 036 | 93 | 54 | **1 183** | **69 %** |
+
+(comptes des lignes `fiable = true`, par méthode.) Parmi les points fiables, l'écart médian de distance au centre est de 0,03 km, le maximum de 0,35 km ; aucun doublon exact de coordonnées.
+
+Les 522 hôtels sans point fiable ne sont pas tirés au hasard : ce sont surtout des hôtels indépendants absents d'OSM ou mal nommés, des logements entiers (D11) et des annonces sans adresse publique. **La carte surreprésente donc les chaînes**, bien cartographiées dans OSM. À signaler dans le rapport.
+
+### G1. Le « centre » de Booking
+
+- Constat : en cherchant le point qui minimise l'écart médian entre distance haversine et `distanceFromCenter` (sur ~280 appariements OSM sûrs par ville, 55 à Rome), l'écart médian tombe à **20-30 m**, c'est-à-dire l'arrondi de Booking. La distance Booking est une distance à vol d'oiseau depuis un point fixe :
+
+  | Ville | Centre estimé | Repère |
+  |---|---|---|
+  | Londres | 51.50774, -0.12789 | Charing Cross / Trafalgar Square |
+  | Berlin | 52.51622, 13.37657 | porte de Brandebourg |
+  | Paris | 48.85642, 2.35138 | Hôtel de Ville |
+  | Rome | 41.89582, 12.48230 | piazza Venezia |
+
+- Conséquence : la question ouverte « définition du centre » est réglée côté hôtels. Reste à vérifier si `dist` d'Airbnb part du même point (calculable à partir des `lat`/`lng` Airbnb).
+
+### G2. Similarité des noms
+
+- Décision : noms normalisés (minuscules, sans accents ni ponctuation, sans mots génériques : « hotel », « the », nom de la ville…), puis score = 80 % Jaccard pondéré par l'IDF des mots dans la ville + 20 % `token_sort_ratio` (rapidfuzz).
+- Justification : avec un simple ratio flou, « AMANO Covent Garden » s'appariait à « Covent Garden Hotel » (les mots de lieu sont partout). L'IDF fait peser les mots rares (le nom propre de l'hôtel) plus que les mots de lieu.
+
+### G3. Paliers d'acceptation et seuil de distance
+
+- Décision : un candidat est retenu s'il passe un palier ; il est `fiable` s'il passe en plus tous les contrôles.
+
+  | Méthode | Similarité | Exigence |
+  |---|---|---|
+  | OSM | ≥ 90 | aucune pour être retenu |
+  | OSM | ≥ 75 | écart ≤ 0,5 km et quartier cohérent |
+  | OSM | ≥ 60 | écart ≤ 0,15 km et quartier cohérent |
+  | Nominatim | ≥ 60 / ≥ 45 | écart ≤ 0,5 / 0,15 km, quartier cohérent, catégorie `tourism`, `amenity`, `building` ou `leisure` (jamais une rue) |
+
+- Seuil de distance : **0,5 km** au lieu du 1 km envisagé. 95 % des appariements sûrs ont un écart < 0,11 km ; 1 km laissait passer la mauvaise succursale d'une chaîne.
+- Contrôle de quartier : un point à moins de 200 m du contour attendu est accepté (erreurs de géocodage en bordure). Rome : indicatif seulement, il n'entre pas dans `fiable`.
+- Doublons : un objet OSM revendiqué par plusieurs hôtels reste au mieux apparié ; les autres passent à leur candidat suivant. Des coordonnées identiques restantes rendent l'hôtel le moins bien apparié non fiable (1 cas : Rome Vatican Inn / BQ House).
+
+### G4. Corrections relues et pages Booking
+
+- Décision : **aucune extraction des pages Booking** (méthode 3 du handoff) : CGU contraires et protection anti-robot. Les cas restants ont été traités par relecture assistée : variantes de nom dans Nominatim, ou adresse postale relevée sur le web (site de l'hôtel, sites d'avis) puis géocodée avec son numéro. Un point n'est gardé que s'il passe les mêmes contrôles (écart ≤ 0,5 km, quartier).
+- Fichier : `data/external/hotels_geocodage_corrections.csv` (95 lignes, colonne `note` = source et écart). C'est une **entrée** versionnée de la chaîne, à côté de la sortie `hotels_geocodage.csv`, pour que le résultat reste reproductible.
+- Effort limité : la relecture a été complète à Rome (taux de 40 % à 69 %), partielle ailleurs (≈ 30 hôtels par ville, recherches par nom seulement). C'est le levier principal pour améliorer le taux si besoin.
+- Méthode dans la sortie : `nominatim` si l'objet trouvé est l'hôtel nommé, `manuel` si le point vient d'une adresse relevée à la main. Points à surveiller signalés dans `note` : plusieurs points romains sont posés sur un autre commerce du même numéro (bar ou restaurant de l'hôtel), et quelques hôtels ont changé de nom depuis 2023 (Grange St Paul's → Leonardo Royal St Paul's, Kyriad La Villette → Campanile, Vibe Nazionale → ex-Giolli).
+
+### G5. Reproductibilité
+
+- Toutes les réponses (Overpass, Nominatim, contours) sont en cache sous `data/external/cache/` (ignoré par Git, ~13 Mo). Sans cache, une exécution complète du notebook refait 4 requêtes Overpass, 6 téléchargements de contours et ~670 requêtes Nominatim (≈ 15 min à 1 requête/s).
+- Dépendances ajoutées à `requirements.txt` : `rapidfuzz`, `shapely`, `requests`.
+- Intégration côté session principale : jointure de `hotels_geocodage.csv` sur `link`, en ne gardant que `fiable = true`.

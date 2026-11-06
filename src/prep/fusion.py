@@ -14,6 +14,40 @@ def fusionner(*sources: pd.DataFrame) -> pd.DataFrame:
     return valider(conformer(pd.concat([valider(s) for s in sources], ignore_index=True)))
 
 
+def ajouter_positions_hotels(df: pd.DataFrame, liens: pd.DataFrame, geocodage: pd.DataFrame) -> pd.DataFrame:
+    """Remplit lat/lon des hôtels dont le géocodage est fiable (jointure id -> lien -> coordonnées)."""
+    sur = geocodage[geocodage["fiable"].astype(bool)].set_index("link")[["lat", "lon"]]
+    pos = liens.set_index("id")["link"].map(sur["lat"]).rename("lat").to_frame()
+    pos["lon"] = liens.set_index("id")["link"].map(sur["lon"])
+    out = df.copy()
+    est_hotel = out["source"] == "Hôtel"
+    for col in ("lat", "lon"):
+        out.loc[est_hotel, col] = out.loc[est_hotel, "id"].map(pos[col]).astype("Float64")
+    return valider(conformer(out))
+
+
+def ajouter_quartiers(df: pd.DataFrame, contours, correspondance: pd.DataFrame) -> pd.DataFrame:
+    """Remplit `quartier` avec le nom du contour (même référentiel pour les deux sources).
+
+    - ligne avec lat/lon : jointure spatiale (Airbnb, et hôtels une fois géocodés) ;
+    - sinon : nom de quartier Booking traduit par la table de correspondance.
+    """
+    from .quartiers import rattacher_noms, rattacher_points
+
+    out = df.copy()
+    par_nom = rattacher_noms(out, correspondance)
+    par_point = rattacher_points(out, contours)["quartier_geo"]
+    out["quartier"] = par_point.fillna(par_nom).astype("string")
+    return valider(conformer(out))
+
+
+def couverture_quartiers(df: pd.DataFrame, contours) -> pd.DataFrame:
+    """Nombre d'offres par quartier et par source, y compris les quartiers vides."""
+    t = df.groupby(["ville", "quartier", "source"], observed=True).size().unstack("source", fill_value=0)
+    tous = pd.MultiIndex.from_frame(contours[["ville", "quartier"]])
+    return t.reindex(tous, fill_value=0)
+
+
 def retirer_aberrants(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Renvoie (table nettoyée, lignes écartées) selon les percentiles par ville et par source."""
     m = masque_aberrants(df)

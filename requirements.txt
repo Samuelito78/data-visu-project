@@ -7,3 +7,9 @@ jupyterlab==4.6.5
 ipykernel==7.4.0
 nbconvert==7.17.2
 nbstripout==0.9.1
+geopandas==1.2.0
+shapely==2.2.0
+pyogrio==0.13.0
+pyproj==3.8.0
+rapidfuzz==3.14.6
+requests==2.34.2

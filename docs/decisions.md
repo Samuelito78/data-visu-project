@@ -40,9 +40,13 @@ Chaque décision donne : ce qui est décidé, la justification chiffrée, la con
 
 ## D7. Rome, prix Booking
 
-- Décision : les 208 hôtels de Rome sont gardés avec `prix_comparable = false`.
-- Justification : leurs prix sont 2 à 5 fois plus élevés qu'ailleurs à étoiles égales. Médiane 3 étoiles : 513 $ contre 104 à 155 $ ; 5 étoiles : 863 $ contre 345 à 472 $. Le rapport n'est pas constant, donc un nombre de nuits ne corrige pas l'écart.
-- Conséquence : les vues de prix doivent filtrer ou signaler ces lignes. **Décision finale à prendre par l'équipe** : exclure Rome des comparaisons de prix hôtels, ou la garder avec un avertissement.
+- Décision (validée par l'équipe le 6 novembre 2026) : les hôtels de Rome (208 bruts, 207 après dédoublonnage) sont **gardés, y compris dans les comparaisons de prix**. Ils sont marqués `prix_comparable = false` pour que l'interface et le rapport signalent la divergence.
+- Justification de la divergence :
+  - Leurs prix sont 2 à 5 fois plus élevés qu'ailleurs à étoiles égales. Médiane 3 étoiles : 513 $ contre 104 à 155 $ ; 5 étoiles : 863 $ contre 345 à 472 $.
+  - Le rapport n'est pas constant, donc un nombre de nuits ne corrige pas l'écart.
+  - Les autres sources du même dataset ne montrent pas une Rome aussi chère : Airbnb 77 $ la nuit, Hotels.com 297 $, contre 581 $ pour Booking.
+  - La recherche Booking de Rome semble faite dans d'autres conditions que les autres villes : 207 résultats au lieu de 500, et 68 % des hôtels à moins de 2 km du centre contre environ 20 % ailleurs. C'est probablement dû à d'autres dates ou à un filtre, ce qui n'est pas vérifiable faute de dates dans les données.
+- Conséquence : toute vue qui compare des prix d'hôtels doit afficher un avertissement quand Rome est sélectionnée, en s'appuyant sur `prix_comparable`. Le rapport doit présenter cette limite avec les chiffres ci-dessus. Les Airbnb de Rome ne sont pas concernés.
 
 ## D8. Proximité du métro côté Airbnb
 
@@ -78,7 +82,7 @@ Chaque décision donne : ce qui est décidé, la justification chiffrée, la con
 
 - Décision : retrait, à la fusion, des lignes dont le prix est hors des percentiles 1 % et 99 % de leur groupe (ville et source).
 - Justification : environ 2 % des lignes retirées ; limite l'effet des valeurs extrêmes sur les échelles.
-- Conséquence : les très bas et très hauts prix légitimes sont aussi retirés. Les lignes écartées sont listées dans le notebook 03.
+- Conséquence : les très bas et très hauts prix légitimes sont aussi retirés. Les lignes écartées sont listées dans le notebook 05.
 
 ## D14. Tranches de distance
 
@@ -88,14 +92,61 @@ Chaque décision donne : ce qui est décidé, la justification chiffrée, la con
 
 ## D15. Quartiers
 
-- Décision : côté Booking, `location` est normalisé (suffixe de ville retiré ; « 7th arr. » devient « 7e arrondissement » ; ville seule devient vide). Côté Airbnb, `quartier` reste vide en attendant la jointure spatiale avec des contours (étape suivante).
+- Décision : côté Booking, `location` est normalisé (suffixe de ville retiré ; « 7th arr. » devient « 7e arrondissement » ; ville seule devient vide). Ce nom intermédiaire est ensuite traduit vers les contours officiels (D16, D17).
 - Justification : le découpage est hétérogène selon les villes : Paris par arrondissements ; Londres surtout par boroughs avec quelques quartiers ; Berlin par Bezirke avec quelques Ortsteile ; Rome par quartiers touristiques.
-- Conséquence : les quartiers ne sont pas comparables d'une ville à l'autre ni entre sources tant que la jointure spatiale n'est pas faite.
+- Conséquence : le nom Booking ne sert que d'étape intermédiaire ; la table finale utilise les contours (D16).
+
+## D16. Niveau de découpage par ville
+
+- Décision : Paris en 20 arrondissements, Berlin en 12 Bezirke, Londres en 33 boroughs, Rome en 15 municipi.
+- Justification :
+  - Paris, Berlin et Londres : c'est le découpage administratif que Booking utilise déjà, presque tous les noms correspondent. Le niveau plus fin de Paris (80 quartiers administratifs) laisserait environ 6 hôtels par zone.
+  - Rome : les noms Booking sont des repères touristiques (« Spagna », « Central Station »…) qui mélangent des rioni minuscules et de grands quartieri. Les municipi sont des zones de taille comparable, et chaque nom s'y rattache.
+- Conséquence (couverture, après nettoyage ; zone « comparable » si ≥ 30 Airbnb et ≥ 10 hôtels) :
+
+| Ville | Zones | Avec Airbnb | Avec hôtels | Comparables |
+|---|---|---|---|---|
+| Paris | 20 | 20 | 20 | 18 |
+| Berlin | 12 | 12 | 12 | 10 |
+| Londres | 33 | 14 | 20 | 10 |
+| Rome | 15 | 13 | 13 | 1 |
+
+  - Londres : le dataset Airbnb ne couvre que les boroughs centraux. Les boroughs périphériques seront grisés.
+  - Rome : 156 hôtels sur 207 sont dans le Municipio I. La carte de Rome sert surtout aux Airbnb ; la comparaison entre sources par zone n'y est pas significative. C'est une limite à ajouter à D7.
+
+## D17. Rattachement des offres aux quartiers
+
+- Décision :
+  - Une offre avec coordonnées (tous les Airbnb, et les hôtels géocodés de façon fiable, D19) est rattachée par jointure spatiale : point contenu dans le contour, sinon contour le plus proche à moins de 250 m.
+  - Une offre sans coordonnées (hôtels pour l'instant) est rattachée par son nom Booking, via `data/external/correspondance_quartiers.csv`, table écrite à la main. Chaque ligne y est qualifiée : `identique`, `contenance` (quartier contenu dans le contour, par ex. Chiswick → Hounslow) ou `approximation`.
+- Justification :
+  - Airbnb : 28 153 annonces sur 28 192 tombent dans un contour, et les 39 autres sont à moins de 250 m. Ce sont surtout des annonces au bord de la Tamise, que les boroughs « Excluding MHW » excluent.
+  - Hôtels : tous les noms Booking ont un contour. Les approximations concernent 36 hôtels à Rome (« Rome City Center », « Central Station », « Tiburtino », « Trionfale », « San Giovanni ») et 1 à Londres (« West End »).
+- Conséquence : les deux sources partagent le même référentiel de quartiers. Pour les hôtels qui ont à la fois une position et un nom Booking, les deux méthodes donnent le même quartier dans 98 à 99 % des cas (Rome : 97,7 %). Cet accord valide à la fois le géocodage et la table de correspondance.
+
+## D18. Centre de référence des distances
+
+- Décision : la distance au centre des Airbnb est **recalculée** à vol d'oiseau depuis le centre utilisé par Booking. La colonne `dist` d'origine est abandonnée.
+- Justification :
+  - Booking mesure `distanceFromCenter` depuis un point fixe par ville, estimé par le géocodage avec un écart médian de 20 à 30 m : Trafalgar Square, porte de Brandebourg, Hôtel de Ville, piazza Venezia (handoff du géocodage, G1).
+  - La même méthode appliquée aux Airbnb (notebook 01, section 3 bis) explique `dist` avec un écart médian de 2 à 7 m. Le point trouvé est le même que celui de Booking à Londres (0,08 km d'écart) et à Paris (0,10 km). Il diffère à Berlin, où c'est Alexanderplatz, à 2,83 km, et à Rome, où c'est la gare Termini, à 1,75 km.
+  - On recalcule côté Airbnb parce que les hôtels sans coordonnées ne sont situés que par leur distance Booking.
+- Conséquence : les tranches de distance (D14) mesurent la même chose pour les deux sources. Avant cette correction, les tranches Airbnb de Berlin et de Rome étaient décalées.
+
+## D19. Géocodage des hôtels
+
+- Décision : on intègre les coordonnées des hôtels seulement quand le géocodage est `fiable`. Le détail de la méthode figure dans le handoff du géocodage, décisions G1 à G5 :
+  - appariement des noms avec OpenStreetMap, puis Nominatim, puis corrections relues à la main ;
+  - aucune extraction des pages Booking ;
+  - contrôles d'emprise, d'écart de distance (≤ 0,5 km) et de quartier.
+- Justification : 1 183 hôtels sur 1 705 sont fiables (69 % ; de 67 à 73 % selon la ville). Parmi eux, l'écart médian à la distance Booking est de 0,03 km.
+- Conséquence :
+  - Dans la table finale, 1 166 hôtels ont une position. Les autres ont été écartés comme prix aberrants (D13).
+  - Les hôtels non géocodés gardent un quartier par leur nom (D17), mais pas de point sur la carte.
+  - **Biais à signaler** : les hôtels non géocodés sont surtout des indépendants et des logements entiers. Une carte de points surreprésente donc les chaînes, bien cartographiées dans OSM.
 
 ## Questions encore ouvertes
 
-- D7 : que faire des hôtels de Rome dans les comparaisons de prix ?
 - Semaine et week-end : les garder séparés ou les fusionner ?
 - Décalage temporel : Airbnb sans date de collecte, hôtels collectés en 2023.
-- Définition du « centre » : non documentée dans les deux datasets, les distances ne sont peut-être pas calculées depuis le même point.
 - Validation du croisement des deux datasets par le superviseur.

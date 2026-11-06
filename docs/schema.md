@@ -18,12 +18,12 @@ Les types de donnée suivent la classification de Munzner (*Visualization Analys
 | `prix_comparable` | boolean | catégorielle (binaire) | `true` / `false` | toujours `true` | `false` pour Rome, `true` sinon | Voir D7. |
 | `note_100` | Float64 | quantitative | 0 à 100 | `guest_satisfaction_overall` | `score` × 10 | « No rating » devient vide (D9). Échelles de notation différentes. |
 | `nb_avis` | Int64 | quantitative | entier | vide | `reviews` arrondi | Vide par construction pour Airbnb. |
-| `dist_centre_km` | float64 | quantitative | km, 2 décimales | `dist` | `distanceFromCenter`, valeurs ≥ 100 divisées par 1000 (D6) | Jamais vide. Définition du « centre » non documentée (voir questions ouvertes). |
+| `dist_centre_km` | float64 | quantitative | km à vol d'oiseau depuis le centre Booking, 2 décimales | recalculée depuis `lat`/`lng` et le centre Booking (D18) | `distanceFromCenter`, valeurs ≥ 100 divisées par 1000 (D6) | Jamais vide. Même point de référence pour les deux sources (D18). |
 | `tranche_dist` | category (ordonnée) | ordinale | `0–1 km`, `1–2 km`, `2–4 km`, `> 4 km` | dérivée de `dist_centre_km` | idem | Bornes fermées à gauche (D14). |
 | `metro_proche` | boolean | catégorielle (binaire) | `true` / `false` | `metro_dist < 0,5` km (D8) | `subwayAccess` | Définitions différentes entre sources. |
-| `quartier` | string | catégorielle | nom de quartier | vide pour l'instant (jointure spatiale à venir) | `location` normalisé (D15) | Vide si Booking ne donne que la ville. |
-| `lat` | Float64 | spatiale | degrés décimaux | `lat` | vide | Vide par construction pour les hôtels. |
-| `lon` | Float64 | spatiale | degrés décimaux | `lng` | vide | Vide par construction pour les hôtels. |
+| `quartier` | string | catégorielle | nom du contour : arrondissement (Paris), Bezirk (Berlin), borough (Londres), municipio (Rome) | jointure spatiale de `lat`/`lon` sur les contours (D17) | nom Booking traduit par `data/external/correspondance_quartiers.csv` ; jointure spatiale une fois géocodé (D17) | Même référentiel pour les deux sources : clé de jointure avec `properties.quartier` de `quartiers_<ville>.geojson`. Vide pour 1 à 5 % des hôtels (Booking ne donne que la ville). |
+| `lat` | Float64 | spatiale | degrés décimaux (WGS84) | `lat` | géocodage fiable (`data/external/hotels_geocodage.csv`, D19) | Renseignée pour environ 70 % des hôtels. |
+| `lon` | Float64 | spatiale | degrés décimaux (WGS84) | `lng` | géocodage fiable (D19) | Comme `lat`. |
 | `periode` | category | catégorielle | `semaine`, `weekend` | fichier `weekdays` / `weekends` | vide | Vide par construction pour les hôtels. |
 | `capacite` | Int64 | quantitative | personnes | `person_capacity` | vide | Vide par construction pour les hôtels. |
 | `superhost` | boolean | catégorielle (binaire) | `true` / `false` | `host_is_superhost` | vide | Vide par construction pour les hôtels. |
@@ -45,6 +45,7 @@ Fichiers produits dans `data/processed/` :
 | Fichier | Contenu |
 |---|---|
 | `offres.csv` | les quatre villes |
+| `quartiers_<ville>.geojson` | contours simplifiés (tolérance 25 m), propriétés `ville`, `quartier`, `code` ; anneaux extérieurs dans le sens horaire pour `d3.geoPath` |
 | `offres_londres.csv`, `offres_berlin.csv`, `offres_paris.csv`, `offres_rome.csv` | une ville chacun, même schéma |
 
 Pour « changer de dataset » dans l'interface, il suffit de charger un autre fichier : les colonnes sont identiques.
@@ -57,6 +58,7 @@ Modèle de Ward, Grinstein et Keim : Raw data → Data transformation → Data t
 |---|---|
 | Raw data | `data/raw/` : CSV Airbnb et JSON Booking téléchargés depuis Kaggle (voir `sources.md`) |
 | Data transformation | `notebooks/01_airbnb.ipynb` et `notebooks/02_hotels_booking.ipynb` (module `src/prep/`) : nettoyage, conversion, dérivation, vers `data/interim/*.parquet` |
-| Data tables | `notebooks/03_table_commune.ipynb` : fusion, contrôles, écrêtage des aberrants, export de `data/processed/offres*.csv` |
+| Data transformation (espace) | `notebooks/03_quartiers.ipynb` : contours normalisés et correspondance des noms Booking ; `notebooks/04_geocodage_hotels.ipynb` : coordonnées des hôtels (OSM, Nominatim, corrections relues) |
+| Data tables | `notebooks/05_table_commune.ipynb` : fusion, rattachement aux quartiers, contrôles, écrêtage des aberrants, export de `data/processed/offres*.csv` |
 | Visual mapping | à venir : encodages D3 (position, couleur, taille) |
 | Views | à venir : vues D3 liées |

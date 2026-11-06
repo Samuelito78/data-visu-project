@@ -24,5 +24,22 @@
 - Le téléchargement est anonyme, via `https://www.kaggle.com/api/v1/datasets/download/<owner>/<slug>`. Aucun jeton Kaggle n'est requis.
 - Les archives sont décompressées dans `data/raw/airbnb/` et `data/raw/hotels/`.
 
-## Contours des quartiers (à venir)
+## Contours des quartiers
+
+Téléchargés par `scripts/download_geo.sh` dans `data/raw/geo/` (non versionné). Ils sont normalisés par le notebook 03 dans `data/external/quartiers_<ville>.geojson`, et simplifiés pour D3 dans `data/processed/`.
+
+| Ville | Niveau | Source | URL | Licence |
+|---|---|---|---|---|
+| Paris | 20 arrondissements | Ville de Paris | https://opendata.paris.fr/explore/dataset/arrondissements/ | ODbL |
+| Berlin | 12 Bezirke | Geoportal Berlin (ALKIS Bezirke, service WFS) | https://gdi.berlin.de/services/wfs/alkis_bezirke | Datenlizenz Deutschland – Zero 2.0 |
+| Londres | 33 boroughs (London_Borough_Excluding_MHW) | Greater London Authority, London Datastore | https://data.london.gov.uk/dataset/statistical-gis-boundary-files-london | Open Government Licence ; contient des données Ordnance Survey (à citer) |
+| Rome | 15 municipi | OpenStreetMap (relations `boundary=administrative`, `admin_level=10`), via Overpass | https://www.openstreetmap.org/relation/1458218 (Municipio I) | ODbL, « © les contributeurs d'OpenStreetMap » |
+
+Attributions à reprendre dans le rapport et dans la démo : « © Ville de Paris (ODbL) », « Geoportal Berlin (DL-DE Zero 2.0) », « Contains National Statistics and Ordnance Survey data © Crown copyright and database right », « © OpenStreetMap contributors (ODbL) ».
+
+## Géocodage des hôtels
+
+Les coordonnées de `data/external/hotels_geocodage.csv` viennent d'OpenStreetMap, interrogé via Overpass et Nominatim (ODbL, « © les contributeurs d'OpenStreetMap »). Quelques adresses ont été relevées à la main sur des sites publics, puis géocodées ; elles sont notées dans `hotels_geocodage_corrections.csv`. Aucune page Booking n'a été extraite.
+
+La licence des données dérivées de Paris et de Rome est l'ODbL : les fichiers `quartiers_paris.geojson` et `quartiers_rome.geojson` restent sous ODbL, avec obligation d'attribution.
 
