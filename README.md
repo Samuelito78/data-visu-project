@@ -43,6 +43,7 @@ Les deux datasets sont sous licence CC0. Les contours des quartiers (Ville de Pa
 | [`docs/decisions.md`](docs/decisions.md) | Journal des choix de préparation (D1 à D19), avec leur justification chiffrée |
 | [`docs/sources.md`](docs/sources.md) | Sources, licences et attributions |
 | [`docs/documentation.html`](docs/documentation.html) | Toute la documentation ci-dessus, sur une seule page lisible dans un navigateur |
+| [`viz/README.md`](viz/README.md) | Application D3 : organisation, contrat d'une vue, état partagé, règles communes |
 
 ## Workflow en bref
 
@@ -56,7 +57,7 @@ Le découpage suit le modèle de pipeline du cours (Ward, Grinstein et Keim). Le
 | Data transformation | `notebooks/03_quartiers.ipynb` | `data/external/quartiers_*.geojson`, `data/processed/quartiers_*.geojson` | 80 quartiers |
 | Data transformation | `notebooks/04_geocodage_hotels.ipynb` | `data/external/hotels_geocodage.csv` | 1 183 positions fiables |
 | Data tables | `notebooks/05_table_commune.ipynb` | `data/processed/offres*.csv` | 29 315 |
-| Visual mapping → Views | `viz/` (application D3, à venir) | | |
+| Visual mapping → Views | `viz/` (application D3, voir [`viz/README.md`](viz/README.md)) | `viz/index.html` | |
 
 La logique de préparation est dans `src/prep/`, que les notebooks importent. Le schéma de la table commune est défini dans `src/prep/schema.py`, et chaque étape le vérifie avant d'écrire.
 
@@ -74,7 +75,19 @@ La logique de préparation est dans `src/prep/`, que les notebooks importent. Le
 | Technique de visualisation 2 (D3) | |
 | Rapport et soutenance | |
 
-## Installation et exécution
+## Lancer la visualisation
+
+Rien à installer : les données traitées et D3 sont dans le dépôt.
+
+```bash
+./scripts/serve.sh        # serveur local à la racine du dépôt (Python 3, déjà présent sur macOS et Linux)
+```
+
+Puis ouvrir <http://localhost:8000/viz/>. Ouvrir `viz/index.html` directement ne marche pas : le navigateur bloque le chargement des CSV en `file://`. L'organisation du code D3 et le contrat d'une vue sont décrits dans [`viz/README.md`](viz/README.md).
+
+## Préparation des données : installation et exécution
+
+Seulement pour modifier ou rejouer la préparation (Python 3.11+).
 
 ```bash
 python3 -m venv .venv
@@ -87,6 +100,17 @@ python3 -m venv .venv
 ```
 
 Le téléchargement Kaggle est anonyme : aucun jeton n'est nécessaire. Les données traitées sont versionnées. On peut donc lancer la visualisation sans rien exécuter.
+
+## Travailler à deux
+
+- **`main` reste toujours démontrable** : on n'y pousse pas directement, tout passe par une pull request relue par l'autre.
+- **Une branche par sujet**, partie de `main` à jour (`git switch main && git pull`) :
+  - `viz/technique-1`, `viz/technique-2` : chacun sa technique, dans son dossier `viz/technique-N/` ;
+  - `viz/commun-…` : une modification du socle partagé (`viz/commun/`, `style.css`, `index.html`, `main.js`), dans une PR à part et courte, pour limiter les conflits ;
+  - `data/…` : une modification de la préparation.
+- **Ne jamais modifier `data/processed/` à la main** : ces fichiers sont produits par `notebooks/05_table_commune.ipynb`. Pour changer une colonne, modifier `src/prep/` puis relancer `./scripts/build_data.sh`, et commiter les CSV régénérés avec le code.
+- **Notebooks** : lancer `.venv/bin/nbstripout --install` une fois par poste, sinon les sorties des notebooks partent dans les commits.
+- **Décisions** : un choix de préparation ou d'encodage qui change ce que montre la visualisation s'ajoute dans `docs/decisions.md`. Il servira au rapport.
 
 ## Fichiers chargés par D3
 
@@ -108,8 +132,9 @@ data/raw/        données brutes téléchargées (ignorées par Git)
 data/interim/    une table par source, au schéma commun
 data/external/   contours des quartiers, correspondance des noms Booking, géocodage des hôtels
 data/processed/  table commune et contours, chargés par D3
+viz/             application D3 : socle commun (viz/commun/) et une technique par étudiant
 notebooks/       01 Airbnb, 02 Booking, 03 quartiers, 04 géocodage, 05 table commune
 src/prep/        code de préparation : schéma, transformations, quartiers, géocodage, fusion
-scripts/         téléchargement, exécution de la chaîne, génération de la doc HTML
+scripts/         téléchargement, exécution de la chaîne, serveur local, génération de la doc HTML
 docs/            documentation (et docs/archives/ : documents de travail)
 ```

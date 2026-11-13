@@ -82,7 +82,7 @@ pre{white-space:pre-wrap}
 <nav class="sidebar" aria-label="Table des matières">
 <details open>
 <summary>Table des matières</summary>
-<ul><li class="toc-sec"><a href="#readme" data-sec="readme">Hôtel ou Airbnb ?</a><ul><li><a href="#readme-description-du-projet">Description du projet</a></li><li><a href="#readme-sources">Sources</a></li><li><a href="#readme-documentation">Documentation</a></li><li><a href="#readme-workflow-en-bref">Workflow en bref</a></li><li><a href="#readme-repartition-du-travail">Répartition du travail</a></li><li><a href="#readme-installation-et-execution">Installation et exécution</a></li><li><a href="#readme-fichiers-charges-par-d3">Fichiers chargés par D3</a></li><li><a href="#readme-organisation-du-depot">Organisation du dépôt</a></li></ul></li><li class="toc-sec"><a href="#utilisateurs-taches" data-sec="utilisateurs-taches">Utilisateurs visés, besoins et tâches</a><ul><li><a href="#utilisateurs-taches-1-utilisateur-vise">1. Utilisateur visé</a></li><li><a href="#utilisateurs-taches-2-besoins">2. Besoins</a></li><li><a href="#utilisateurs-taches-3-des-objectifs-aux-taches">3. Des objectifs aux tâches</a></li><li><a href="#utilisateurs-taches-4-catalogue-des-taches-utilisateur">4. Catalogue des tâches utilisateur</a></li><li><a href="#utilisateurs-taches-5-ce-que-les-donnees-permettent-et-leurs-limites">5. Ce que les données permettent, et leurs limites</a></li><li><a href="#utilisateurs-taches-6-liste-des-taches-a-presenter-en-soutenance">6. Liste des tâches à présenter en soutenance</a></li></ul></li><li class="toc-sec"><a href="#workflow" data-sec="workflow">Workflow de préparation des données</a><ul><li><a href="#workflow-1-vue-densemble">1. Vue d&#x27;ensemble</a></li><li><a href="#workflow-2-etape-0-recuperer-les-donnees-brutes">2. Étape 0 : récupérer les données brutes</a></li><li><a href="#workflow-3-etape-1-transformer-les-annonces-airbnb">3. Étape 1 : transformer les annonces Airbnb</a></li><li><a href="#workflow-4-etape-2-transformer-les-hotels-booking">4. Étape 2 : transformer les hôtels Booking</a></li><li><a href="#workflow-5-etape-3-construire-le-referentiel-de-quartiers">5. Étape 3 : construire le référentiel de quartiers</a></li><li><a href="#workflow-6-etape-4-geolocaliser-les-hotels">6. Étape 4 : géolocaliser les hôtels</a></li><li><a href="#workflow-7-etape-5-construire-la-table-commune">7. Étape 5 : construire la table commune</a></li><li><a href="#workflow-8-le-dataset-a-visualiser">8. Le dataset à visualiser</a></li></ul></li><li class="toc-sec"><a href="#schema" data-sec="schema">Schéma de la table commune offres</a><ul><li><a href="#schema-dictionnaire-de-donnees">Dictionnaire de données</a></li><li><a href="#schema-format-csv-pour-d3">Format CSV pour D3</a></li><li><a href="#schema-place-dans-le-modele-de-pipeline-du-cours">Place dans le modèle de pipeline du cours</a></li></ul></li><li class="toc-sec"><a href="#decisions" data-sec="decisions">Journal des décisions de préparation des données</a><ul><li><a href="#decisions-d1-villes-retenues">D1. Villes retenues</a></li><li><a href="#decisions-d2-source-des-hotels">D2. Source des hôtels</a></li><li><a href="#decisions-d3-prix-airbnb">D3. Prix Airbnb</a></li><li><a href="#decisions-d4-prix-booking">D4. Prix Booking</a></li><li><a href="#decisions-d5-conversion-de-devise">D5. Conversion de devise</a></li><li><a href="#decisions-d6-distance-au-centre-cote-booking">D6. Distance au centre côté Booking</a></li><li><a href="#decisions-d7-rome-prix-booking">D7. Rome, prix Booking</a></li><li><a href="#decisions-d8-proximite-du-metro-cote-airbnb">D8. Proximité du métro côté Airbnb</a></li><li><a href="#decisions-d9-note">D9. Note</a></li><li><a href="#decisions-d10-etoiles">D10. Étoiles</a></li><li><a href="#decisions-d11-type-dhebergement-cote-booking">D11. Type d&#x27;hébergement côté Booking</a></li><li><a href="#decisions-d12-doublons">D12. Doublons</a></li><li><a href="#decisions-d13-prix-aberrants">D13. Prix aberrants</a></li><li><a href="#decisions-d14-tranches-de-distance">D14. Tranches de distance</a></li><li><a href="#decisions-d15-quartiers">D15. Quartiers</a></li><li><a href="#decisions-d16-niveau-de-decoupage-par-ville">D16. Niveau de découpage par ville</a></li><li><a href="#decisions-d17-rattachement-des-offres-aux-quartiers">D17. Rattachement des offres aux quartiers</a></li><li><a href="#decisions-d18-centre-de-reference-des-distances">D18. Centre de référence des distances</a></li><li><a href="#decisions-d19-geocodage-des-hotels">D19. Géocodage des hôtels</a></li><li><a href="#decisions-annexe-detail-du-geocodage-des-hotels-g1-a-g5">Annexe : détail du géocodage des hôtels (G1 à G5)</a></li><li><a href="#decisions-questions-encore-ouvertes">Questions encore ouvertes</a></li></ul></li><li class="toc-sec"><a href="#sources" data-sec="sources">Sources de données</a><ul><li><a href="#sources-airbnb-prices-in-european-cities">Airbnb Prices in European Cities</a></li><li><a href="#sources-7500-hotels-from-airbnb-booking-and-hotelscom">7500 hotels from Airbnb, Booking and Hotels.com</a></li><li><a href="#sources-telechargement">Téléchargement</a></li><li><a href="#sources-contours-des-quartiers">Contours des quartiers</a></li><li><a href="#sources-geocodage-des-hotels">Géocodage des hôtels</a></li></ul></li></ul>
+<ul><li class="toc-sec"><a href="#readme" data-sec="readme">Hôtel ou Airbnb ?</a><ul><li><a href="#readme-description-du-projet">Description du projet</a></li><li><a href="#readme-sources">Sources</a></li><li><a href="#readme-documentation">Documentation</a></li><li><a href="#readme-workflow-en-bref">Workflow en bref</a></li><li><a href="#readme-repartition-du-travail">Répartition du travail</a></li><li><a href="#readme-lancer-la-visualisation">Lancer la visualisation</a></li><li><a href="#readme-preparation-des-donnees-installation-et-execution">Préparation des données : installation et exécution</a></li><li><a href="#readme-travailler-a-deux">Travailler à deux</a></li><li><a href="#readme-fichiers-charges-par-d3">Fichiers chargés par D3</a></li><li><a href="#readme-organisation-du-depot">Organisation du dépôt</a></li></ul></li><li class="toc-sec"><a href="#utilisateurs-taches" data-sec="utilisateurs-taches">Utilisateurs visés, besoins et tâches</a><ul><li><a href="#utilisateurs-taches-1-utilisateur-vise">1. Utilisateur visé</a></li><li><a href="#utilisateurs-taches-2-besoins">2. Besoins</a></li><li><a href="#utilisateurs-taches-3-des-objectifs-aux-taches">3. Des objectifs aux tâches</a></li><li><a href="#utilisateurs-taches-4-catalogue-des-taches-utilisateur">4. Catalogue des tâches utilisateur</a></li><li><a href="#utilisateurs-taches-5-ce-que-les-donnees-permettent-et-leurs-limites">5. Ce que les données permettent, et leurs limites</a></li><li><a href="#utilisateurs-taches-6-liste-des-taches-a-presenter-en-soutenance">6. Liste des tâches à présenter en soutenance</a></li></ul></li><li class="toc-sec"><a href="#workflow" data-sec="workflow">Workflow de préparation des données</a><ul><li><a href="#workflow-1-vue-densemble">1. Vue d&#x27;ensemble</a></li><li><a href="#workflow-2-etape-0-recuperer-les-donnees-brutes">2. Étape 0 : récupérer les données brutes</a></li><li><a href="#workflow-3-etape-1-transformer-les-annonces-airbnb">3. Étape 1 : transformer les annonces Airbnb</a></li><li><a href="#workflow-4-etape-2-transformer-les-hotels-booking">4. Étape 2 : transformer les hôtels Booking</a></li><li><a href="#workflow-5-etape-3-construire-le-referentiel-de-quartiers">5. Étape 3 : construire le référentiel de quartiers</a></li><li><a href="#workflow-6-etape-4-geolocaliser-les-hotels">6. Étape 4 : géolocaliser les hôtels</a></li><li><a href="#workflow-7-etape-5-construire-la-table-commune">7. Étape 5 : construire la table commune</a></li><li><a href="#workflow-8-le-dataset-a-visualiser">8. Le dataset à visualiser</a></li></ul></li><li class="toc-sec"><a href="#schema" data-sec="schema">Schéma de la table commune offres</a><ul><li><a href="#schema-dictionnaire-de-donnees">Dictionnaire de données</a></li><li><a href="#schema-format-csv-pour-d3">Format CSV pour D3</a></li><li><a href="#schema-place-dans-le-modele-de-pipeline-du-cours">Place dans le modèle de pipeline du cours</a></li></ul></li><li class="toc-sec"><a href="#decisions" data-sec="decisions">Journal des décisions de préparation des données</a><ul><li><a href="#decisions-d1-villes-retenues">D1. Villes retenues</a></li><li><a href="#decisions-d2-source-des-hotels">D2. Source des hôtels</a></li><li><a href="#decisions-d3-prix-airbnb">D3. Prix Airbnb</a></li><li><a href="#decisions-d4-prix-booking">D4. Prix Booking</a></li><li><a href="#decisions-d5-conversion-de-devise">D5. Conversion de devise</a></li><li><a href="#decisions-d6-distance-au-centre-cote-booking">D6. Distance au centre côté Booking</a></li><li><a href="#decisions-d7-rome-prix-booking">D7. Rome, prix Booking</a></li><li><a href="#decisions-d8-proximite-du-metro-cote-airbnb">D8. Proximité du métro côté Airbnb</a></li><li><a href="#decisions-d9-note">D9. Note</a></li><li><a href="#decisions-d10-etoiles">D10. Étoiles</a></li><li><a href="#decisions-d11-type-dhebergement-cote-booking">D11. Type d&#x27;hébergement côté Booking</a></li><li><a href="#decisions-d12-doublons">D12. Doublons</a></li><li><a href="#decisions-d13-prix-aberrants">D13. Prix aberrants</a></li><li><a href="#decisions-d14-tranches-de-distance">D14. Tranches de distance</a></li><li><a href="#decisions-d15-quartiers">D15. Quartiers</a></li><li><a href="#decisions-d16-niveau-de-decoupage-par-ville">D16. Niveau de découpage par ville</a></li><li><a href="#decisions-d17-rattachement-des-offres-aux-quartiers">D17. Rattachement des offres aux quartiers</a></li><li><a href="#decisions-d18-centre-de-reference-des-distances">D18. Centre de référence des distances</a></li><li><a href="#decisions-d19-geocodage-des-hotels">D19. Géocodage des hôtels</a></li><li><a href="#decisions-annexe-detail-du-geocodage-des-hotels-g1-a-g5">Annexe : détail du géocodage des hôtels (G1 à G5)</a></li><li><a href="#decisions-questions-encore-ouvertes">Questions encore ouvertes</a></li></ul></li><li class="toc-sec"><a href="#sources" data-sec="sources">Sources de données</a><ul><li><a href="#sources-airbnb-prices-in-european-cities">Airbnb Prices in European Cities</a></li><li><a href="#sources-7500-hotels-from-airbnb-booking-and-hotelscom">7500 hotels from Airbnb, Booking and Hotels.com</a></li><li><a href="#sources-telechargement">Téléchargement</a></li><li><a href="#sources-contours-des-quartiers">Contours des quartiers</a></li><li><a href="#sources-geocodage-des-hotels">Géocodage des hôtels</a></li></ul></li></ul>
 <div class="tools"><button type="button" id="theme-btn">Clair / sombre</button><a href="#top">Haut de page</a></div>
 </details>
 </nav>
@@ -90,7 +90,7 @@ pre{white-space:pre-wrap}
 <header class="top">
 <h1>Hôtel ou Airbnb ? — Documentation</h1>
 <p>Documentation du projet de visualisation de données — Luca VIZIO &amp; Samuel BOIX-SEGURA</p>
-<p>Généré le 13/11/2026 à 19:44</p>
+<p>Généré le 13/11/2026 à 19:50</p>
 </header>
 <main>
 <section id="readme" class="doc-section">
@@ -172,6 +172,10 @@ pre{white-space:pre-wrap}
 <td><a href="documentation.html"><code>docs/documentation.html</code></a></td>
 <td>Toute la documentation ci-dessus, sur une seule page lisible dans un navigateur</td>
 </tr>
+<tr>
+<td><a href="../viz/README.md"><code>viz/README.md</code></a></td>
+<td>Application D3 : organisation, contrat d'une vue, état partagé, règles communes</td>
+</tr>
 </tbody>
 </table></div>
 <h2 id="readme-workflow-en-bref">Workflow en bref</h2>
@@ -224,8 +228,8 @@ pre{white-space:pre-wrap}
 </tr>
 <tr>
 <td>Visual mapping → Views</td>
-<td><code>viz/</code> (application D3, à venir)</td>
-<td></td>
+<td><code>viz/</code> (application D3, voir <a href="../viz/README.md"><code>viz/README.md</code></a>)</td>
+<td><code>viz/index.html</code></td>
 <td></td>
 </tr>
 </tbody>
@@ -271,7 +275,13 @@ pre{white-space:pre-wrap}
 </tr>
 </tbody>
 </table></div>
-<h2 id="readme-installation-et-execution">Installation et exécution</h2>
+<h2 id="readme-lancer-la-visualisation">Lancer la visualisation</h2>
+<p>Rien à installer : les données traitées et D3 sont dans le dépôt.</p>
+<pre><code class="language-bash">./scripts/serve.sh        # serveur local à la racine du dépôt (Python 3, déjà présent sur macOS et Linux)
+</code></pre>
+<p>Puis ouvrir <a href="http://localhost:8000/viz/" target="_blank" rel="noopener noreferrer">http://localhost:8000/viz/</a>. Ouvrir <code>viz/index.html</code> directement ne marche pas : le navigateur bloque le chargement des CSV en <code>file://</code>. L'organisation du code D3 et le contrat d'une vue sont décrits dans <a href="../viz/README.md"><code>viz/README.md</code></a>.</p>
+<h2 id="readme-preparation-des-donnees-installation-et-execution">Préparation des données : installation et exécution</h2>
+<p>Seulement pour modifier ou rejouer la préparation (Python 3.11+).</p>
 <pre><code class="language-bash">python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/nbstripout --install        # une fois par poste : retire les sorties des notebooks au commit
@@ -281,6 +291,19 @@ pre{white-space:pre-wrap}
 .venv/bin/jupyter lab                 # pour explorer les notebooks
 </code></pre>
 <p>Le téléchargement Kaggle est anonyme : aucun jeton n'est nécessaire. Les données traitées sont versionnées. On peut donc lancer la visualisation sans rien exécuter.</p>
+<h2 id="readme-travailler-a-deux">Travailler à deux</h2>
+<ul>
+<li><strong><code>main</code> reste toujours démontrable</strong> : on n'y pousse pas directement, tout passe par une pull request relue par l'autre.</li>
+<li><strong>Une branche par sujet</strong>, partie de <code>main</code> à jour (<code>git switch main &amp;&amp; git pull</code>) :<ul>
+<li><code>viz/technique-1</code>, <code>viz/technique-2</code> : chacun sa technique, dans son dossier <code>viz/technique-N/</code> ;</li>
+<li><code>viz/commun-…</code> : une modification du socle partagé (<code>viz/commun/</code>, <code>style.css</code>, <code>index.html</code>, <code>main.js</code>), dans une PR à part et courte, pour limiter les conflits ;</li>
+<li><code>data/…</code> : une modification de la préparation.</li>
+</ul>
+</li>
+<li><strong>Ne jamais modifier <code>data/processed/</code> à la main</strong> : ces fichiers sont produits par <code>notebooks/05_table_commune.ipynb</code>. Pour changer une colonne, modifier <code>src/prep/</code> puis relancer <code>./scripts/build_data.sh</code>, et commiter les CSV régénérés avec le code.</li>
+<li><strong>Notebooks</strong> : lancer <code>.venv/bin/nbstripout --install</code> une fois par poste, sinon les sorties des notebooks partent dans les commits.</li>
+<li><strong>Décisions</strong> : un choix de préparation ou d'encodage qui change ce que montre la visualisation s'ajoute dans <code>docs/decisions.md</code>. Il servira au rapport.</li>
+</ul>
 <h2 id="readme-fichiers-charges-par-d3">Fichiers chargés par D3</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -312,9 +335,10 @@ const zones = await d3.json(&quot;data/processed/quartiers_paris.geojson&quot;);
 data/interim/    une table par source, au schéma commun
 data/external/   contours des quartiers, correspondance des noms Booking, géocodage des hôtels
 data/processed/  table commune et contours, chargés par D3
+viz/             application D3 : socle commun (viz/commun/) et une technique par étudiant
 notebooks/       01 Airbnb, 02 Booking, 03 quartiers, 04 géocodage, 05 table commune
 src/prep/        code de préparation : schéma, transformations, quartiers, géocodage, fusion
-scripts/         téléchargement, exécution de la chaîne, génération de la doc HTML
+scripts/         téléchargement, exécution de la chaîne, serveur local, génération de la doc HTML
 docs/            documentation (et docs/archives/ : documents de travail)
 </code></pre>
 </section>
@@ -1267,11 +1291,11 @@ const zones  = await d3.json(&quot;data/processed/quartiers_paris.geojson&quot;)
 </tr>
 <tr>
 <td>Visual mapping</td>
-<td>à venir : encodages D3 (position, couleur, taille)</td>
+<td><code>viz/</code> : encodages D3 (position, couleur, taille), voir <code>viz/README.md</code></td>
 </tr>
 <tr>
 <td>Views</td>
-<td>à venir : vues D3 liées</td>
+<td><code>viz/index.html</code> : deux techniques liées par un état partagé (<code>viz/commun/etat.js</code>)</td>
 </tr>
 </tbody>
 </table></div>

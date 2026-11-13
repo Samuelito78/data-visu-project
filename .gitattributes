@@ -1,3 +1,6 @@
 # Les sorties des notebooks sont retirées au commit (nbstripout --install, une fois par poste)
 *.ipynb filter=nbstripout
 *.ipynb diff=ipynb
+
+# D3 embarqué : fichier tiers, exclu des statistiques de langage et des diffs
+viz/lib/** linguist-vendored -diff
