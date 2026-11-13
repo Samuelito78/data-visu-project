@@ -1,60 +1,115 @@
 # Hôtel ou Airbnb ?
 
-Projet de visualisation de données (Master MIAGE MBDS, cours *Information Visualization* de Marco Winckler), par Luca VIZIO & Samuel BOIX-SEGURA.
+Projet de visualisation de données. Master MIAGE MBDS, cours *Information Visualization* de Marco Winckler (Université Côte d'Azur). Par Luca VIZIO et Samuel BOIX-SEGURA.
 
 > Pour un voyageur avec un budget donné, vaut-il mieux réserver un hôtel ou un Airbnb, et dans quel secteur de la ville ?
 
-On compare les deux offres à Londres, Berlin, Paris et Rome à partir de deux datasets Kaggle, réunis dans une table commune que l'application D3 charge en fichiers statiques.
+## Description du projet
 
-## Pipeline de données
+Quand on prépare un court séjour dans une grande ville, on hésite souvent entre un hôtel et un Airbnb, sans savoir lequel est le plus avantageux, ni où loger. Les sites de réservation présentent les deux offres séparément, ce qui empêche de les comparer.
 
-Le découpage suit le modèle de pipeline du cours (Ward, Grinstein et Keim) :
+Notre projet réunit ces deux offres dans une même visualisation interactive, pour quatre capitales européennes : Londres, Berlin, Paris et Rome. Il s'adresse à un voyageur non expert qui part à deux, avec un budget par nuit en tête. Il compare les deux types d'hébergement sur quatre critères qui comptent pour lui :
+- le prix par nuit ;
+- la note des clients ;
+- la distance au centre ;
+- l'accès au métro.
 
-| Étape du modèle | Ici | Sortie |
+Il montre comment ces critères varient d'un quartier à l'autre.
+
+Les données viennent de deux datasets Kaggle :
+- environ 28 000 annonces Airbnb ;
+- 1 700 hôtels Booking.
+
+Nous les avons transformés en une table commune d'environ 29 000 offres : prix convertis en euros par nuit, notes ramenées sur 100, distances mesurées depuis un même centre et accès au métro aligné. Chaque offre est rattachée à un quartier officiel : arrondissement, Bezirk, borough ou municipio. Les hôtels, qui n'avaient pas de coordonnées, ont été géolocalisés pour 69 % d'entre eux.
+
+La visualisation, développée en D3.js, propose une vue d'ensemble par ville, par distance et par quartier. Elle permet ensuite de filtrer selon ses critères, puis d'afficher le détail d'une offre. La problématique reste descriptive : on montre où et comment les deux offres diffèrent, sans chercher à l'expliquer.
+
+## Sources
+
+| Dataset | Lien | Ce qui est utilisé |
 |---|---|---|
-| Raw data | `scripts/download_data.sh`, `scripts/download_geo.sh` | `data/raw/` (non versionné) |
-| Data transformation | `notebooks/01_airbnb.ipynb`, `notebooks/02_hotels_booking.ipynb` | `data/interim/*.parquet` |
-| Data transformation (espace) | `notebooks/03_quartiers.ipynb`, `notebooks/04_geocodage_hotels.ipynb` | `data/external/` |
-| Data tables | `notebooks/05_table_commune.ipynb` | `data/processed/offres*.csv`, `data/processed/quartiers_*.geojson` |
-| Visual mapping → Views | `viz/` (application D3, à venir) | |
+| Airbnb Prices in European Cities | [kaggle.com/datasets/thedevastator/…](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities) | 8 CSV, pour Londres, Berlin, Paris et Rome en semaine et le week-end : 28 192 annonces |
+| 7500 hotels from Airbnb, Booking and Hotels.com | [kaggle.com/datasets/mykhailozub/…](https://www.kaggle.com/datasets/mykhailozub/500-hotels-from-airbnb-booking-and-hotelscom) | la liste Booking des 4 mêmes villes : 1 705 hôtels |
 
-La logique est dans `src/prep/`. Les notebooks l'importent, explorent les données et documentent chaque choix. Le schéma de la table commune est défini dans `src/prep/schema.py` (contrôlé par `valider()`) et décrit dans `docs/schema.md`. Les choix de nettoyage sont justifiés dans `docs/decisions.md`.
+Les deux datasets sont sous licence CC0. Les contours des quartiers (Ville de Paris, Geoportal Berlin, London Datastore, OpenStreetMap) et le géocodage (OpenStreetMap) ont leurs propres licences et mentions obligatoires, détaillées dans [`docs/sources.md`](docs/sources.md).
 
-## Installation
+## Documentation
+
+| Document | Contenu |
+|---|---|
+| [`docs/utilisateurs_taches.md`](docs/utilisateurs_taches.md) | Utilisateurs visés, besoins, catalogue des tâches utilisateur et limites des données |
+| [`docs/workflow.md`](docs/workflow.md) | Workflow complet : chaque script, ce qu'il lit, ce qu'il fait, ce qu'il produit, jusqu'au dataset visualisé |
+| [`docs/schema.md`](docs/schema.md) | Dictionnaire de données de la table commune : types de Munzner, unités, dérivation par source |
+| [`docs/decisions.md`](docs/decisions.md) | Journal des choix de préparation (D1 à D19), avec leur justification chiffrée |
+| [`docs/sources.md`](docs/sources.md) | Sources, licences et attributions |
+| [`docs/documentation.html`](docs/documentation.html) | Toute la documentation ci-dessus, sur une seule page lisible dans un navigateur |
+
+## Workflow en bref
+
+Le découpage suit le modèle de pipeline du cours (Ward, Grinstein et Keim). Le détail de chaque étape est dans [`docs/workflow.md`](docs/workflow.md).
+
+| Étape du modèle | Script | Sortie | Lignes |
+|---|---|---|---|
+| Raw data | `scripts/download_data.sh`, `scripts/download_geo.sh` | `data/raw/` (non versionné) | 51 707 annonces, 5 JSON, 4 jeux de contours |
+| Data transformation | `notebooks/01_airbnb.ipynb` | `data/interim/airbnb.parquet` | 28 192 |
+| Data transformation | `notebooks/02_hotels_booking.ipynb` | `data/interim/hotels.parquet` | 1 705 |
+| Data transformation | `notebooks/03_quartiers.ipynb` | `data/external/quartiers_*.geojson`, `data/processed/quartiers_*.geojson` | 80 quartiers |
+| Data transformation | `notebooks/04_geocodage_hotels.ipynb` | `data/external/hotels_geocodage.csv` | 1 183 positions fiables |
+| Data tables | `notebooks/05_table_commune.ipynb` | `data/processed/offres*.csv` | 29 315 |
+| Visual mapping → Views | `viz/` (application D3, à venir) | | |
+
+La logique de préparation est dans `src/prep/`, que les notebooks importent. Le schéma de la table commune est défini dans `src/prep/schema.py`, et chaque étape le vérifie avant d'écrire.
+
+## Répartition du travail
+
+*À compléter par l'équipe : chacun indique la partie réalisée par l'autre.*
+
+| Partie | Réalisée par |
+|---|---|
+| Choix des datasets, problématique | |
+| Collecte et préparation des données (notebooks 01, 02, 05) | |
+| Quartiers et géolocalisation des hôtels (notebooks 03, 04) | |
+| Documentation (utilisateurs, tâches, workflow) | |
+| Technique de visualisation 1 (D3) | |
+| Technique de visualisation 2 (D3) | |
+| Rapport et soutenance | |
+
+## Installation et exécution
 
 ```bash
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
-.venv/bin/nbstripout --install      # une fois par poste : retire les sorties des notebooks au commit
-./scripts/build_data.sh             # télécharge les données si besoin puis exécute les notebooks
-                                    # (GEOCODER=1 ./scripts/build_data.sh rejoue aussi le géocodage, ~15 min)
-.venv/bin/jupyter lab               # pour explorer
+.venv/bin/nbstripout --install        # une fois par poste : retire les sorties des notebooks au commit
+./scripts/build_data.sh               # télécharge les données si besoin, puis exécute les notebooks
+                                      # (GEOCODER=1 ./scripts/build_data.sh rejoue aussi le géocodage, ~15 min)
+.venv/bin/python scripts/build_doc.py # régénère docs/documentation.html
+.venv/bin/jupyter lab                 # pour explorer les notebooks
 ```
 
-Le téléchargement Kaggle est anonyme : aucun jeton n'est nécessaire.
+Le téléchargement Kaggle est anonyme : aucun jeton n'est nécessaire. Les données traitées sont versionnées. On peut donc lancer la visualisation sans rien exécuter.
 
-## Fichiers produits pour D3
+## Fichiers chargés par D3
 
 | Fichier | Contenu |
 |---|---|
-| `data/processed/offres.csv` | table complète, une ligne par hébergement |
-| `data/processed/offres_<ville>.csv` | une ville (`londres`, `berlin`, `paris`, `rome`) : sert à « changer de dataset » |
+| `data/processed/offres.csv` | table complète : une ligne par hébergement, 19 colonnes |
+| `data/processed/offres_<ville>.csv` | une ville (`londres`, `berlin`, `paris`, `rome`), pour « changer de dataset » |
 | `data/processed/quartiers_<ville>.geojson` | contours simplifiés des quartiers, orientés pour `d3.geoPath` |
 
 ```js
 const offres = await d3.csv("data/processed/offres_paris.csv", d3.autoType);
-const zones = await d3.json("data/processed/quartiers_paris.geojson");  // relier par offres.quartier = feature.properties.quartier
+const zones = await d3.json("data/processed/quartiers_paris.geojson");  // relier par offre.quartier = feature.properties.quartier
 ```
 
-## Organisation
+## Organisation du dépôt
 
 ```
-data/raw/        données Kaggle brutes (ignorées par Git)
+data/raw/        données brutes téléchargées (ignorées par Git)
 data/interim/    une table par source, au schéma commun
-data/external/   contours de quartiers normalisés et correspondance des noms Booking
-data/processed/  table commune, chargée par D3
-notebooks/       01 Airbnb, 02 Booking, 03 quartiers, 04 géocodage des hôtels, 05 fusion et contrôles qualité
-src/prep/        code partagé : schéma, transformations, fusion
-scripts/         téléchargement et exécution de la préparation
-docs/            schéma, décisions, sources, plan du projet
+data/external/   contours des quartiers, correspondance des noms Booking, géocodage des hôtels
+data/processed/  table commune et contours, chargés par D3
+notebooks/       01 Airbnb, 02 Booking, 03 quartiers, 04 géocodage, 05 table commune
+src/prep/        code de préparation : schéma, transformations, quartiers, géocodage, fusion
+scripts/         téléchargement, exécution de la chaîne, génération de la doc HTML
+docs/            documentation (et docs/archives/ : documents de travail)
 ```

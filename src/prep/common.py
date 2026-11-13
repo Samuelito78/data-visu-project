@@ -27,7 +27,7 @@ TRANCHES_BORNES = [0, 1, 2, 4, np.inf]
 TRANCHES_LIBELLES = ["0–1 km", "1–2 km", "2–4 km", "> 4 km"]
 
 # « Centre » de référence de chaque ville : le point depuis lequel Booking mesure distanceFromCenter,
-# estimé par le géocodage des hôtels (docs/handoff_geocodage_hotels.md, G1). Airbnb n'utilise pas le même
+# estimé par le géocodage des hôtels (docs/decisions.md, G1). Airbnb n'utilise pas le même
 # point à Berlin (Alexanderplatz) ni à Rome (gare Termini) : on recalcule donc sa distance depuis ce centre (D18).
 CENTRES = {
     "Londres": (51.50774, -0.12789),   # Charing Cross / Trafalgar Square
