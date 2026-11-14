@@ -1,0 +1,204 @@
+/* Styles communs. Les couleurs sont des variables : une vue ne code jamais une couleur en dur. */
+
+:root {
+  color-scheme: light;
+  --fond: #f6f5f2;
+  --surface: #fcfcfb;          /* fond des vues et des graphiques */
+  --bordure: #e2e0da;
+  --texte: #0b0b0b;
+  --texte-secondaire: #52514e;
+  --texte-discret: #8a8983;
+  --grille: #e8e6e0;
+  --sans-donnees: #dcdad4;     /* quartiers sans offres */
+  --avertissement-fond: #fdf3dc;
+  --avertissement-bord: #e0a100;
+  --erreur: #d03b3b;
+  /* Couleurs des sources (bleu / orange, vérifiées pour le daltonisme et le contraste) */
+  --couleur-hotel: #2a78d6;
+  --couleur-airbnb: #eb6834;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --fond: #121211;
+    --surface: #1a1a19;
+    --bordure: #33332f;
+    --texte: #f0efec;
+    --texte-secondaire: #c3c2b7;
+    --texte-discret: #8f8e86;
+    --grille: #2b2b28;
+    --sans-donnees: #383835;
+    --avertissement-fond: #3a2f12;
+    --avertissement-bord: #c98500;
+    --couleur-hotel: #3987e5;
+    --couleur-airbnb: #d95926;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --fond: #121211;
+  --surface: #1a1a19;
+  --bordure: #33332f;
+  --texte: #f0efec;
+  --texte-secondaire: #c3c2b7;
+  --texte-discret: #8f8e86;
+  --grille: #2b2b28;
+  --sans-donnees: #383835;
+  --avertissement-fond: #3a2f12;
+  --avertissement-bord: #c98500;
+  --couleur-hotel: #3987e5;
+  --couleur-airbnb: #d95926;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0 16px 24px;
+  background: var(--fond);
+  color: var(--texte);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+body.en-chargement { cursor: progress; }
+body.en-chargement .vues { opacity: 0.6; }
+
+.entete { max-width: 1400px; margin: 0 auto; padding: 16px 0 8px; }
+.entete h1 { margin: 0; font-size: 22px; }
+.entete p { margin: 4px 0 0; color: var(--texte-secondaire); }
+
+/* Barre de contrôles : une seule rangée au-dessus des vues, qui passe à la ligne si besoin. */
+.controles {
+  max-width: 1400px;
+  margin: 8px auto;
+  padding: 10px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  align-items: flex-end;
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: 8px;
+}
+.controle { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.controle-libelle { font-size: 12px; color: var(--texte-secondaire); }
+.controle output { font-size: 12px; font-variant-numeric: tabular-nums; }
+.controle-options { display: flex; flex-wrap: wrap; gap: 4px 10px; }
+.controle-options label, label.controle-options { display: inline-flex; align-items: center; gap: 4px; }
+.controle-fin { margin-left: auto; align-items: flex-end; }
+.compteur { margin: 0; font-size: 12px; color: var(--texte-secondaire); font-variant-numeric: tabular-nums; }
+select, button, input { font: inherit; color: inherit; }
+select, button {
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+button { cursor: pointer; }
+input[type="range"] { width: 140px; }
+
+.avertissements { max-width: 1400px; margin: 0 auto; }
+.avertissement {
+  margin: 6px 0;
+  padding: 6px 10px;
+  background: var(--avertissement-fond);
+  border-left: 3px solid var(--avertissement-bord);
+  border-radius: 4px;
+  font-size: 13px;
+}
+.avertissement::before { content: "⚠ "; }
+.avertissement.erreur { border-left-color: var(--erreur); }
+
+/* Disposition : les deux vues à gauche, la fiche de détail à droite. */
+.disposition {
+  max-width: 1400px;
+  margin: 8px auto 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 12px;
+  align-items: start;
+}
+.vues { display: grid; gap: 12px; min-width: 0; }
+.vue, .detail {
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: 8px;
+  padding: 12px;
+  min-width: 0;
+}
+.vue-titre { margin: 0 0 8px; font-size: 15px; }
+.vue-contenu { min-width: 0; }
+.vue-contenu svg { display: block; max-width: 100%; height: auto; }
+.detail { position: sticky; top: 12px; }
+
+body[data-vue-seule="1"] #technique-2,
+body[data-vue-seule="2"] #technique-1 { display: none; }
+
+@media (max-width: 900px) {
+  .disposition { grid-template-columns: minmax(0, 1fr); }
+  .detail { position: static; }
+  .controle-fin { margin-left: 0; align-items: flex-start; }
+}
+
+/* Axes D3 : discrets */
+.axe { color: var(--texte-discret); }
+.axe text { fill: var(--texte-secondaire); font-size: 11px; }
+.axe line, .axe path { stroke: var(--grille); }
+
+/* Pastille de couleur d'une source (légendes, fiches, listes) */
+.pastille {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: baseline;
+  flex: none;
+}
+.pastille.hotel { background: var(--couleur-hotel); }
+.pastille.airbnb { background: var(--couleur-airbnb); }
+
+/* Surlignage partagé : une offre survolée ou sélectionnée dans une vue l'est aussi dans l'autre. */
+circle.survolee { stroke: var(--texte); stroke-width: 1.5px; }
+circle.selectionnee { stroke: var(--texte); stroke-width: 2.5px; r: 5px; }
+
+/* Fiche de détail */
+.detail-vide { margin: 0; color: var(--texte-secondaire); }
+.detail-entete { display: flex; justify-content: space-between; gap: 8px; align-items: start; }
+.detail-entete h2 { margin: 0; font-size: 16px; }
+.detail-entete button { padding: 0 8px; line-height: 1.6; }
+.detail-source { margin: 4px 0 8px; color: var(--texte-secondaire); display: flex; align-items: center; }
+.detail dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0; }
+.detail dt { color: var(--texte-secondaire); }
+.detail dd { margin: 0; font-variant-numeric: tabular-nums; }
+
+/* Infobulle (commun/infobulle.js) */
+.infobulle {
+  position: fixed;
+  z-index: 10;
+  pointer-events: none;
+  max-width: 280px;
+  padding: 6px 10px;
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+.infobulle.visible { opacity: 1; }
+
+/* Exemples des techniques (à supprimer avec eux) */
+.exemple-resume { margin: 0 0 6px; color: var(--texte-secondaire); }
+.exemple-liste { margin: 0; padding-left: 24px; }
+.exemple-liste button {
+  display: flex; align-items: center; gap: 4px;
+  width: 100%; text-align: left;
+  border-color: transparent; background: none;
+}
+.exemple-nom { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.exemple-valeurs { color: var(--texte-secondaire); font-variant-numeric: tabular-nums; }
+.exemple-liste li.survolee button { border-color: var(--bordure); }
+.exemple-liste li.selectionnee button { border-color: var(--texte); }
+
+.pied { max-width: 1400px; margin: 16px auto 0; font-size: 12px; color: var(--texte-discret); }

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hôtel ou Airbnb ?</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+  <!-- D3 embarqué dans le dépôt : la démo fonctionne sans réseau. -->
+  <script src="lib/d3.v7.9.0.min.js"></script>
+  <script type="module" src="main.js"></script>
+</head>
+<body>
+  <header class="entete">
+    <h1>Hôtel ou Airbnb ?</h1>
+    <p>Pour un séjour à deux, avec un budget par nuit : quel hébergement choisir, et dans quel secteur de la ville ?</p>
+  </header>
+
+  <!-- Éléments communs : commun/controles.js et commun/avertissements.js -->
+  <section id="controles" class="controles" aria-label="Ville et filtres"></section>
+  <div id="avertissements" class="avertissements"></div>
+
+  <main class="disposition">
+    <div class="vues">
+      <!-- Technique 1 : technique-1/vue.js -->
+      <section id="technique-1" class="vue">
+        <h2 class="vue-titre">Technique 1</h2>
+        <div class="vue-contenu"></div>
+      </section>
+      <!-- Technique 2 : technique-2/vue.js -->
+      <section id="technique-2" class="vue">
+        <h2 class="vue-titre">Technique 2</h2>
+        <div class="vue-contenu"></div>
+      </section>
+    </div>
+    <!-- Détails à la demande : commun/detail.js -->
+    <aside id="detail" class="detail" aria-label="Fiche de l'offre sélectionnée" aria-live="polite"></aside>
+  </main>
+
+  <footer class="pied">
+    Données : Kaggle (CC0) · contours : Ville de Paris, Geoportal Berlin, London Datastore, © contributeurs OpenStreetMap.
+    Détail des licences dans <code>docs/sources.md</code>.
+  </footer>
+</body>
+</html>

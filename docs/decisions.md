@@ -128,14 +128,14 @@ Chaque décision donne : ce qui est décidé, la justification chiffrée, la con
 
 - Décision : la distance au centre des Airbnb est **recalculée** à vol d'oiseau depuis le centre utilisé par Booking. La colonne `dist` d'origine est abandonnée.
 - Justification :
-  - Booking mesure `distanceFromCenter` depuis un point fixe par ville, estimé par le géocodage avec un écart médian de 20 à 30 m : Trafalgar Square, porte de Brandebourg, Hôtel de Ville, piazza Venezia (handoff du géocodage, G1).
+  - Booking mesure `distanceFromCenter` depuis un point fixe par ville, estimé par le géocodage avec un écart médian de 20 à 30 m : Trafalgar Square, porte de Brandebourg, Hôtel de Ville, piazza Venezia (G1, en annexe).
   - La même méthode appliquée aux Airbnb (notebook 01, section 3 bis) explique `dist` avec un écart médian de 2 à 7 m. Le point trouvé est le même que celui de Booking à Londres (0,08 km d'écart) et à Paris (0,10 km). Il diffère à Berlin, où c'est Alexanderplatz, à 2,83 km, et à Rome, où c'est la gare Termini, à 1,75 km.
   - On recalcule côté Airbnb parce que les hôtels sans coordonnées ne sont situés que par leur distance Booking.
 - Conséquence : les tranches de distance (D14) mesurent la même chose pour les deux sources. Avant cette correction, les tranches Airbnb de Berlin et de Rome étaient décalées.
 
 ## D19. Géocodage des hôtels
 
-- Décision : on intègre les coordonnées des hôtels seulement quand le géocodage est `fiable`. Le détail de la méthode figure dans le handoff du géocodage, décisions G1 à G5 :
+- Décision : on intègre les coordonnées des hôtels seulement quand le géocodage est `fiable`. Le détail de la méthode figure en annexe, décisions G1 à G5 :
   - appariement des noms avec OpenStreetMap, puis Nominatim, puis corrections relues à la main ;
   - aucune extraction des pages Booking ;
   - contrôles d'emprise, d'écart de distance (≤ 0,5 km) et de quartier.
@@ -144,6 +144,70 @@ Chaque décision donne : ce qui est décidé, la justification chiffrée, la con
   - Dans la table finale, 1 166 hôtels ont une position. Les autres ont été écartés comme prix aberrants (D13).
   - Les hôtels non géocodés gardent un quartier par leur nom (D17), mais pas de point sur la carte.
   - **Biais à signaler** : les hôtels non géocodés sont surtout des indépendants et des logements entiers. Une carte de points surreprésente donc les chaînes, bien cartographiées dans OSM.
+
+## Annexe : détail du géocodage des hôtels (G1 à G5)
+
+Code : `src/prep/geocodage.py` ; exploration et contrôles : `notebooks/04_geocodage_hotels.ipynb`. Le contrat d'origine de cette étape (méthodes, format de sortie, contrôles) est archivé dans `docs/archives/handoff_geocodage_hotels.md`.
+
+### Résultats
+
+| Ville | Hôtels | OSM | Nominatim | Manuel | **Fiables** | Taux |
+|---|---|---|---|---|---|---|
+| Londres | 499 | 307 | 34 | 0 | **341** | 68 % |
+| Berlin | 499 | 334 | 28 | 0 | **362** | 73 % |
+| Paris | 500 | 320 | 17 | 0 | **337** | 67 % |
+| Rome | 207 | 75 | 14 | 54 | **143** | 69 % |
+| **Total** | 1 705 | 1 036 | 93 | 54 | **1 183** | **69 %** |
+
+(comptes des lignes `fiable = true`, par méthode.) Parmi les points fiables, l'écart médian de distance au centre est de 0,03 km, le maximum de 0,35 km ; aucun doublon exact de coordonnées.
+
+Les 522 hôtels sans point fiable ne sont pas tirés au hasard : ce sont surtout des hôtels indépendants absents d'OSM ou mal nommés, des logements entiers (D11) et des annonces sans adresse publique. **La carte surreprésente donc les chaînes**, bien cartographiées dans OSM. À signaler dans le rapport.
+
+### G1. Le « centre » de Booking
+
+- Constat : en cherchant le point qui minimise l'écart médian entre distance haversine et `distanceFromCenter` (sur ~280 appariements OSM sûrs par ville, 55 à Rome), l'écart médian tombe à **20-30 m**, c'est-à-dire l'arrondi de Booking. La distance Booking est une distance à vol d'oiseau depuis un point fixe :
+
+  | Ville | Centre estimé | Repère |
+  |---|---|---|
+  | Londres | 51.50774, -0.12789 | Charing Cross / Trafalgar Square |
+  | Berlin | 52.51622, 13.37657 | porte de Brandebourg |
+  | Paris | 48.85642, 2.35138 | Hôtel de Ville |
+  | Rome | 41.89582, 12.48230 | piazza Venezia |
+
+- Conséquence : la question ouverte « définition du centre » est réglée côté hôtels. Côté Airbnb, voir D18.
+
+### G2. Similarité des noms
+
+- Décision : noms normalisés (minuscules, sans accents ni ponctuation, sans mots génériques : « hotel », « the », nom de la ville…), puis score = 80 % Jaccard pondéré par l'IDF des mots dans la ville + 20 % `token_sort_ratio` (rapidfuzz).
+- Justification : avec un simple ratio flou, « AMANO Covent Garden » s'appariait à « Covent Garden Hotel » (les mots de lieu sont partout). L'IDF fait peser les mots rares (le nom propre de l'hôtel) plus que les mots de lieu.
+
+### G3. Paliers d'acceptation et seuil de distance
+
+- Décision : un candidat est retenu s'il passe un palier ; il est `fiable` s'il passe en plus tous les contrôles.
+
+  | Méthode | Similarité | Exigence |
+  |---|---|---|
+  | OSM | ≥ 90 | aucune pour être retenu |
+  | OSM | ≥ 75 | écart ≤ 0,5 km et quartier cohérent |
+  | OSM | ≥ 60 | écart ≤ 0,15 km et quartier cohérent |
+  | Nominatim | ≥ 60 / ≥ 45 | écart ≤ 0,5 / 0,15 km, quartier cohérent, catégorie `tourism`, `amenity`, `building` ou `leisure` (jamais une rue) |
+
+- Seuil de distance : **0,5 km** au lieu du 1 km envisagé. 95 % des appariements sûrs ont un écart < 0,11 km ; 1 km laissait passer la mauvaise succursale d'une chaîne.
+- Contrôle de quartier : un point à moins de 200 m du contour attendu est accepté (erreurs de géocodage en bordure). Rome : indicatif seulement, il n'entre pas dans `fiable`.
+- Doublons : un objet OSM revendiqué par plusieurs hôtels reste au mieux apparié ; les autres passent à leur candidat suivant. Des coordonnées identiques restantes rendent l'hôtel le moins bien apparié non fiable (1 cas : Rome Vatican Inn / BQ House).
+
+### G4. Corrections relues et pages Booking
+
+- Décision : **aucune extraction des pages Booking** (méthode 3 du handoff) : CGU contraires et protection anti-robot. Les cas restants ont été traités par relecture assistée : variantes de nom dans Nominatim, ou adresse postale relevée sur le web (site de l'hôtel, sites d'avis) puis géocodée avec son numéro. Un point n'est gardé que s'il passe les mêmes contrôles (écart ≤ 0,5 km, quartier).
+- Fichier : `data/external/hotels_geocodage_corrections.csv` (95 lignes, colonne `note` = source et écart). C'est une **entrée** versionnée de la chaîne, à côté de la sortie `hotels_geocodage.csv`, pour que le résultat reste reproductible.
+- Effort limité : la relecture a été complète à Rome (taux de 40 % à 69 %), partielle ailleurs (≈ 30 hôtels par ville, recherches par nom seulement). C'est le levier principal pour améliorer le taux si besoin.
+- Méthode dans la sortie : `nominatim` si l'objet trouvé est l'hôtel nommé, `manuel` si le point vient d'une adresse relevée à la main. Points à surveiller signalés dans `note` : plusieurs points romains sont posés sur un autre commerce du même numéro (bar ou restaurant de l'hôtel), et quelques hôtels ont changé de nom depuis 2023 (Grange St Paul's → Leonardo Royal St Paul's, Kyriad La Villette → Campanile, Vibe Nazionale → ex-Giolli).
+
+### G5. Reproductibilité
+
+- Toutes les réponses (Overpass, Nominatim, contours) sont en cache sous `data/external/cache/` (ignoré par Git, ~13 Mo). Sans cache, une exécution complète du notebook refait 4 requêtes Overpass, 6 téléchargements de contours et ~670 requêtes Nominatim (≈ 15 min à 1 requête/s).
+- Dépendances ajoutées à `requirements.txt` : `rapidfuzz`, `shapely`, `requests`.
+- Intégration : jointure de `hotels_geocodage.csv` sur `link` au notebook 05, en ne gardant que `fiable = true` (D19).
 
 ## Questions encore ouvertes
 

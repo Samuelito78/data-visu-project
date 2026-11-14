@@ -60,5 +60,5 @@ Modèle de Ward, Grinstein et Keim : Raw data → Data transformation → Data t
 | Data transformation | `notebooks/01_airbnb.ipynb` et `notebooks/02_hotels_booking.ipynb` (module `src/prep/`) : nettoyage, conversion, dérivation, vers `data/interim/*.parquet` |
 | Data transformation (espace) | `notebooks/03_quartiers.ipynb` : contours normalisés et correspondance des noms Booking ; `notebooks/04_geocodage_hotels.ipynb` : coordonnées des hôtels (OSM, Nominatim, corrections relues) |
 | Data tables | `notebooks/05_table_commune.ipynb` : fusion, rattachement aux quartiers, contrôles, écrêtage des aberrants, export de `data/processed/offres*.csv` |
-| Visual mapping | à venir : encodages D3 (position, couleur, taille) |
-| Views | à venir : vues D3 liées |
+| Visual mapping | `viz/` : encodages D3 (position, couleur, taille), voir `viz/README.md` |
+| Views | `viz/index.html` : deux techniques liées par un état partagé (`viz/commun/etat.js`) |
