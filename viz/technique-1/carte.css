@@ -1,0 +1,78 @@
+/* Styles de la technique 1 (carte des quartiers). Chargé par technique-1/vue.js :
+   les fichiers communs (style.css, index.html) ne sont pas modifiés.
+   Couleurs : uniquement les variables de style.css, pour suivre le mode sombre. */
+
+.t1-entete {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+  margin: 0 0 8px;
+}
+.t1-resume { margin: 0; color: var(--texte-secondaire); flex: 1 1 260px; }
+.t1-retour[hidden] { display: none; }
+.t1-pastille-valeur {
+  display: inline-block;
+  width: 12px; height: 12px;
+  margin-right: 6px;
+  vertical-align: -1px;
+  border: 1px solid var(--bordure);
+  border-radius: 2px;
+}
+
+.t1-carte { cursor: grab; }
+.t1-carte:active { cursor: grabbing; }
+
+/* Contours : trait de largeur constante quel que soit le zoom. */
+.t1-quartiers path {
+  stroke: var(--surface);
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.t1-quartiers path:hover,
+.t1-quartiers path.t1-lie { stroke: var(--texte); stroke-width: 2px; }
+.t1-quartiers path.t1-zoome { stroke: var(--texte); stroke-width: 1.5px; cursor: grab; }
+.t1-quartiers path.t1-estompe { opacity: 0.7; }
+/* Avec les points, la couleur des quartiers reste lisible : on l'atténue à peine. */
+.t1-quartiers.t1-avec-points path { fill-opacity: 0.75; }
+
+.t1-etiquettes text {
+  font-size: 11px;
+  fill: var(--texte);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+/* Points : liseré clair épais pour se détacher du fond, plus une ombre fine et sombre
+   (posée une seule fois sur le groupe, c'est moins coûteux qu'un filtre par point). */
+.t1-points { filter: drop-shadow(0 0 0.6px rgb(0 0 0 / 0.7)); }
+.t1-points path { stroke: var(--surface); stroke-width: 1.25px; cursor: pointer; }
+.t1-points path.survolee { stroke: var(--texte); stroke-width: 2px; }
+.t1-points path.selectionnee { stroke: var(--texte); stroke-width: 2.5px; }
+
+/* Légende */
+.t1-legende {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  align-items: flex-start;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--texte-secondaire);
+}
+.t1-legende-bloc { display: flex; flex-direction: column; gap: 2px; }
+.t1-legende-titre { color: var(--texte); }
+.t1-legende-sens { display: flex; justify-content: space-between; gap: 12px; width: 264px; padding: 0 4px; white-space: nowrap; }
+.t1-legende-cas { display: flex; flex-direction: column; gap: 4px; max-width: 360px; }
+.t1-legende-item { display: inline-flex; align-items: center; gap: 6px; }
+.t1-legende-item svg { display: inline; flex: none; border: 1px solid var(--bordure); }
+.t1-legende-note { color: var(--texte-discret); }
+.t1-legende-item.t1-points svg { border: none; overflow: visible; }
