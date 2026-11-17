@@ -80,7 +80,7 @@ Les notebooks explorent les données, montrent les constats et justifient les ch
 - **Produit** dans `data/raw/geo/` :
   - les 20 arrondissements de Paris (Ville de Paris, GeoJSON) ;
   - les 12 Bezirke de Berlin (Geoportal Berlin, service WFS) ;
-  - les 33 boroughs de Londres (London Datastore, Shapefile) ;
+  - les 33 boroughs de Londres (ONS Open Geography Portal, GeoJSON) ;
   - les 15 municipi de Rome (OpenStreetMap, via Overpass).
 
 ## 3. Étape 1 : transformer les annonces Airbnb
@@ -139,7 +139,7 @@ Les notebooks explorent les données, montrent les constats et justifient les ch
 - **Fait** :
   1. ramène les 4 villes au même format (`ville`, `quartier`, `code`) et en coordonnées WGS84. Londres est reprojeté depuis le système britannique, et les municipi de Rome sont reconstitués à partir des chemins OpenStreetMap (D16) ;
   2. vérifie la table de correspondance `data/external/correspondance_quartiers.csv`, écrite à la main. Elle associe les 85 noms de quartier Booking à un contour : nom identique, quartier contenu dans le contour (Chiswick → Hounslow, Trevi → Municipio I), ou approximation (D17) ;
-  3. rattache les annonces Airbnb par jointure spatiale (point dans le polygone) : 28 153 sur 28 192 tombent dans un contour, et les 39 autres sont à moins de 250 m. Ce sont surtout des annonces au bord de la Tamise (D17) ;
+  3. rattache les annonces Airbnb par jointure spatiale (point dans le polygone) : 28 187 sur 28 192 tombent dans un contour, et les 5 autres, en bordure de Rome, sont à moins de 250 m (D17) ;
   4. mesure où la comparaison est possible : zones avec au moins 30 Airbnb et 10 hôtels (D16) ;
   5. simplifie les contours (tolérance 25 m) et oriente les polygones comme l'attend `d3.geoPath`.
 - **Produit** :

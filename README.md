@@ -31,7 +31,7 @@ La visualisation, développée en D3.js, propose une vue d'ensemble par ville, p
 | Airbnb Prices in European Cities | [kaggle.com/datasets/thedevastator/…](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities) | 8 CSV, pour Londres, Berlin, Paris et Rome en semaine et le week-end : 28 192 annonces |
 | 7500 hotels from Airbnb, Booking and Hotels.com | [kaggle.com/datasets/mykhailozub/…](https://www.kaggle.com/datasets/mykhailozub/500-hotels-from-airbnb-booking-and-hotelscom) | la liste Booking des 4 mêmes villes : 1 705 hôtels |
 
-Les deux datasets sont sous licence CC0. Les contours des quartiers (Ville de Paris, Geoportal Berlin, London Datastore, OpenStreetMap) et le géocodage (OpenStreetMap) ont leurs propres licences et mentions obligatoires, détaillées dans [`docs/sources.md`](docs/sources.md).
+Les deux datasets sont sous licence CC0. Les contours des quartiers (Ville de Paris, Geoportal Berlin, ONS, OpenStreetMap) et le géocodage (OpenStreetMap) ont leurs propres licences et mentions obligatoires, détaillées dans [`docs/sources.md`](docs/sources.md).
 
 ## Documentation
 

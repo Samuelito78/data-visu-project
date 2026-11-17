@@ -3435,7 +3435,7 @@ LON-A-01037,Londres,Airbnb,Chambre privée,,,106.66,true,85.0,,3.72,2–4 km,tru
 LON-A-01038,Londres,Airbnb,Logement entier,,,137.82,true,88.0,,3.08,2–4 km,true,Westminster,51.518440000000005,-0.16893,semaine,2,false
 LON-A-01039,Londres,Airbnb,Chambre privée,,,129.47,true,92.0,,0.78,0–1 km,true,Westminster,51.512,-0.11900000000000001,semaine,2,false
 LON-A-01040,Londres,Airbnb,Logement entier,,,456.85,true,100.0,,1.36,1–2 km,true,Westminster,51.515,-0.11199999999999999,semaine,4,true
-LON-A-01041,Londres,Airbnb,Logement entier,,,346.9,true,96.0,,1.43,1–2 km,true,City of London,51.516000000000005,-0.11199999999999999,semaine,2,true
+LON-A-01041,Londres,Airbnb,Logement entier,,,346.9,true,96.0,,1.43,1–2 km,true,Camden,51.516000000000005,-0.11199999999999999,semaine,2,true
 LON-A-01042,Londres,Airbnb,Logement entier,,,135.82,true,94.0,,4.34,> 4 km,true,Tower Hamlets,51.5148,-0.06622,semaine,3,false
 LON-A-01043,Londres,Airbnb,Logement entier,,,135.82,true,95.0,,4.22,> 4 km,true,Tower Hamlets,51.51592,-0.06836,semaine,3,false
 LON-A-01044,Londres,Airbnb,Chambre privée,,,100.31,true,98.0,,1.79,1–2 km,true,Lambeth,51.495470000000005,-0.11112999999999999,semaine,2,false
@@ -3531,7 +3531,7 @@ LON-A-01133,Londres,Airbnb,Logement entier,,,390.18,true,93.0,,3.91,2–4 km,tru
 LON-A-01134,Londres,Airbnb,Chambre privée,,,94.43,true,95.0,,2.66,2–4 km,true,Camden,51.530640000000005,-0.1392,semaine,2,true
 LON-A-01135,Londres,Airbnb,Logement entier,,,225.78,true,91.0,,4.95,> 4 km,false,Tower Hamlets,51.52644,-0.06294,semaine,6,false
 LON-A-01136,Londres,Airbnb,Logement entier,,,221.31,true,71.0,,1.93,1–2 km,true,Camden,51.521,-0.11,semaine,6,false
-LON-A-01137,Londres,Airbnb,Chambre privée,,,98.31,true,96.0,,4.85,> 4 km,false,Hackney,51.5421,-0.08475,semaine,2,false
+LON-A-01137,Londres,Airbnb,Chambre privée,,,98.31,true,96.0,,4.85,> 4 km,false,Islington,51.5421,-0.08475,semaine,2,false
 LON-A-01138,Londres,Airbnb,Chambre privée,,,90.67,true,87.0,,2.11,2–4 km,true,Islington,51.52108,-0.10611,semaine,2,false
 LON-A-01139,Londres,Airbnb,Logement entier,,,203.79,true,65.0,,4.43,> 4 km,true,Kensington and Chelsea,51.493990000000004,-0.18797,semaine,3,false
 LON-A-01140,Londres,Airbnb,Logement entier,,,177.92,true,93.0,,4.41,> 4 km,true,Kensington and Chelsea,51.49473,-0.18805,semaine,2,false
@@ -6956,7 +6956,7 @@ LON-A-04612,Londres,Airbnb,Chambre privée,,,71.14,true,97.0,,8.8,> 4 km,false,L
 LON-A-04613,Londres,Airbnb,Chambre privée,,,186.15,true,80.0,,7.51,> 4 km,false,Lambeth,51.44023,-0.1281,semaine,2,false
 LON-A-04614,Londres,Airbnb,Logement entier,,,286.58,true,98.0,,6.94,> 4 km,false,Hackney,51.56266,-0.08009,semaine,6,true
 LON-A-04615,Londres,Airbnb,Chambre privée,,,60.56,true,69.0,,5.76,> 4 km,true,Tower Hamlets,51.5257,-0.04975,weekend,2,false
-LON-A-04616,Londres,Airbnb,Chambre privée,,,97.96,true,96.0,,4.85,> 4 km,false,Hackney,51.5421,-0.08475,weekend,2,false
+LON-A-04616,Londres,Airbnb,Chambre privée,,,97.96,true,96.0,,4.85,> 4 km,false,Islington,51.5421,-0.08475,weekend,2,false
 LON-A-04617,Londres,Airbnb,Chambre privée,,,96.66,true,95.0,,4.65,> 4 km,true,Camden,51.54802,-0.14585,weekend,3,false
 LON-A-04618,Londres,Airbnb,Chambre privée,,,90.19,true,87.0,,2.11,2–4 km,true,Islington,51.52108,-0.10611,weekend,2,false
 LON-A-04619,Londres,Airbnb,Logement entier,,,202.85,true,65.0,,4.43,> 4 km,true,Kensington and Chelsea,51.493990000000004,-0.18797,weekend,3,false
@@ -7161,7 +7161,7 @@ LON-A-04824,Londres,Airbnb,Chambre privée,,,102.42,true,97.0,,3.28,2–4 km,tru
 LON-A-04825,Londres,Airbnb,Chambre privée,,,106.31,true,95.0,,3.12,2–4 km,false,Islington,51.52645,-0.09423,weekend,2,true
 LON-A-04826,Londres,Airbnb,Logement entier,,,242.83,true,95.0,,7.27,> 4 km,false,Tower Hamlets,51.53567,-0.032889999999999996,weekend,3,false
 LON-A-04827,Londres,Airbnb,Chambre privée,,,107.01,true,89.0,,3.46,2–4 km,true,Westminster,51.51364,-0.17693,weekend,3,false
-LON-A-04829,Londres,Airbnb,Logement entier,,,345.38,true,96.0,,1.43,1–2 km,true,City of London,51.516000000000005,-0.11199999999999999,weekend,2,true
+LON-A-04829,Londres,Airbnb,Logement entier,,,345.38,true,96.0,,1.43,1–2 km,true,Camden,51.516000000000005,-0.11199999999999999,weekend,2,true
 LON-A-04830,Londres,Airbnb,Logement entier,,,148.29,true,94.0,,7.82,> 4 km,false,Lewisham,51.46548,-0.0377,weekend,2,false
 LON-A-04831,Londres,Airbnb,Chambre privée,,,167.45,true,96.0,,3.84,2–4 km,false,Islington,51.538759999999996,-0.10344,weekend,5,false
 LON-A-04832,Londres,Airbnb,Chambre privée,,,152.76,true,91.0,,1.22,1–2 km,true,Camden,51.51854,-0.12443,weekend,3,false
@@ -10430,7 +10430,7 @@ LON-A-08161,Londres,Airbnb,Logement entier,,,213.43,true,100.0,,6.1,> 4 km,true,
 LON-A-08162,Londres,Airbnb,Chambre privée,,,58.21,true,100.0,,8.1,> 4 km,false,Hackney,51.551840000000006,-0.0347,weekend,2,false
 LON-A-08163,Londres,Airbnb,Chambre privée,,,103.6,true,82.0,,2.84,2–4 km,true,Islington,51.53282,-0.12025,weekend,2,false
 LON-A-08164,Londres,Airbnb,Logement entier,,,300.81,true,87.0,,4.86,> 4 km,true,Kensington and Chelsea,51.50974,-0.19797,weekend,3,false
-LON-A-08166,Londres,Airbnb,Logement entier,,,146.17,true,100.0,,7.63,> 4 km,true,Brent,51.53113,-0.23149,weekend,2,false
+LON-A-08166,Londres,Airbnb,Logement entier,,,146.17,true,100.0,,7.63,> 4 km,true,Hammersmith and Fulham,51.53113,-0.23149,weekend,2,false
 LON-A-08167,Londres,Airbnb,Chambre privée,,,67.85,true,87.0,,2.39,2–4 km,true,Lambeth,51.49149,-0.10535,weekend,2,false
 LON-A-08168,Londres,Airbnb,Chambre privée,,,69.26,true,98.0,,7.73,> 4 km,false,Tower Hamlets,51.492909999999995,-0.01881,weekend,2,false
 LON-A-08169,Londres,Airbnb,Chambre privée,,,77.02,true,80.0,,2.36,2–4 km,true,Camden,51.52892,-0.13005999999999998,weekend,2,false

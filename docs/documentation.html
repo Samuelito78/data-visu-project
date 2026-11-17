@@ -138,7 +138,7 @@ pre{white-space:pre-wrap}
 </tr>
 </tbody>
 </table></div>
-<p>Les deux datasets sont sous licence CC0. Les contours des quartiers (Ville de Paris, Geoportal Berlin, London Datastore, OpenStreetMap) et le géocodage (OpenStreetMap) ont leurs propres licences et mentions obligatoires, détaillées dans <a href="#sources"><code>docs/sources.md</code></a>.</p>
+<p>Les deux datasets sont sous licence CC0. Les contours des quartiers (Ville de Paris, Geoportal Berlin, ONS, OpenStreetMap) et le géocodage (OpenStreetMap) ont leurs propres licences et mentions obligatoires, détaillées dans <a href="#sources"><code>docs/sources.md</code></a>.</p>
 <h2 id="readme-documentation">Documentation</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -801,7 +801,7 @@ docs/            documentation (et docs/archives/ : documents de travail)
 <li><strong>Produit</strong> dans <code>data/raw/geo/</code> :<ul>
 <li>les 20 arrondissements de Paris (Ville de Paris, GeoJSON) ;</li>
 <li>les 12 Bezirke de Berlin (Geoportal Berlin, service WFS) ;</li>
-<li>les 33 boroughs de Londres (London Datastore, Shapefile) ;</li>
+<li>les 33 boroughs de Londres (ONS Open Geography Portal, GeoJSON) ;</li>
 <li>les 15 municipi de Rome (OpenStreetMap, via Overpass).</li>
 </ul>
 </li>
@@ -896,7 +896,7 @@ docs/            documentation (et docs/archives/ : documents de travail)
 <li><strong>Fait</strong> :<ol>
 <li>ramène les 4 villes au même format (<code>ville</code>, <code>quartier</code>, <code>code</code>) et en coordonnées WGS84. Londres est reprojeté depuis le système britannique, et les municipi de Rome sont reconstitués à partir des chemins OpenStreetMap (D16) ;</li>
 <li>vérifie la table de correspondance <code>data/external/correspondance_quartiers.csv</code>, écrite à la main. Elle associe les 85 noms de quartier Booking à un contour : nom identique, quartier contenu dans le contour (Chiswick → Hounslow, Trevi → Municipio I), ou approximation (D17) ;</li>
-<li>rattache les annonces Airbnb par jointure spatiale (point dans le polygone) : 28 153 sur 28 192 tombent dans un contour, et les 39 autres sont à moins de 250 m. Ce sont surtout des annonces au bord de la Tamise (D17) ;</li>
+<li>rattache les annonces Airbnb par jointure spatiale (point dans le polygone) : 28 187 sur 28 192 tombent dans un contour, et les 5 autres, en bordure de Rome, sont à moins de 250 m (D17) ;</li>
 <li>mesure où la comparaison est possible : zones avec au moins 30 Airbnb et 10 hôtels (D16) ;</li>
 <li>simplifie les contours (tolérance 25 m) et oriente les polygones comme l'attend <code>d3.geoPath</code>.</li>
 </ol>
@@ -1437,7 +1437,7 @@ const zones  = await d3.json(&quot;data/processed/quartiers_paris.geojson&quot;)
 <tr>
 <td>Londres</td>
 <td>33</td>
-<td>14</td>
+<td>13</td>
 <td>20</td>
 <td>10</td>
 </tr>
@@ -1461,8 +1461,14 @@ const zones  = await d3.json(&quot;data/processed/quartiers_paris.geojson&quot;)
 </ul>
 </li>
 <li>Justification :<ul>
-<li>Airbnb : 28 153 annonces sur 28 192 tombent dans un contour, et les 39 autres sont à moins de 250 m. Ce sont surtout des annonces au bord de la Tamise, que les boroughs « Excluding MHW » excluent.</li>
+<li>Airbnb : 28 187 annonces sur 28 192 tombent dans un contour, et les 5 autres, en bordure de Rome, sont à moins de 250 m.</li>
 <li>Hôtels : tous les noms Booking ont un contour. Les approximations concernent 36 hôtels à Rome (« Rome City Center », « Central Station », « Tiburtino », « Trionfale », « San Giovanni ») et 1 à Londres (« West End »).</li>
+</ul>
+</li>
+<li>Contours de Londres : on utilise les limites « BFE » de l'ONS, qui passent au milieu de la Tamise, et non la version « Excluding MHW » du London Datastore, qui s'arrête aux berges.<ul>
+<li>Les contours de Paris, Berlin et Rome couvrent déjà leur fleuve. Avec « Excluding MHW », seule la carte de Londres montrait un fleuve, sous la forme d'un vide entre les quartiers. Les quatre cartes sont maintenant traitées de la même façon : pas de cours d'eau.</li>
+<li>On n'ajoute pas de couche d'eau aux autres villes : l'eau ne sert pas aux tâches de la carte (comparer des prix par quartier), et le bleu y code déjà les hôtels.</li>
+<li>Effet sur les données : les 34 annonces de Londres au bord de la Tamise, auparavant rattachées au contour le plus proche, tombent maintenant dans un contour. 5 annonces changent de borough, à cause des retouches de limites entre 2011 et 2023 ; la seule annonce de Brent passe à Hammersmith and Fulham.</li>
 </ul>
 </li>
 <li>Conséquence : les deux sources partagent le même référentiel de quartiers. Pour les hôtels qui ont à la fois une position et un nom Booking, les deux méthodes donnent le même quartier dans 98 à 99 % des cas (Rome : 97,7 %). Cet accord valide à la fois le géocodage et la table de correspondance.</li>
@@ -1721,9 +1727,9 @@ const zones  = await d3.json(&quot;data/processed/quartiers_paris.geojson&quot;)
 </tr>
 <tr>
 <td>Londres</td>
-<td>33 boroughs (London_Borough_Excluding_MHW)</td>
-<td>Greater London Authority, London Datastore</td>
-<td>https://data.london.gov.uk/dataset/statistical-gis-boundary-files-london</td>
+<td>33 boroughs (Local Authority Districts, décembre 2023, version BFE : les limites couvrent la Tamise, D17)</td>
+<td>Office for National Statistics, Open Geography Portal</td>
+<td>https://geoportal.statistics.gov.uk/ (couche <code>Local_Authority_Districts_December_2023_Boundaries_UK_BFE</code>, codes <code>E09</code>)</td>
 <td>Open Government Licence ; contient des données Ordnance Survey (à citer)</td>
 </tr>
 <tr>

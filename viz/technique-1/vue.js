@@ -213,14 +213,21 @@ export function creerVue(conteneur, etat) {
   let centres = new Map();     // quartier → [x, y] du centre de l'étiquette
   let tailles = new Map();     // quartier → [largeur, hauteur] du contour, en pixels sans zoom
   const longueurs = new Map(); // quartier → longueur de son étiquette, en pixels
+  let transformDebut = null;   // transformation au début d'un geste de zoom
 
   const zoom = d3.zoom()
     .scaleExtent([1, ZOOM_MAX])
     .clickDistance(4)        // un petit glissement ne compte pas comme un déplacement
     // Molette et pincement zooment ; glisser avec le bouton gauche déplace (les autres boutons sont ignorés).
     .filter((e) => !e.button)
+    .on("start", ({ transform }) => { transformDebut = transform; })
     .on("zoom", ({ transform }) => placer(transform))
     .on("end", ({ transform }) => {
+      // Simple clic (la vue n'a pas bougé) : ne rien redessiner. d3.zoom émet « end » au relâchement,
+      // juste avant l'événement click ; redessiner ici réordonne les éléments (join, raise) et le navigateur
+      // envoie alors le clic au groupe parent au lieu de l'offre ou du quartier cliqué.
+      const t0 = transformDebut;
+      if (t0 && t0.k === transform.k && t0.x === transform.x && t0.y === transform.y) return;
       if (transform.k <= 1.01) quartierZoome = null;
       dessinerPoints();
     });
