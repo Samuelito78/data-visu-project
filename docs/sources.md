@@ -32,7 +32,7 @@ Téléchargés par `scripts/download_geo.sh` dans `data/raw/geo/` (non versionn�
 |---|---|---|---|---|
 | Paris | 20 arrondissements | Ville de Paris | https://opendata.paris.fr/explore/dataset/arrondissements/ | ODbL |
 | Berlin | 12 Bezirke | Geoportal Berlin (ALKIS Bezirke, service WFS) | https://gdi.berlin.de/services/wfs/alkis_bezirke | Datenlizenz Deutschland – Zero 2.0 |
-| Londres | 33 boroughs (London_Borough_Excluding_MHW) | Greater London Authority, London Datastore | https://data.london.gov.uk/dataset/statistical-gis-boundary-files-london | Open Government Licence ; contient des données Ordnance Survey (à citer) |
+| Londres | 33 boroughs (Local Authority Districts, décembre 2023, version BFE : les limites couvrent la Tamise, D17) | Office for National Statistics, Open Geography Portal | https://geoportal.statistics.gov.uk/ (couche `Local_Authority_Districts_December_2023_Boundaries_UK_BFE`, codes `E09`) | Open Government Licence ; contient des données Ordnance Survey (à citer) |
 | Rome | 15 municipi | OpenStreetMap (relations `boundary=administrative`, `admin_level=10`), via Overpass | https://www.openstreetmap.org/relation/1458218 (Municipio I) | ODbL, « © les contributeurs d'OpenStreetMap » |
 
 Attributions à reprendre dans le rapport et dans la démo : « © Ville de Paris (ODbL) », « Geoportal Berlin (DL-DE Zero 2.0) », « Contains National Statistics and Ordnance Survey data © Crown copyright and database right », « © OpenStreetMap contributors (ODbL) ».

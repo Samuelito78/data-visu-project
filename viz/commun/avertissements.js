@@ -7,7 +7,7 @@ const d3 = window.d3;
 const PAR_VILLE = {
   rome: "Rome : les prix des hôtels sont 2 à 5 fois plus élevés qu'ailleurs à étoiles égales, sans correction possible. " +
         "Ne pas comparer les prix hôtel / Airbnb de Rome (D7). Par ailleurs, 156 hôtels sur 207 sont dans le Municipio I (D16).",
-  londres: "Londres : les annonces Airbnb ne couvrent que 14 boroughs centraux sur 33. Les autres boroughs sont grisés (D16).",
+  londres: "Londres : les annonces Airbnb ne couvrent que 13 boroughs centraux sur 33. Les autres boroughs sont grisés (D16).",
 };
 
 export function creerAvertissements(conteneur, etat) {

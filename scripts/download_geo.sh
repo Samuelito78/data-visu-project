@@ -20,9 +20,11 @@ recuperer "$GEO/paris_arrondissements.geojson" \
 recuperer "$GEO/berlin_bezirke.geojson" \
   "https://gdi.berlin.de/services/wfs/alkis_bezirke?service=WFS&version=2.0.0&request=GetFeature&typeNames=alkis_bezirke:bezirksgrenzen&outputFormat=application/json&srsName=EPSG:4326"
 
-# Londres : 33 boroughs (London Datastore, Statistical GIS Boundary Files, OGL ; contient des données OS)
-recuperer "$GEO/london_statistical_gis_boundaries.zip" \
-  "https://data.london.gov.uk/download/statistical-gis-boundary-files-london/9ba8c833-6370-4b11-abdc-314aa020d5e0/statistical-gis-boundaries-london.zip"
+# Londres : 33 boroughs (ONS Open Geography Portal, Local Authority Districts décembre 2023, OGL ; contient des données OS).
+# Version « BFE » (full extent) : les limites passent au milieu de la Tamise, comme à Paris, Berlin et Rome pour leur fleuve.
+# Les codes E09 sont les 33 districts du Grand Londres.
+recuperer "$GEO/london_boroughs_bfe.geojson" \
+  "https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/Local_Authority_Districts_December_2023_Boundaries_UK_BFE/FeatureServer/0/query?where=LAD23CD%20LIKE%20%27E09%25%27&outFields=LAD23CD,LAD23NM&outSR=4326&f=geojson"
 
 # Rome : 15 municipi (OpenStreetMap via Overpass, ODbL). Deux serveurs, essayés dans l'ordre.
 REQ='[out:json][timeout:120];area["name"="Roma"]["admin_level"="8"]->.r;rel(area.r)["boundary"="administrative"]["admin_level"="10"]["name"~"^Municipio Roma"];out geom;'
