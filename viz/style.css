@@ -11,7 +11,6 @@
   --grille: #e8e6e0;
   --sans-donnees: #dcdad4;     /* quartiers sans offres */
   --avertissement-fond: #fdf3dc;
-  --avertissement-bord: #e0a100;
   --erreur: #d03b3b;
   /* Couleurs des sources (bleu / orange, vérifiées pour le daltonisme et le contraste) */
   --couleur-hotel: #2a78d6;
@@ -30,7 +29,6 @@
     --grille: #2b2b28;
     --sans-donnees: #383835;
     --avertissement-fond: #3a2f12;
-    --avertissement-bord: #c98500;
     --couleur-hotel: #3987e5;
     --couleur-airbnb: #d95926;
   }
@@ -46,7 +44,6 @@
   --grille: #2b2b28;
   --sans-donnees: #383835;
   --avertissement-fond: #3a2f12;
-  --avertissement-bord: #c98500;
   --couleur-hotel: #3987e5;
   --couleur-airbnb: #d95926;
 }
@@ -102,12 +99,11 @@ input[type="range"] { width: 140px; }
   margin: 6px 0;
   padding: 6px 10px;
   background: var(--avertissement-fond);
-  border-left: 3px solid var(--avertissement-bord);
   border-radius: 4px;
   font-size: 13px;
 }
 .avertissement::before { content: "⚠ "; }
-.avertissement.erreur { border-left-color: var(--erreur); }
+.avertissement.erreur { color: var(--erreur); }
 
 /* Disposition : les deux vues à gauche, la fiche de détail à droite. */
 .disposition {

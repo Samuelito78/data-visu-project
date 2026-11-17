@@ -108,7 +108,7 @@ Chaque décision donne : ce qui est décidé, la justification chiffrée, la con
 |---|---|---|---|---|
 | Paris | 20 | 20 | 20 | 18 |
 | Berlin | 12 | 12 | 12 | 10 |
-| Londres | 33 | 14 | 20 | 10 |
+| Londres | 33 | 13 | 20 | 10 |
 | Rome | 15 | 13 | 13 | 1 |
 
   - Londres : le dataset Airbnb ne couvre que les boroughs centraux. Les boroughs périphériques seront grisés.
@@ -120,8 +120,12 @@ Chaque décision donne : ce qui est décidé, la justification chiffrée, la con
   - Une offre avec coordonnées (tous les Airbnb, et les hôtels géocodés de façon fiable, D19) est rattachée par jointure spatiale : point contenu dans le contour, sinon contour le plus proche à moins de 250 m.
   - Une offre sans coordonnées (hôtels pour l'instant) est rattachée par son nom Booking, via `data/external/correspondance_quartiers.csv`, table écrite à la main. Chaque ligne y est qualifiée : `identique`, `contenance` (quartier contenu dans le contour, par ex. Chiswick → Hounslow) ou `approximation`.
 - Justification :
-  - Airbnb : 28 153 annonces sur 28 192 tombent dans un contour, et les 39 autres sont à moins de 250 m. Ce sont surtout des annonces au bord de la Tamise, que les boroughs « Excluding MHW » excluent.
+  - Airbnb : 28 187 annonces sur 28 192 tombent dans un contour, et les 5 autres, en bordure de Rome, sont à moins de 250 m.
   - Hôtels : tous les noms Booking ont un contour. Les approximations concernent 36 hôtels à Rome (« Rome City Center », « Central Station », « Tiburtino », « Trionfale », « San Giovanni ») et 1 à Londres (« West End »).
+- Contours de Londres : on utilise les limites « BFE » de l'ONS, qui passent au milieu de la Tamise, et non la version « Excluding MHW » du London Datastore, qui s'arrête aux berges.
+  - Les contours de Paris, Berlin et Rome couvrent déjà leur fleuve. Avec « Excluding MHW », seule la carte de Londres montrait un fleuve, sous la forme d'un vide entre les quartiers. Les quatre cartes sont maintenant traitées de la même façon : pas de cours d'eau.
+  - On n'ajoute pas de couche d'eau aux autres villes : l'eau ne sert pas aux tâches de la carte (comparer des prix par quartier), et le bleu y code déjà les hôtels.
+  - Effet sur les données : les 34 annonces de Londres au bord de la Tamise, auparavant rattachées au contour le plus proche, tombent maintenant dans un contour. 5 annonces changent de borough, à cause des retouches de limites entre 2011 et 2023 ; la seule annonce de Brent passe à Hammersmith and Fulham.
 - Conséquence : les deux sources partagent le même référentiel de quartiers. Pour les hôtels qui ont à la fois une position et un nom Booking, les deux méthodes donnent le même quartier dans 98 à 99 % des cas (Rome : 97,7 %). Cet accord valide à la fois le géocodage et la table de correspondance.
 
 ## D18. Centre de référence des distances

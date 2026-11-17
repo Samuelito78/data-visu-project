@@ -20,8 +20,7 @@ CRS_WGS84 = "EPSG:4326"
 CRS_METRIQUE = "EPSG:3035"  # Europe LAEA, en mètres : pour les distances et la simplification
 
 # Un point hors de tout contour est rattaché au contour le plus proche s'il est à moins de cette distance.
-# Cas typique : les boroughs de Londres excluent la Tamise (« Excluding MHW »), donc une annonce sur un quai
-# peut tomber juste à côté du contour.
+# Cas typique : une annonce géolocalisée au bord d'une limite simplifiée ou de la frontière de la ville.
 DISTANCE_MAX_PROCHE_M = 250
 
 # Tolérance de simplification des contours exportés pour D3 (en mètres).
@@ -56,14 +55,14 @@ def _berlin(dossier: Path) -> gpd.GeoDataFrame:
 
 
 def _londres(dossier: Path) -> gpd.GeoDataFrame:
-    zip_ = dossier / "london_statistical_gis_boundaries.zip"
-    g = gpd.read_file(f"zip://{zip_}!statistical-gis-boundaries-london/ESRI/London_Borough_Excluding_MHW.shp")
-    g = g.to_crs(CRS_WGS84)
+    # Limites « BFE » de l'ONS : elles couvrent la Tamise. La version « Excluding MHW » du London Datastore
+    # s'arrêtait aux berges et laissait un vide à la place du fleuve, absent des autres villes.
+    g = gpd.read_file(dossier / "london_boroughs_bfe.geojson").to_crs(CRS_WGS84)
     return gpd.GeoDataFrame({
         "ville": "Londres",
-        "quartier": g["NAME"],
-        "code": g["GSS_CODE"],
-        "ordre": g["GSS_CODE"].str[-3:].astype(int),
+        "quartier": g["LAD23NM"],
+        "code": g["LAD23CD"],
+        "ordre": g["LAD23CD"].str[-3:].astype(int),
     }, geometry=g.geometry, crs=CRS_WGS84)
 
 
