@@ -23,6 +23,7 @@ const HAUTEUR_MAX = 560;     // hauteur maximale de la carte
 const ZOOM_MAX = 12;
 const SEUIL_POINTS = 2;      // à partir de ce facteur de zoom, les offres s'affichent une par une
 const DUREE = 750;           // durée des transitions de zoom, en ms
+const RAYON_SECOND_PAR_DEFAUT = 0.8;
 // Forme des points : la source est codée deux fois, par la couleur et par la forme (redondance),
 // pour qu'un hôtel bleu reste reconnaissable sur un quartier bleu. Taille = aire en px².
 const FORME = { "Hôtel": d3.symbolSquare, "Airbnb": d3.symbolCircle };
@@ -175,6 +176,43 @@ function remplirHachures(motif) {
   return motif;
 }
 
+function distanceKm([lon1, lat1], [lon2, lat2]) {
+  const rad = Math.PI / 180;
+  const dLat = (lat2 - lat1) * rad;
+  const dLon = (lon2 - lon1) * rad;
+  const a = Math.sin(dLat / 2) ** 2
+    + Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLon / 2) ** 2;
+  return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function capInitial([lon1, lat1], [lon2, lat2]) {
+  const rad = Math.PI / 180;
+  const y = Math.sin((lon2 - lon1) * rad) * Math.cos(lat2 * rad);
+  const x = Math.cos(lat1 * rad) * Math.sin(lat2 * rad)
+    - Math.sin(lat1 * rad) * Math.cos(lat2 * rad) * Math.cos((lon2 - lon1) * rad);
+  return Math.atan2(y, x);
+}
+
+function destination([lon, lat], distance, cap) {
+  const R = 6371;
+  const rad = Math.PI / 180;
+  const d = distance / R;
+  const phi1 = lat * rad;
+  const lambda1 = lon * rad;
+  const phi2 = Math.asin(
+    Math.sin(phi1) * Math.cos(d) + Math.cos(phi1) * Math.sin(d) * Math.cos(cap)
+  );
+  const lambda2 = lambda1 + Math.atan2(
+    Math.sin(cap) * Math.sin(d) * Math.cos(phi1),
+    Math.cos(d) - Math.sin(phi1) * Math.sin(phi2)
+  );
+  return [((lambda2 * 180 / Math.PI + 540) % 360) - 180, phi2 * 180 / Math.PI];
+}
+
+function formatKmCourt(v) {
+  return `${d3.format(",.1f")(v).replace(".", ",")} km`;
+}
+
 export function creerVue(conteneur, etat) {
   chargerStyle();
   const racine = d3.select(conteneur);
@@ -182,6 +220,13 @@ export function creerVue(conteneur, etat) {
   // En-tête : phrase d'explication (ou résumé du quartier zoomé) et bouton de retour.
   const entete = racine.append("div").attr("class", "t1-entete");
   const resume = entete.append("p").attr("class", "t1-resume").attr("aria-live", "polite");
+  const controlesPoi = entete.append("div").attr("class", "t1-poi-controles");
+  const boutonPoi = controlesPoi.append("button").attr("type", "button").attr("class", "t1-poi-bouton")
+    .attr("aria-pressed", "false")
+    .text("Mode point d'intérêt : désactivé");
+  const infoPoi = controlesPoi.append("span").attr("class", "t1-poi-info");
+  const boutonEffacerPoi = controlesPoi.append("button").attr("type", "button")
+    .attr("class", "t1-poi-effacer").text("Effacer le point").property("disabled", true);
   const boutonRetour = entete.append("button").attr("type", "button").attr("class", "t1-retour")
     .text("← Vue d'ensemble").property("hidden", true)
     .on("click", () => dezoomer());
@@ -197,6 +242,11 @@ export function creerVue(conteneur, etat) {
   const gQuartiers = carte.append("g").attr("class", "t1-quartiers");
   const gEtiquettes = svg.append("g").attr("class", "t1-etiquettes");
   const gPoints = svg.append("g").attr("class", "t1-points");
+  const gPoi = svg.append("g").attr("class", "t1-poi").style("display", "none");
+  gPoi.append("circle").attr("class", "t1-poi-halo").attr("r", 0);
+  gPoi.append("circle").attr("class", "t1-poi-marqueur").attr("r", 5);
+  gPoi.append("circle").attr("class", "t1-poi-halo-secondaire").style("display", "none").attr("r", 0);
+  gPoi.append("circle").attr("class", "t1-poi-centre-secondaire").style("display", "none").attr("r", 4);
 
   const legende = racine.append("div").attr("class", "t1-legende");
 
@@ -214,6 +264,17 @@ export function creerVue(conteneur, etat) {
   let tailles = new Map();     // quartier → [largeur, hauteur] du contour, en pixels sans zoom
   const longueurs = new Map(); // quartier → longueur de son étiquette, en pixels
   let transformDebut = null;   // transformation au début d'un geste de zoom
+  let modePoi = false;
+  let poiGeo = null;           // [lon, lat]
+  let rayonPoiKm = null;
+  let rayonPoiPx = 0;
+  let rayonPoiFige = false;
+  let poiSecondaireGeo = null;
+  let rayonPoiSecondaireKm = null;
+  let rayonPoiSecondairePx = 0;
+  let rayonPoiSecondaireFige = false;
+  let idsProchesPoi = new Set();
+  let resumePoi = null;
 
   const zoom = d3.zoom()
     .scaleExtent([1, ZOOM_MAX])
@@ -233,9 +294,193 @@ export function creerVue(conteneur, etat) {
     });
   svg.call(zoom).on("dblclick.zoom", null);
 
+  const dragPoi = d3.drag()
+    .on("start", (e) => e.sourceEvent.stopPropagation())
+    .on("drag", (e) => {
+      const t = d3.zoomTransform(svg.node());
+      const [xCarte, yCarte] = t.invert([e.x, e.y]);
+      const geo = projection.invert([xCarte, yCarte]);
+      if (!geo) return;
+      poiGeo = geo;
+      rayonPoiKm = 0;
+      rayonPoiPx = 0;
+      rayonPoiFige = false;
+      poiSecondaireGeo = null;
+      rayonPoiSecondaireKm = null;
+      rayonPoiSecondairePx = 0;
+      rayonPoiSecondaireFige = false;
+      mettreAJourPoi();
+    });
+  gPoi.call(dragPoi);
+
+  function calculerRayonPixels(centreGeo, rayonKm) {
+    if (!centreGeo || rayonKm == null || rayonKm <= 0) return 0;
+    const p0 = projection(centreGeo);
+    const p1 = projection(destination(centreGeo, rayonKm, Math.PI / 2));
+    if (!p0 || !p1) return 0;
+    const t = d3.zoomTransform(svg.node());
+    const a = t.apply(p0);
+    const b = t.apply(p1);
+    return Math.hypot(a[0] - b[0], a[1] - b[1]);
+  }
+
+  function synchroniserControlesPoi() {
+    boutonPoi.attr("aria-pressed", modePoi ? "true" : "false")
+      .text(`Mode point d'intérêt : ${modePoi ? "activé" : "désactivé"}`);
+    boutonEffacerPoi.property("disabled", !poiGeo);
+    infoPoi.text(
+      !poiGeo ? "Placez un point sur la carte."
+        : !rayonPoiFige
+          ? (rayonPoiKm == null || rayonPoiKm <= 0
+            ? "Déplacez la souris puis cliquez pour figer le 1er rayon."
+            : `1er rayon : ${formatKmCourt(rayonPoiKm)} (cliquez pour figer)`)
+          : (!rayonPoiSecondaireFige
+            ? (rayonPoiSecondaireKm == null || rayonPoiSecondaireKm <= 0
+              ? `1er rayon figé (${formatKmCourt(rayonPoiKm)}). Déplacez la souris puis cliquez pour figer le 2e cercle.`
+              : `1er rayon : ${formatKmCourt(rayonPoiKm)} · 2e rayon : ${formatKmCourt(rayonPoiSecondaireKm)} (cliquez pour figer)`)
+            : `2e cercle figé (${formatKmCourt(rayonPoiSecondaireKm)}). Déplacez la souris pour tourner ; cliquez pour redimensionner.`)
+    );
+    svg.classed("t1-mode-poi", modePoi);
+  }
+
+  function placerPoi() {
+    if (!poiGeo) {
+      gPoi.style("display", "none");
+      return;
+    }
+    const proj = projection(poiGeo);
+    if (!proj) {
+      gPoi.style("display", "none");
+      return;
+    }
+    const [x, y] = d3.zoomTransform(svg.node()).apply(proj);
+    rayonPoiPx = calculerRayonPixels(poiGeo, rayonPoiKm);
+    rayonPoiSecondairePx = calculerRayonPixels(poiSecondaireGeo, rayonPoiSecondaireKm);
+    gPoi.style("display", null).attr("transform", `translate(${x},${y})`);
+    gPoi.select(".t1-poi-halo").attr("r", rayonPoiPx);
+    if (poiSecondaireGeo && rayonPoiFige) {
+      const projSecondaire = projection(poiSecondaireGeo);
+      if (projSecondaire) {
+        const [x2, y2] = d3.zoomTransform(svg.node()).apply(projSecondaire);
+        gPoi.select(".t1-poi-halo-secondaire")
+          .style("display", null)
+          .attr("cx", x2 - x)
+          .attr("cy", y2 - y)
+          .attr("r", rayonPoiSecondairePx);
+        gPoi.select(".t1-poi-centre-secondaire")
+          .style("display", null)
+          .attr("cx", x2 - x)
+          .attr("cy", y2 - y);
+      } else {
+        gPoi.select(".t1-poi-halo-secondaire").style("display", "none");
+        gPoi.select(".t1-poi-centre-secondaire").style("display", "none");
+      }
+    } else {
+      gPoi.select(".t1-poi-halo-secondaire").style("display", "none");
+      gPoi.select(".t1-poi-centre-secondaire").style("display", "none");
+    }
+  }
+
+  function definirPoiDepuisEcran([x, y]) {
+    const t = d3.zoomTransform(svg.node());
+    const [xCarte, yCarte] = t.invert([x, y]);
+    const geo = projection.invert([xCarte, yCarte]);
+    if (!geo) return;
+    poiGeo = geo;
+    rayonPoiKm = 0;
+    rayonPoiPx = 0;
+    rayonPoiFige = false;
+    poiSecondaireGeo = null;
+    rayonPoiSecondaireKm = null;
+    rayonPoiSecondairePx = 0;
+    rayonPoiSecondaireFige = false;
+    mettreAJourPoi();
+  }
+
+  function mettrePremierRayonDepuisEcran([x, y]) {
+    if (!poiGeo) return;
+    const t = d3.zoomTransform(svg.node());
+    const [xCarte, yCarte] = t.invert([x, y]);
+    const geoSouris = projection.invert([xCarte, yCarte]);
+    rayonPoiKm = geoSouris ? distanceKm(poiGeo, geoSouris) : null;
+  }
+
+  function mettreSecondRayonDepuisEcran([x, y]) {
+    if (!poiGeo || !rayonPoiFige || rayonPoiKm == null) return;
+    const t = d3.zoomTransform(svg.node());
+    const [xCarte, yCarte] = t.invert([x, y]);
+    const geoSouris = projection.invert([xCarte, yCarte]);
+    if (!geoSouris) return;
+    const cap = capInitial(poiGeo, geoSouris);
+    poiSecondaireGeo = destination(poiGeo, rayonPoiKm, cap);
+    if (!rayonPoiSecondaireFige) rayonPoiSecondaireKm = distanceKm(poiSecondaireGeo, geoSouris);
+  }
+
+  function initialiserSecondCercle([x, y]) {
+    if (!poiGeo || rayonPoiKm == null || rayonPoiKm <= 0) return;
+    const t = d3.zoomTransform(svg.node());
+    const [xCarte, yCarte] = t.invert([x, y]);
+    const geoSouris = projection.invert([xCarte, yCarte]);
+    const cap = geoSouris ? capInitial(poiGeo, geoSouris) : 0;
+    poiSecondaireGeo = destination(poiGeo, rayonPoiKm, cap);
+    rayonPoiSecondaireKm = Math.max(0.2, Math.min(RAYON_SECOND_PAR_DEFAUT, rayonPoiKm));
+    rayonPoiSecondaireFige = false;
+  }
+
+  function mettreAJourPoi() {
+    placerPoi();
+    dessinerPoints();
+    synchroniserControlesPoi();
+  }
+
+  function gererClicPoi(e) {
+    if (!modePoi) return false;
+    const pointeur = d3.pointer(e, svg.node());
+    if (!poiGeo) definirPoiDepuisEcran(pointeur);
+    else if (!rayonPoiFige) {
+      mettrePremierRayonDepuisEcran(pointeur);
+      rayonPoiFige = true;
+      initialiserSecondCercle(pointeur);
+    } else if (!rayonPoiSecondaireFige) {
+      mettreSecondRayonDepuisEcran(pointeur);
+      rayonPoiSecondaireFige = true;
+    } else {
+      rayonPoiSecondaireFige = false;
+    }
+    mettreAJourPoi();
+    return true;
+  }
+
+  boutonPoi.on("click", () => {
+    modePoi = !modePoi;
+    synchroniserControlesPoi();
+  });
+  boutonEffacerPoi.on("click", () => {
+    poiGeo = null;
+    rayonPoiKm = null;
+    rayonPoiPx = 0;
+    rayonPoiFige = false;
+    poiSecondaireGeo = null;
+    rayonPoiSecondaireKm = null;
+    rayonPoiSecondairePx = 0;
+    rayonPoiSecondaireFige = false;
+    idsProchesPoi = new Set();
+    resumePoi = null;
+    mettreAJourPoi();
+  });
+  synchroniserControlesPoi();
+
   // Clic dans le vide (hors des quartiers) : retour à la vue d'ensemble.
-  svg.on("click", () => {
+  svg.on("click", (e) => {
+    if (gererClicPoi(e)) return;
     if (quartierZoome || d3.zoomTransform(svg.node()).k > 1) dezoomer();
+  });
+  svg.on("pointermove", (e) => {
+    if (!modePoi || !poiGeo) return;
+    const pointeur = d3.pointer(e, svg.node());
+    if (!rayonPoiFige) mettrePremierRayonDepuisEcran(pointeur);
+    else mettreSecondRayonDepuisEcran(pointeur);
+    mettreAJourPoi();
   });
 
   // Cale la projection sur la ville : la largeur vient du conteneur, la hauteur de la forme de la ville.
@@ -280,6 +525,7 @@ export function creerVue(conteneur, etat) {
       .on("pointerleave", () => masquerInfobulle())
       .on("click", (e, f) => {
         e.stopPropagation();
+        if (gererClicPoi(e)) return;
         // Clic sur le quartier déjà zoomé : on reste (c'est là qu'on vise les points).
         if (f.properties.quartier !== quartierZoome) zoomerSur(f);
       });
@@ -321,6 +567,7 @@ export function creerVue(conteneur, etat) {
     motif.attr("patternTransform", `scale(${1 / t.k}) rotate(45)`); // hachures de taille constante
     gPoints.selectAll("path").attr("transform", (o) => `translate(${t.apply(positions.get(o.id))})`);
     placerEtiquettes(t);
+    placerPoi();
   }
 
   // Une étiquette n'est affichée que si elle tient dans son quartier et ne chevauche pas une autre.
@@ -351,16 +598,52 @@ export function creerVue(conteneur, etat) {
   function dessinerPoints() {
     if (!etat.donnees) return;
     const t = d3.zoomTransform(svg.node());
+    const toutes = etat.offresFiltrees();
+    idsProchesPoi = new Set();
+    resumePoi = null;
+    const centreRecherche = modePoi ? poiSecondaireGeo : (rayonPoiFige ? poiSecondaireGeo : poiGeo);
+    const rayonRecherche = modePoi ? rayonPoiSecondaireKm : (rayonPoiFige ? rayonPoiSecondaireKm : rayonPoiKm);
+    if (centreRecherche && rayonRecherche != null && rayonRecherche > 0) {
+      const proches = toutes.filter((o) => {
+        if (o.lat == null || o.lon == null) return false;
+        return distanceKm(centreRecherche, [o.lon, o.lat]) <= rayonRecherche;
+      });
+      idsProchesPoi = new Set(proches.map((o) => o.id));
+    }
+
     let offres = [];
-    if (quartierZoome || t.k >= SEUIL_POINTS) {
+    if (modePoi) {
+      offres = toutes
+        .filter((o) => idsProchesPoi.has(o.id))
+        .sort((a, b) => d3.ascending(a.source === "Hôtel", b.source === "Hôtel"));
+    } else if (quartierZoome || t.k >= SEUIL_POINTS) {
       const [x0, y0] = t.invert([0, 0]);
       const [x1, y1] = t.invert([largeur, hauteur]);
-      offres = etat.offresFiltrees()
+      offres = toutes
         .filter((o) => {
           const p = positions.get(o.id);
           return p && p[0] >= x0 && p[0] <= x1 && p[1] >= y0 && p[1] <= y1;
         })
         .sort((a, b) => d3.ascending(a.source === "Hôtel", b.source === "Hôtel")); // hôtels au-dessus
+    } else if (centreRecherche && rayonRecherche != null && rayonRecherche > 0) {
+      offres = toutes
+        .filter((o) => idsProchesPoi.has(o.id))
+        .sort((a, b) => d3.ascending(a.source === "Hôtel", b.source === "Hôtel"));
+    }
+
+    if (centreRecherche && rayonRecherche != null && rayonRecherche > 0) {
+      const comptes = d3.rollup(
+        toutes.filter((o) => idsProchesPoi.has(o.id)),
+        (v) => v.length,
+        (o) => o.source
+      );
+      resumePoi = {
+        total: idsProchesPoi.size,
+        hotel: comptes.get("Hôtel") ?? 0,
+        airbnb: comptes.get("Airbnb") ?? 0,
+        rayon: rayonRecherche,
+        secondaire: rayonPoiFige,
+      };
     }
 
     gPoints.selectAll("path")
@@ -369,10 +652,15 @@ export function creerVue(conteneur, etat) {
       .attr("d", (o) => symbole(o, o === etat.selection))
       .attr("transform", (o) => `translate(${t.apply(positions.get(o.id))})`)
       .style("fill", (o) => couleurSource(o.source))
+      .classed("t1-proche-poi", (o) => poiGeo != null && idsProchesPoi.has(o.id))
       .on("pointerenter", (e, o) => { etat.survoler(o); afficherInfobulle(e, htmlInfobulleOffre(o)); })
       .on("pointermove", (e, o) => afficherInfobulle(e, htmlInfobulleOffre(o)))
       .on("pointerleave", () => { etat.survoler(null); masquerInfobulle(); })
-      .on("click", (e, o) => { e.stopPropagation(); etat.selectionner(o); });
+      .on("click", (e, o) => {
+        e.stopPropagation();
+        if (!(modePoi && rayonPoiSecondaireFige) && gererClicPoi(e)) return;
+        etat.selectionner(o);
+      });
 
     // Avec les points, les couleurs des quartiers passent au second plan (sinon un hôtel bleu disparaît sur un quartier bleu).
     gQuartiers.classed("t1-avec-points", offres.length > 0);
@@ -414,6 +702,24 @@ export function creerVue(conteneur, etat) {
       resume.text(`${formatEntier(nbPoints)} offres visibles. Cliquez sur une offre pour afficher sa fiche.`);
     } else {
       resume.text(indicateur.consigne);
+    }
+    if (resumePoi) {
+      resume.append("span")
+        .attr("class", "t1-resume-poi")
+        .text(
+          ` ${resumePoi.secondaire ? "2e cercle" : "Point d'intérêt"} (${formatKmCourt(resumePoi.rayon)}) : `
+          + `${formatEntier(resumePoi.total)} offre(s) proche(s) `
+          + `(${formatEntier(resumePoi.hotel)} hôtels, ${formatEntier(resumePoi.airbnb)} Airbnb).`
+        );
+    } else if (modePoi) {
+      resume.append("span")
+        .attr("class", "t1-resume-poi")
+        .text(poiGeo ? (!rayonPoiFige
+          ? " Déplacez la souris puis cliquez pour figer le 1er rayon."
+          : (!rayonPoiSecondaireFige
+            ? " Déplacez la souris puis cliquez pour figer le 2e cercle."
+            : " Déplacez la souris pour faire tourner le 2e cercle, cliquez pour ajuster son rayon."))
+          : " Mode point d'intérêt activé : cliquez sur la carte puis faites glisser le repère.");
     }
   }
 
@@ -533,11 +839,22 @@ export function creerVue(conteneur, etat) {
 
   function surDonnees() {
     quartierZoome = null;
+    poiGeo = null;
+    rayonPoiKm = null;
+    rayonPoiPx = 0;
+    rayonPoiFige = false;
+    poiSecondaireGeo = null;
+    rayonPoiSecondaireKm = null;
+    rayonPoiSecondairePx = 0;
+    rayonPoiSecondaireFige = false;
+    idsProchesPoi = new Set();
+    resumePoi = null;
     svg.interrupt();
     caler();
     dessinerContours();
     svg.call(zoom.transform, d3.zoomIdentity);
     dessiner();
+    synchroniserControlesPoi();
   }
 
   // Redimensionnement : on recale la projection et on revient au même quartier, sans animation.
