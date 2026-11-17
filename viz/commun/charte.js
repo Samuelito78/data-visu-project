@@ -39,6 +39,7 @@ export const SEUIL_COMPARABLE = { airbnb: 30, hotel: 10 };
 // Plage du filtre de budget, identique pour toutes les villes pour pouvoir les comparer (T7).
 // Le cran maximal signifie « sans limite » : il couvre au moins 99 % des offres hors hôtels de Rome.
 export const BUDGET = { min: 30, max: 600, pas: 10 };
+export const DISTANCE_CENTRE = { min: 0, max: 25, pas: 0.5 };
 
 // Formats à la française.
 const fr = d3.formatLocale({

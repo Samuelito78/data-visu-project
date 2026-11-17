@@ -1,54 +1,113 @@
-// Technique 2 : EXEMPLE À REMPLACER par la vraie visualisation.
+// Technique 2 : nuage de points distance au centre × prix par nuit.
 //
-// Même contrat que la technique 1, en HTML plutôt qu'en SVG :
-// la liste des offres les mieux notées parmi celles qui passent les filtres (une ébauche de T5).
-// Cliquer une ligne met à jour la fiche de détail et le surlignage dans la technique 1 : c'est la sélection liée.
+// Cette vue montre la relation entre l'éloignement et le prix, pour les deux sources
+// (hôtels en bleu, Airbnb en orange) selon les filtres actifs.
+// Survol et clic utilisent l'état partagé pour la sélection liée avec la technique 1.
 
-import { classeSource, formatPrix, formatNote, libelleOffre } from "../commun/charte.js";
+import {
+  classeSource, couleurSource, formatPrix, formatKm, formatEntier,
+} from "../commun/charte.js";
+import { afficherInfobulle, masquerInfobulle, htmlInfobulleOffre } from "../commun/infobulle.js";
 
 const d3 = window.d3;
-const NOMBRE = 10;
+const HAUTEUR = 320;
+const MARGES = { haut: 12, droite: 18, bas: 42, gauche: 68 };
+const RAYON = 3;
+const OPACITE = 0.72;
 
 export function creerVue(conteneur, etat) {
   const racine = d3.select(conteneur);
-  const titre = racine.append("p").attr("class", "exemple-resume");
-  const liste = racine.append("ol").attr("class", "exemple-liste");
+  const resume = racine.append("p").attr("class", "exemple-resume");
+
+  const svg = racine.append("svg")
+    .attr("role", "img")
+    .attr("aria-label", "Nuage de points : distance au centre et prix par nuit");
+  const gGrille = svg.append("g").attr("class", "axe");
+  const gAxeX = svg.append("g").attr("class", "axe");
+  const gAxeY = svg.append("g").attr("class", "axe");
+  const gPoints = svg.append("g");
+
+  const legende = racine.append("p").attr("class", "exemple-resume");
+  for (const source of ["Hôtel", "Airbnb"]) {
+    legende.append("span").attr("class", `pastille ${classeSource(source)}`);
+    legende.append("span").text(source);
+    legende.append("span").text("  ");
+  }
 
   function dessiner() {
     if (!etat.donnees) return;
-    const meilleures = d3.sort(
-      etat.offresFiltrees().filter((o) => o.note_100 != null),
-      (a, b) => d3.descending(a.note_100, b.note_100) || d3.ascending(a.prix_nuit_eur, b.prix_nuit_eur)
-    ).slice(0, NOMBRE);
-    titre.text(`${etat.ville.nom} : les ${NOMBRE} offres les mieux notées, puis les moins chères à note égale`);
+    const largeur = conteneur.clientWidth || 640;
+    svg.attr("viewBox", `0 0 ${largeur} ${HAUTEUR}`).attr("width", largeur).attr("height", HAUTEUR);
 
-    liste.selectAll("li")
-      .data(meilleures, (o) => o.id)
-      .join((entree) => {
-        const li = entree.append("li");
-        const bouton = li.append("button").attr("type", "button");
-        bouton.append("span").attr("class", (o) => `pastille ${classeSource(o.source)}`);
-        bouton.append("span").attr("class", "exemple-nom");
-        bouton.append("span").attr("class", "exemple-valeurs");
-        return li;
-      })
-      .call((li) => {
-        li.select(".exemple-nom").text(libelleOffre);
-        li.select(".exemple-valeurs").text((o) => `${formatNote(o.note_100)} · ${formatPrix(o.prix_nuit_eur)}`);
-        li.select("button")
-          .on("click", (_, o) => etat.selectionner(o))
-          .on("pointerenter", (_, o) => etat.survoler(o))
-          .on("pointerleave", () => etat.survoler(null));
-      });
+    const offres = etat.offresFiltrees()
+      .filter((o) => o.dist_centre_km != null && o.prix_nuit_eur != null);
+
+    const maxDistance = d3.max(offres, (o) => o.dist_centre_km) ?? 1;
+    const maxPrix = d3.max(offres, (o) => o.prix_nuit_eur) ?? 1;
+    const maxDistanceAffichee = etat.filtres.distanceMax ?? maxDistance;
+    const x = d3.scaleLinear([0, Math.max(1, maxDistanceAffichee)], [MARGES.gauche, largeur - MARGES.droite]).nice();
+    const y = d3.scaleLinear([0, Math.max(1, maxPrix)], [HAUTEUR - MARGES.bas, MARGES.haut]).nice();
+
+    gGrille.attr("transform", `translate(0,${HAUTEUR - MARGES.bas})`)
+      .call(
+        d3.axisBottom(x)
+          .ticks(6)
+          .tickSize(-(HAUTEUR - MARGES.bas - MARGES.haut))
+          .tickFormat("")
+      )
+      .call((g) => g.select(".domain").remove());
+
+    gAxeX.attr("transform", `translate(0,${HAUTEUR - MARGES.bas})`)
+      .call(d3.axisBottom(x).ticks(6).tickFormat(formatKm));
+    gAxeY.attr("transform", `translate(${MARGES.gauche},0)`)
+      .call(d3.axisLeft(y).ticks(6).tickFormat(formatPrix));
+
+    gAxeX.selectAll(".titre-axe").data([0]).join("text")
+      .attr("class", "titre-axe")
+      .attr("x", (largeur + MARGES.gauche - MARGES.droite) / 2)
+      .attr("y", 34)
+      .attr("fill", "var(--texte-secondaire)")
+      .style("text-anchor", "middle")
+      .text("Distance au centre");
+
+    gAxeY.selectAll(".titre-axe").data([0]).join("text")
+      .attr("class", "titre-axe")
+      .attr("transform", "rotate(-90)")
+      .attr("x", -(MARGES.haut + (HAUTEUR - MARGES.bas)) / 2)
+      .attr("y", -50)
+      .attr("fill", "var(--texte-secondaire)")
+      .style("text-anchor", "middle")
+      .text("Prix par nuit");
+
+    gPoints.selectAll("circle")
+      .data(offres, (o) => o.id)
+      .join("circle")
+      .attr("cx", (o) => x(o.dist_centre_km))
+      .attr("cy", (o) => y(o.prix_nuit_eur))
+      .attr("r", RAYON)
+      .style("fill", (o) => couleurSource(o.source))
+      .style("opacity", OPACITE)
+      .on("pointerenter", (e, o) => { etat.survoler(o); afficherInfobulle(e, htmlInfobulleOffre(o)); })
+      .on("pointermove", (e, o) => afficherInfobulle(e, htmlInfobulleOffre(o)))
+      .on("pointerleave", () => { etat.survoler(null); masquerInfobulle(); })
+      .on("click", (_, o) => etat.selectionner(o));
+
+    const comptes = d3.rollup(offres, (v) => v.length, (o) => o.source);
+    resume.text(
+      `${etat.ville.nom} : ${formatEntier(offres.length)} offres affichées `
+      + `(${formatEntier(comptes.get("Hôtel") ?? 0)} hôtels, ${formatEntier(comptes.get("Airbnb") ?? 0)} Airbnb).`
+    );
     surligner();
   }
 
   function surligner() {
-    liste.selectAll("li")
+    gPoints.selectAll("circle")
       .classed("selectionnee", (o) => o === etat.selection)
       .classed("survolee", (o) => o === etat.survol);
+    gPoints.selectAll("circle.selectionnee, circle.survolee").raise();
   }
 
   etat.on("donnees", dessiner).on("filtres", dessiner)
     .on("selection", surligner).on("survol", surligner);
+  new ResizeObserver(() => dessiner()).observe(conteneur);
 }

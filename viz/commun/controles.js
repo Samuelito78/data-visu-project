@@ -1,7 +1,9 @@
 // Barre de contrôles commune : changer de ville (changer de dataset) et filtrer (T4).
 // Les filtres s'appliquent aux deux techniques à la fois.
 
-import { VILLES, SOURCES, TYPES, BUDGET, classeSource, formatPrix, formatEntier } from "./charte.js";
+import {
+  VILLES, SOURCES, TYPES, BUDGET, DISTANCE_CENTRE, classeSource, formatPrix, formatEntier, formatKm,
+} from "./charte.js";
 
 const d3 = window.d3;
 
@@ -55,6 +57,17 @@ export function creerControles(conteneur, etat) {
       etat.modifierFiltres({ prixMax: v >= BUDGET.max ? null : v });
     });
 
+  // Distance max au centre
+  const gDistance = groupe(racine, "Distance max centre");
+  const valeurDistance = gDistance.append("output");
+  const curseurDistance = gDistance.append("input").attr("type", "range")
+    .attr("aria-label", "Distance maximale au centre")
+    .attr("min", DISTANCE_CENTRE.min).attr("max", DISTANCE_CENTRE.max).attr("step", DISTANCE_CENTRE.pas)
+    .on("input", (e) => {
+      const v = +e.target.value;
+      etat.modifierFiltres({ distanceMax: v >= DISTANCE_CENTRE.max ? null : v });
+    });
+
   // Note minimale
   const gNote = groupe(racine, "Note min.");
   const valeurNote = gNote.append("output");
@@ -92,6 +105,8 @@ export function creerControles(conteneur, etat) {
     selectPeriode.property("value", f.periode);
     curseurBudget.property("value", f.prixMax ?? BUDGET.max);
     valeurBudget.text(f.prixMax == null ? "sans limite" : formatPrix(f.prixMax));
+    curseurDistance.property("value", f.distanceMax ?? DISTANCE_CENTRE.max);
+    valeurDistance.text(f.distanceMax == null ? "sans limite" : formatKm(f.distanceMax));
     curseurNote.property("value", f.noteMin);
     valeurNote.text(f.noteMin === 0 ? "toutes" : `${f.noteMin}/100`);
     selectEtoiles.property("value", f.etoilesMin);
