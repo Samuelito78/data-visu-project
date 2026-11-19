@@ -54,6 +54,9 @@ export function creerFond(cadre, { onZoom, onZoomFin }) {
       onZoomFin();
     });
   svg.call(zoom).on("dblclick.zoom", null);
+  // La molette sur la carte ne fait jamais défiler la page. d3.zoom laisse passer l'événement quand le zoom
+  // est déjà à sa limite (dézoomer en vue d'ensemble, zoomer au maximum) : la page défilait alors à sa place.
+  svg.on("wheel.bloquer", (e) => e.preventDefault(), { passive: false });
 
   const transform = () => d3.zoomTransform(svg.node());
 
