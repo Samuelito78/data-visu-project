@@ -1,6 +1,6 @@
 """Constantes et fonctions partagées par les deux sources.
 
-Toute valeur choisie ici (taux, seuils, tranches) est justifiée dans docs/decisions.md.
+Toute valeur choisie ici (taux, seuils, tranches) est justifiée dans le notebook qui l'utilise.
 """
 from __future__ import annotations
 
@@ -27,8 +27,8 @@ TRANCHES_BORNES = [0, 1, 2, 4, np.inf]
 TRANCHES_LIBELLES = ["0–1 km", "1–2 km", "2–4 km", "> 4 km"]
 
 # « Centre » de référence de chaque ville : le point depuis lequel Booking mesure distanceFromCenter,
-# estimé par le géocodage des hôtels (docs/decisions.md, G1). Airbnb n'utilise pas le même
-# point à Berlin (Alexanderplatz) ni à Rome (gare Termini) : on recalcule donc sa distance depuis ce centre (D18).
+# estimé par le géocodage des hôtels (notebook 04). Airbnb n'utilise pas le même
+# point à Berlin (Alexanderplatz) ni à Rome (gare Termini) : on recalcule donc sa distance depuis ce centre (notebook 01, section 3 bis).
 CENTRES = {
     "Londres": (51.50774, -0.12789),   # Charing Cross / Trafalgar Square
     "Berlin": (52.51622, 13.37657),    # porte de Brandebourg

@@ -1,0 +1,51 @@
+/* Thème : toutes les couleurs de l'interface, en clair et en sombre.
+   Une vue ou un composant ne code jamais une couleur en dur : il lit ces variables.
+   Le mode suit le système, ou l'attribut data-theme="light" / "dark" posé sur <html>. */
+
+:root {
+  color-scheme: light;
+  --fond: #f6f5f2;
+  --surface: #fcfcfb;          /* fond des vues et des graphiques */
+  --bordure: #e2e0da;
+  --texte: #0b0b0b;
+  --texte-secondaire: #52514e;
+  --texte-discret: #8a8983;
+  --grille: #e8e6e0;
+  --sans-donnees: #dcdad4;     /* quartiers sans offres */
+  --avertissement-fond: #fdf3dc;
+  --erreur: #d03b3b;
+  /* Couleurs des sources (bleu / orange, vérifiées pour le daltonisme et le contraste) */
+  --couleur-hotel: #2a78d6;
+  --couleur-airbnb: #eb6834;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --fond: #121211;
+    --surface: #1a1a19;
+    --bordure: #33332f;
+    --texte: #f0efec;
+    --texte-secondaire: #c3c2b7;
+    --texte-discret: #8f8e86;
+    --grille: #2b2b28;
+    --sans-donnees: #383835;
+    --avertissement-fond: #3a2f12;
+    --couleur-hotel: #3987e5;
+    --couleur-airbnb: #d95926;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --fond: #121211;
+  --surface: #1a1a19;
+  --bordure: #33332f;
+  --texte: #f0efec;
+  --texte-secondaire: #c3c2b7;
+  --texte-discret: #8f8e86;
+  --grille: #2b2b28;
+  --sans-donnees: #383835;
+  --avertissement-fond: #3a2f12;
+  --couleur-hotel: #3987e5;
+  --couleur-airbnb: #d95926;
+}

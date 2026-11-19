@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
-"""Génère docs/documentation.html (page unique) à partir des fichiers Markdown.
+"""Génère docs/documentation.html (page unique) à partir des six documents de docs/.
+
+Chaque document compte au plus 300 mots (consigne du rendu) : le script compte les mots lus
+(texte, tableaux, libellés des diagrammes ; pas le code ni les adresses des liens) et s'arrête
+si un document dépasse la limite.
 
 Usage : .venv/bin/python scripts/build_doc.py
 """
 import html
 import os
 import re
+import sys
 from datetime import datetime
 from pathlib import Path
 
@@ -17,13 +22,33 @@ OUT = ROOT / "docs" / "documentation.html"
 
 # (fichier, id de section, libellé de secours)
 SOURCES = [
-    ("README.md", "readme", "Présentation"),
-    ("docs/utilisateurs_taches.md", "utilisateurs-taches", "Utilisateurs et tâches"),
-    ("docs/workflow.md", "workflow", "Workflow"),
-    ("docs/schema.md", "schema", "Schéma de données"),
-    ("docs/decisions.md", "decisions", "Décisions"),
-    ("docs/sources.md", "sources", "Sources"),
+    ("docs/1-description.md", "description", "Description du projet"),
+    ("docs/2-utilisateurs-taches.md", "utilisateurs-taches", "Utilisateurs et tâches"),
+    ("docs/3-workflow.md", "workflow", "Workflow"),
+    ("docs/4-mapping-carte.md", "technique-1", "Technique 1 : la carte"),
+    ("docs/5-mapping-points-interet.md", "technique-2", "Technique 2 : les points d'intérêt"),
+    ("docs/6-mapping-nuage.md", "technique-3", "Technique 3 : le nuage de points"),
 ]
+MOTS_MAX = 300
+
+_LETTRE = re.compile(r"[0-9A-Za-zÀ-ÖØ-öø-ÿŒœ]")
+
+
+def compter_mots(texte):
+    """Nombre de mots qu'un lecteur voit dans un document Markdown.
+
+    Compte le texte, les titres, les tableaux et le code en ligne. Pour un diagramme Mermaid,
+    seuls les libellés des nœuds comptent. Ne comptent pas : les autres blocs de code, les
+    adresses des liens et des images, ni les textes alternatifs des images.
+    """
+    def libelles(m):
+        return " ".join(re.findall(r'"([^"]*)"', m.group(1)))
+    texte = re.sub(r"```mermaid\n(.*?)```", libelles, texte, flags=re.S)
+    texte = re.sub(r"```.*?```", " ", texte, flags=re.S)
+    texte = re.sub(r"!\[[^\]]*\]\([^)]*\)", " ", texte)
+    texte = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", texte)
+    texte = re.sub(r"<[^>]+>", " ", texte)
+    return sum(1 for mot in texte.split() if _LETTRE.search(mot))
 FILE_TO_ID = {(ROOT / f).resolve(): sid for f, sid, _ in SOURCES}
 
 MERMAID_VERSION = "10.9.1"
@@ -109,6 +134,16 @@ def convert(rel, sid, fallback):
 
 
 def main():
+    trop_longs = []
+    for rel, _, _ in SOURCES:
+        if (ROOT / rel).is_file():
+            n = compter_mots((ROOT / rel).read_text(encoding="utf-8"))
+            print(f"{n:4d} mots  {rel}")
+            if n > MOTS_MAX:
+                trop_longs.append(rel)
+    if trop_longs:
+        sys.exit(f"Plus de {MOTS_MAX} mots : {', '.join(trop_longs)}. Raccourcir avant de générer.")
+
     parsed = []
     for rel, sid, fallback in SOURCES:
         if not (ROOT / rel).is_file():
@@ -139,6 +174,18 @@ def main():
                 attrs += ' target="_blank" rel="noopener noreferrer"'
             return f"<a {attrs}>"
         body = re.sub(r"<a ([^>]*)>", fix_a, body)
+
+        # Images : chemin relatif au fichier source, réécrit par rapport à docs/ (où est la page).
+        def fix_img(m, src_dir=src_dir):
+            attrs = m.group(1)
+            sm = re.search(r'src="([^"]*)"', attrs)
+            if not sm or re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", sm.group(1)):
+                return m.group(0)
+            cible = os.path.normpath(src_dir / html.unescape(sm.group(1)))
+            rel = os.path.relpath(cible, ROOT / "docs").replace(os.sep, "/")
+            nouveau = 'src="' + rel + '"'
+            return "<img " + attrs.replace(sm.group(0), nouveau) + ">"
+        body = re.sub(r"<img ([^>]*?)/?>", fix_img, body)
 
         # Mermaid
         body = re.sub(

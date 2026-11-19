@@ -2,7 +2,7 @@
 
 import {
   echapper, libelleOffre, classeSource, formatPrix, formatNote, formatKm, formatEtoiles,
-} from "./charte.js";
+} from "../../noyau/charte.js";
 
 const d3 = window.d3;
 let bulle = null;

@@ -31,23 +31,26 @@ La visualisation, développée en D3.js, propose une vue d'ensemble par ville, p
 | Airbnb Prices in European Cities | [kaggle.com/datasets/thedevastator/…](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities) | 8 CSV, pour Londres, Berlin, Paris et Rome en semaine et le week-end : 28 192 annonces |
 | 7500 hotels from Airbnb, Booking and Hotels.com | [kaggle.com/datasets/mykhailozub/…](https://www.kaggle.com/datasets/mykhailozub/500-hotels-from-airbnb-booking-and-hotelscom) | la liste Booking des 4 mêmes villes : 1 705 hôtels |
 
-Les deux datasets sont sous licence CC0. Les contours des quartiers (Ville de Paris, Geoportal Berlin, ONS, OpenStreetMap) et le géocodage (OpenStreetMap) ont leurs propres licences et mentions obligatoires, détaillées dans [`docs/sources.md`](docs/sources.md).
+Les deux datasets sont sous licence CC0. Les contours des quartiers (Ville de Paris, Geoportal Berlin, ONS, OpenStreetMap) et le géocodage (OpenStreetMap) ont leurs propres licences et mentions obligatoires : © Ville de Paris (ODbL) ; Geoportal Berlin (Datenlizenz Deutschland – Zero 2.0) ; « Contains National Statistics and Ordnance Survey data © Crown copyright and database right » (Open Government Licence) ; © les contributeurs d'OpenStreetMap (ODbL). Les points d'intérêt viennent du ministère de la Culture (bases Mérimée et Muséofile, Licence Ouverte), du Landesdenkmalamt Berlin (DL-DE Zero 2.0), de Historic England (© Historic England, Open Government Licence) et d'OpenStreetMap pour Rome.
 
 ## Documentation
 
+La documentation tient en six documents de 300 mots au plus chacun, dans `docs/`. Ils sont réunis sur une page, [`docs/documentation.html`](docs/documentation.html) ; la commande `.venv/bin/python scripts/build_doc.py` la régénère et refuse un document qui dépasse 300 mots.
+
 | Document | Contenu |
 |---|---|
-| [`docs/utilisateurs_taches.md`](docs/utilisateurs_taches.md) | Utilisateurs visés, besoins, catalogue des tâches utilisateur et limites des données |
-| [`docs/workflow.md`](docs/workflow.md) | Workflow complet : chaque script, ce qu'il lit, ce qu'il fait, ce qu'il produit, jusqu'au dataset visualisé |
-| [`docs/schema.md`](docs/schema.md) | Dictionnaire de données de la table commune : types de Munzner, unités, dérivation par source |
-| [`docs/decisions.md`](docs/decisions.md) | Journal des choix de préparation (D1 à D19), avec leur justification chiffrée |
-| [`docs/sources.md`](docs/sources.md) | Sources, licences et attributions |
-| [`docs/documentation.html`](docs/documentation.html) | Toute la documentation ci-dessus, sur une seule page lisible dans un navigateur |
-| [`viz/README.md`](viz/README.md) | Application D3 : organisation, contrat d'une vue, état partagé, règles communes |
+| [`docs/1-description.md`](docs/1-description.md) | Description du projet |
+| [`docs/2-utilisateurs-taches.md`](docs/2-utilisateurs-taches.md) | Utilisateurs visés et leurs tâches avec les données |
+| [`docs/3-workflow.md`](docs/3-workflow.md) | Workflow : chaque script, ce qu'il fait, jusqu'au dataset visualisé |
+| [`docs/4-mapping-carte.md`](docs/4-mapping-carte.md) | Technique 1, la carte : données, variables visuelles, rôle de chaque donnée |
+| [`docs/5-mapping-points-interet.md`](docs/5-mapping-points-interet.md) | Technique 2, les points d'intérêt : idem |
+| [`docs/6-mapping-nuage.md`](docs/6-mapping-nuage.md) | Technique 3, le nuage de points : idem |
+
+Le détail des choix de préparation est dans les notebooks, à l'endroit où chaque choix est fait.
 
 ## Workflow en bref
 
-Le découpage suit le modèle de pipeline du cours (Ward, Grinstein et Keim). Le détail de chaque étape est dans [`docs/workflow.md`](docs/workflow.md).
+Le découpage suit le modèle de pipeline du cours (Ward, Grinstein et Keim). Chaque script est décrit dans [`docs/3-workflow.md`](docs/3-workflow.md).
 
 | Étape du modèle | Script | Sortie | Lignes |
 |---|---|---|---|
@@ -106,11 +109,11 @@ Le téléchargement Kaggle est anonyme : aucun jeton n'est nécessaire. Les donn
 - **`main` reste toujours démontrable** : on n'y pousse pas directement, tout passe par une pull request relue par l'autre.
 - **Une branche par sujet**, partie de `main` à jour (`git switch main && git pull`) :
   - `viz/technique-1`, `viz/technique-2` : chacun sa technique, dans son dossier `viz/technique-N/` ;
-  - `viz/commun-…` : une modification du socle partagé (`viz/commun/`, `style.css`, `index.html`, `main.js`), dans une PR à part et courte, pour limiter les conflits ;
+  - `viz/commun-…` : une modification du socle partagé (`viz/noyau/`, `viz/composants/`, `viz/styles/`, `index.html`, `main.js`), dans une PR à part et courte, pour limiter les conflits ;
   - `data/…` : une modification de la préparation.
 - **Ne jamais modifier `data/processed/` à la main** : ces fichiers sont produits par `notebooks/05_table_commune.ipynb`. Pour changer une colonne, modifier `src/prep/` puis relancer `./scripts/build_data.sh`, et commiter les CSV régénérés avec le code.
 - **Notebooks** : lancer `.venv/bin/nbstripout --install` une fois par poste, sinon les sorties des notebooks partent dans les commits.
-- **Décisions** : un choix de préparation ou d'encodage qui change ce que montre la visualisation s'ajoute dans `docs/decisions.md`. Il servira au rapport.
+- **Décisions** : un choix de préparation qui change ce que montre la visualisation s'explique dans le notebook où il est fait, avec ses chiffres.
 
 ## Fichiers chargés par D3
 
@@ -132,9 +135,9 @@ data/raw/        données brutes téléchargées (ignorées par Git)
 data/interim/    une table par source, au schéma commun
 data/external/   contours des quartiers, correspondance des noms Booking, géocodage des hôtels
 data/processed/  table commune et contours, chargés par D3
-viz/             application D3 : socle commun (viz/commun/) et une technique par étudiant
+viz/             application D3 : socle (viz/noyau/), composants communs (viz/composants/) et une technique par étudiant
 notebooks/       01 Airbnb, 02 Booking, 03 quartiers, 04 géocodage, 05 table commune
 src/prep/        code de préparation : schéma, transformations, quartiers, géocodage, fusion
 scripts/         téléchargement, exécution de la chaîne, serveur local, génération de la doc HTML
-docs/            documentation (et docs/archives/ : documents de travail)
+docs/            documentation du rendu : 6 documents de 300 mots au plus, captures, page HTML
 ```

@@ -35,7 +35,7 @@ def dedoublonner(brut: pd.DataFrame) -> pd.DataFrame:
 
 
 def transformer(brut: pd.DataFrame) -> pd.DataFrame:
-    """Passe du format brut au schéma commun (voir docs/schema.md)."""
+    """Passe du format brut au schéma commun (voir src/prep/schema.py)."""
     out = pd.DataFrame({
         "ville": brut["ville_brut"].map({k: v[0] for k, v in VILLES.items()}),
         "source": "Airbnb",
@@ -45,7 +45,7 @@ def transformer(brut: pd.DataFrame) -> pd.DataFrame:
         "prix_comparable": True,
         "note_100": brut["guest_satisfaction_overall"],
         # Distance recalculée depuis le centre Booking, pour que les deux sources partagent la même
-        # référence (D18). La distance d'origine `dist` part d'un autre point à Berlin et à Rome.
+        # référence. La distance d'origine `dist` part d'un autre point à Berlin et à Rome.
         "dist_centre_km": distance_au_centre(
             brut["ville_brut"].map({k: v[0] for k, v in VILLES.items()}), brut["lat"], brut["lng"]),
         "metro_proche": brut["metro_dist"] < METRO_SEUIL_KM,

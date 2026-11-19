@@ -1,4 +1,4 @@
-// Filtres communs (tâche T4 de docs/utilisateurs_taches.md).
+// Filtres communs (tâche T4 de docs/2-utilisateurs-taches.md).
 // Un filtre qui ne concerne qu'une source laisse passer l'autre :
 // les étoiles ne filtrent que les hôtels, la période que les Airbnb.
 

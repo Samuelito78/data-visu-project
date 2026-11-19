@@ -1,6 +1,41 @@
-/* Styles de la technique 1 (carte des quartiers). Chargé par technique-1/vue.js :
-   les fichiers communs (style.css, index.html) ne sont pas modifiés.
-   Couleurs : uniquement les variables de style.css, pour suivre le mode sombre. */
+/* Styles de la technique 1 (carte des offres), chargés par index.html.
+   Couleurs : les variables de styles/theme.css, plus celles des triangles et du fond des quartiers,
+   propres à cette vue et définies ici (clair et sombre). */
+
+:root {
+  /* Triangles : couleur à la médiane, puis de plus en plus foncée en s'en éloignant. */
+  --t1-hotel-mediane: #b3d0f0;
+  --t1-hotel-moyen: #2a78d6;
+  --t1-hotel-loin: #0a2668;
+  --t1-airbnb-mediane: #f4b3aa;
+  --t1-airbnb-moyen: #d7362c;
+  --t1-airbnb-loin: #6e0b0b;
+  --t1-contour-triangle: rgb(255 255 255 / 0.9);
+  /* Fond neutre des quartiers : les quartiers ne sont plus colorés. */
+  --t1-fond-quartier: #a9aaa5;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --t1-hotel-mediane: #a6c8ef;
+    --t1-hotel-moyen: #3987e5;
+    --t1-hotel-loin: #12378c;
+    --t1-airbnb-mediane: #f2a99f;
+    --t1-airbnb-moyen: #e0443a;
+    --t1-airbnb-loin: #8a1414;
+    --t1-contour-triangle: rgb(255 255 255 / 0.75);
+    --t1-fond-quartier: #6c6d69;
+  }
+}
+:root[data-theme="dark"] {
+  --t1-hotel-mediane: #a6c8ef;
+  --t1-hotel-moyen: #3987e5;
+  --t1-hotel-loin: #12378c;
+  --t1-airbnb-mediane: #f2a99f;
+  --t1-airbnb-moyen: #e0443a;
+  --t1-airbnb-loin: #8a1414;
+  --t1-contour-triangle: rgb(255 255 255 / 0.75);
+  --t1-fond-quartier: #6c6d69;
+}
 
 .t1-entete {
   display: flex;
@@ -11,7 +46,6 @@
   margin: 0 0 8px;
 }
 .t1-resume { margin: 0; color: var(--texte-secondaire); flex: 1 1 260px; }
-.t1-resume-poi { display: inline-block; margin-left: 8px; color: var(--texte); font-weight: 500; }
 .t1-retour[hidden] { display: none; }
 .t1-poi-controles {
   display: inline-flex;
@@ -23,21 +57,36 @@
   border-color: var(--texte);
   box-shadow: inset 0 0 0 1px var(--texte);
 }
-.t1-poi-info { color: var(--texte-secondaire); font-size: 12px; }
-.t1-pastille-valeur {
-  display: inline-block;
-  width: 12px; height: 12px;
-  margin-right: 6px;
-  vertical-align: -1px;
-  border: 1px solid var(--bordure);
-  border-radius: 2px;
-}
 
-.t1-carte { cursor: grab; }
+/* Encart du point d'intérêt, posé sur la carte : hors du flux, il ne décale rien quand son texte change. */
+.t1-cadre { position: relative; }
+.t1-poi-bandeau {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  max-width: min(420px, calc(100% - 16px));
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 10px;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  border: 1px solid var(--bordure);
+  border-radius: 6px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+.t1-poi-bandeau[hidden] { display: none; }
+.t1-poi-info { color: var(--texte-secondaire); }
+.t1-poi-info:empty, .t1-poi-compte:empty { display: none; }
+.t1-poi-compte { color: var(--texte); font-weight: 500; }
+
+.t1-carte { cursor: grab; touch-action: none; }
 .t1-carte:active { cursor: grabbing; }
 
-/* Contours : trait de largeur constante quel que soit le zoom. */
+/* Contours : fond neutre, trait de largeur constante quel que soit le zoom. */
 .t1-quartiers path {
+  fill: var(--t1-fond-quartier);
   stroke: var(--surface);
   stroke-width: 1px;
   vector-effect: non-scaling-stroke;
@@ -47,12 +96,11 @@
 .t1-quartiers path:hover,
 .t1-quartiers path.t1-lie { stroke: var(--texte); stroke-width: 2px; }
 .t1-quartiers path.t1-zoome { stroke: var(--texte); stroke-width: 1.5px; cursor: grab; }
-.t1-quartiers path.t1-estompe { opacity: 0.7; }
-/* Avec les points, la couleur des quartiers reste lisible : on l'atténue à peine. */
-.t1-quartiers.t1-avec-points path { fill-opacity: 0.75; }
+.t1-quartiers path.t1-estompe { opacity: 0.55; }
 
 .t1-etiquettes text {
   font-size: 11px;
+  font-weight: 600;
   fill: var(--texte);
   text-anchor: middle;
   dominant-baseline: middle;
@@ -63,14 +111,18 @@
   pointer-events: none;
 }
 
-/* Points : liseré clair épais pour se détacher du fond, plus une ombre fine et sombre
-   (posée une seule fois sur le groupe, c'est moins coûteux qu'un filtre par point). */
-.t1-points { filter: drop-shadow(0 0 0.6px rgb(0 0 0 / 0.7)); }
-.t1-points path { stroke: var(--surface); stroke-width: 1.25px; cursor: pointer; }
-.t1-points path.t1-proche-poi { stroke-width: 2.2px; }
-.t1-points path.survolee { stroke: var(--texte); stroke-width: 2px; }
-.t1-points path.selectionnee { stroke: var(--texte); stroke-width: 2.5px; }
+/* Triangles : liseré clair fin, de largeur constante malgré la mise à l'échelle. */
+.t1-points path {
+  stroke: var(--t1-contour-triangle);
+  stroke-width: 0.6px;
+  vector-effect: non-scaling-stroke;
+  cursor: pointer;
+}
+.t1-points path.t1-proche-poi { stroke: var(--texte); stroke-width: 1.2px; }
+.t1-points path.survolee { stroke: var(--texte); stroke-width: 1.5px; }
+.t1-points path.selectionnee { stroke: var(--texte); stroke-width: 2px; }
 
+/* Point d'intérêt : repère déplaçable et ses deux cercles de recherche. */
 .t1-poi circle { vector-effect: non-scaling-stroke; }
 .t1-poi .t1-poi-halo {
   fill: rgb(235 104 52 / 0.18);
@@ -99,21 +151,34 @@
 }
 .t1-carte.t1-mode-poi { cursor: copy; }
 
+/* Zone de dépôt du repère « point perso » glissé depuis le panneau (composants/points-interet). */
+.poi-en-glisse .t1-carte { outline: 2px dashed var(--couleur-airbnb); outline-offset: 2px; }
+.poi-en-glisse .t1-carte.t1-cible-depot { outline-style: solid; }
+
+/* Triangle dans l'infobulle */
+.t1-pastille-triangle { display: inline-block; margin-right: 4px; vertical-align: -1px; overflow: visible; }
+.t1-pastille-triangle path { stroke: var(--texte-discret); stroke-width: 0.8px; vector-effect: non-scaling-stroke; }
+
 /* Légende */
 .t1-legende {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 24px;
+  gap: 12px 28px;
   align-items: flex-start;
-  margin-top: 8px;
+  margin-top: 10px;
   font-size: 12px;
   color: var(--texte-secondaire);
 }
-.t1-legende-bloc { display: flex; flex-direction: column; gap: 2px; }
+.t1-legende-bloc { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .t1-legende-titre { color: var(--texte); }
-.t1-legende-sens { display: flex; justify-content: space-between; gap: 12px; width: 264px; padding: 0 4px; white-space: nowrap; }
-.t1-legende-cas { display: flex; flex-direction: column; gap: 4px; max-width: 360px; }
-.t1-legende-item { display: inline-flex; align-items: center; gap: 6px; }
-.t1-legende-item svg { display: inline; flex: none; border: 1px solid var(--bordure); }
-.t1-legende-note { color: var(--texte-discret); }
-.t1-legende-item.t1-points svg { border: none; overflow: visible; }
+/* Une ligne par source : le nom aligné sur la barre (en haut du SVG), pas sur l'axe en dessous. */
+.t1-legende-barre { display: flex; align-items: flex-start; gap: 8px; }
+.t1-legende-barre > span { width: 52px; flex: none; line-height: 12px; }
+.t1-legende-note { color: var(--texte-discret); max-width: 360px; }
+.t1-medianes { display: grid; grid-template-columns: auto auto; gap: 2px 14px; margin: 0; }
+.t1-medianes dt { color: var(--texte-secondaire); }
+.t1-medianes dd { margin: 0; color: var(--texte); font-variant-numeric: tabular-nums; text-align: right; }
+
+@media (prefers-reduced-motion: reduce) {
+  .t1-quartiers path { transition: none; }
+}

@@ -1,7 +1,7 @@
 """Schéma de la table commune : le contrat entre les notebooks de source et la fusion.
 
 Chaque notebook de source appelle `valider(df)` avant d'écrire dans data/interim/.
-La description lisible du schéma est dans docs/schema.md : les deux doivent rester alignés.
+Les colonnes sont résumées dans docs/3-workflow.md ; ce fichier fait foi.
 """
 from __future__ import annotations
 

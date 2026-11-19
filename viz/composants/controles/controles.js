@@ -3,7 +3,7 @@
 
 import {
   VILLES, SOURCES, TYPES, BUDGET, DISTANCE_CENTRE, classeSource, formatPrix, formatEntier, formatKm,
-} from "./charte.js";
+} from "../../noyau/charte.js";
 
 const d3 = window.d3;
 
