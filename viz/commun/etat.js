@@ -7,6 +7,7 @@
 //   "filtres"   les filtres ont changé ; recalculer etat.offresFiltrees()
 //   "selection" une offre a été cliquée, ou la sélection est effacée (etat.selection vaut null)
 //   "survol"    une offre est survolée, ou plus aucune (etat.survol vaut null)
+//   "poi"       un point d'intérêt est choisi ou posé, ou effacé (etat.poi vaut null)
 
 import { chargerVille } from "./donnees.js";
 import { filtresParDefaut, appliquerFiltres } from "./filtres.js";
@@ -14,7 +15,7 @@ import { filtresParDefaut, appliquerFiltres } from "./filtres.js";
 const d3 = window.d3;
 
 export function creerEtat() {
-  const evenements = d3.dispatch("donnees", "filtres", "selection", "survol", "chargement", "erreur");
+  const evenements = d3.dispatch("donnees", "filtres", "selection", "survol", "poi", "chargement", "erreur");
   let compteur = 0;
   let filtreesCache = null;
 
@@ -23,6 +24,7 @@ export function creerEtat() {
     filtres: filtresParDefaut(),
     selection: null,        // une offre (ligne de la table) ou null
     survol: null,           // une offre ou null
+    poi: null,              // point d'intérêt { id, nom, lon, lat, perso } ou null (commun/points-interet.js)
 
     get ville() {
       return this.donnees?.ville ?? null;
@@ -48,6 +50,7 @@ export function creerEtat() {
         etat.donnees = donnees;
         etat.selection = null;
         etat.survol = null;
+        etat.poi = null;    // les points d'intérêt sont propres à chaque ville
         filtreesCache = null;
         evenements.call("donnees", null, etat);
         evenements.call("selection", null, etat);
@@ -74,6 +77,12 @@ export function creerEtat() {
     selectionner(offre) {
       etat.selection = offre ?? null;
       evenements.call("selection", null, etat);
+    },
+
+    // Choisir un point d'intérêt (lieu prédéfini ou point posé sur la carte), ou l'effacer avec null.
+    choisirPoi(poi) {
+      etat.poi = poi ?? null;
+      evenements.call("poi", null, etat);
     },
 
     survoler(offre) {

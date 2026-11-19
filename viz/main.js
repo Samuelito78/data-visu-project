@@ -7,6 +7,7 @@ import { creerEtat } from "./commun/etat.js";
 import { creerControles } from "./commun/controles.js";
 import { creerAvertissements } from "./commun/avertissements.js";
 import { creerPanneauDetail } from "./commun/detail.js";
+import { creerPanneauPoi } from "./commun/points-interet.js";
 import { creerVue as creerTechnique1 } from "./technique-1/vue.js";
 import { creerVue as creerTechnique2 } from "./technique-2/vue.js";
 
@@ -16,6 +17,7 @@ const parametres = new URLSearchParams(location.search);
 creerControles(document.querySelector("#controles"), etat);
 creerAvertissements(document.querySelector("#avertissements"), etat);
 creerPanneauDetail(document.querySelector("#detail"), etat);
+creerPanneauPoi(document.querySelector("#points-interet"), etat);
 creerTechnique1(document.querySelector("#technique-1 .vue-contenu"), etat);
 creerTechnique2(document.querySelector("#technique-2 .vue-contenu"), etat);
 

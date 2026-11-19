@@ -1,39 +1,50 @@
-// Technique 1 : carte des quartiers.
+// Technique 1 : carte des offres.
 //
-// Vue d'ensemble : une carte choroplèthe. Chaque quartier est coloré selon l'écart entre le prix médian
-// des hôtels et celui des Airbnb (bleu : les hôtels sont moins chers ; orange : les Airbnb sont moins chers).
-// Si une seule source est cochée dans les filtres, la couleur donne le prix médian de cette source.
-// Détails : un clic sur un quartier zoome dessus et affiche ses offres une par une (zoom sémantique,
-// cours 2 p. 97-100). Un clic sur une offre ouvre sa fiche et la surligne dans la technique 2.
+// Vue d'ensemble : chaque offre qui a une position est un triangle posé sur la carte des quartiers.
+//   ▲ : prix au-dessus de la médiane de sa source dans la ville (médiane des hôtels pour un hôtel,
+//       médiane des Airbnb pour un Airbnb) ;
+//   ▼ : prix en dessous.
+// La couleur donne l'éloignement à cette médiane : bleu de plus en plus foncé pour les hôtels,
+// rouge de plus en plus foncé pour les Airbnb. Les quartiers ont un fond neutre, sans couleur,
+// pour ne pas orienter la lecture par quartier.
+// Plus on zoome, plus les triangles sont petits, jusqu'à une taille minimale qui reste cliquable.
+// Point d'intérêt : un lieu choisi dans le panneau de droite (commun/points-interet.js), un repère
+// « point perso » glissé depuis ce panneau et déposé sur la carte, ou un clic en mode point d'intérêt.
+// Les offres autour du point sont comptées et, en mode point d'intérêt, seules elles sont dessinées.
+// Détails : un clic sur un quartier (entre les triangles) zoome dessus ; à tout niveau de zoom, le survol
+// d'une offre affiche son infobulle et un clic ouvre sa fiche et la surligne dans la technique 2
+// (zoom sémantique, cours 2 p. 97-100).
 //
-// Données lues : etat.donnees.quartiers (contours) et etat.offresFiltrees() (offres qui passent les filtres).
-// Aucune préparation ici : seulement une agrégation légère (médiane par quartier) qui dépend des filtres.
-// Les styles propres à la carte sont dans technique-1/carte.css, chargé par ce fichier.
+// Données lues : etat.donnees.quartiers (contours), etat.donnees.offres (médianes de référence, sans filtre)
+// et etat.offresFiltrees() (les triangles affichés).
+// Les styles et les couleurs des triangles sont dans technique-1/carte.css, chargé par ce fichier.
 
-import {
-  SOURCES, SEUIL_COMPARABLE, COULEUR_SANS_DONNEES, couleurSource, classeSource,
-  formatPrix, formatEntier, echapper,
-} from "../commun/charte.js";
+import { SOURCES, classeSource, formatPrix, formatEntier, echapper } from "../commun/charte.js";
 import { afficherInfobulle, masquerInfobulle, htmlInfobulleOffre } from "../commun/infobulle.js";
+import { TYPE_DEPOT_POI } from "../commun/points-interet.js";
 
 const d3 = window.d3;
 
 const MARGE = 12;            // marge autour de la ville, en pixels
 const HAUTEUR_MAX = 560;     // hauteur maximale de la carte
-const ZOOM_MAX = 12;
-const SEUIL_POINTS = 2;      // à partir de ce facteur de zoom, les offres s'affichent une par une
+const ZOOM_MAX = 16;
+const SEUIL_POINTS = 2;      // à partir de ce facteur de zoom, le résumé compte les offres visibles
 const DUREE = 750;           // durée des transitions de zoom, en ms
 const RAYON_SECOND_PAR_DEFAUT = 0.8;
-// Forme des points : la source est codée deux fois, par la couleur et par la forme (redondance),
-// pour qu'un hôtel bleu reste reconnaissable sur un quartier bleu. Taille = aire en px².
-const FORME = { "Hôtel": d3.symbolSquare, "Airbnb": d3.symbolCircle };
-const AIRE = { "Hôtel": 64, "Airbnb": 26 };
-const AGRANDI = 3;           // facteur d'aire de l'offre sélectionnée
-const symbole = (o, agrandi = false) => d3.symbol(FORME[o.source], AIRE[o.source] * (agrandi ? AGRANDI : 1))();
-const ID_HACHURES = "t1-hachures";
-const ID_DEGRADE = "t1-degrade";
+const RAYON_LIEU_PAR_DEFAUT = 1; // rayon de départ, en km, d'un lieu choisi dans le panneau des points d'intérêt
 
-const seuil = (source) => (source === "Hôtel" ? SEUIL_COMPARABLE.hotel : SEUIL_COMPARABLE.airbnb);
+// Triangles. La taille est une aire à l'écran, en px² : aire = AIRE_BASE × zoom^−EXPOSANT,
+// sans descendre sous AIRE_MIN (environ 8 px de côté) pour que les offres restent faciles à cliquer.
+const TRIANGLE = d3.symbol(d3.symbolTriangle, 100)(); // tracé d'aire 100, mis à l'échelle par transform
+const AIRE_BASE = 46;        // environ 10 px de côté au zoom 1
+const AIRE_MIN = 30;         // environ 8 px de côté
+const EXPOSANT = 0.25;
+const AGRANDI = 3.5;         // facteur d'aire de l'offre sélectionnée
+const AGRANDI_SURVOL = 3;    // facteur de taille (côté) de l'offre survolée
+const LOG_MAX = 1;           // écart log2 à partir duquel la couleur est la plus foncée : ×2 ou ÷2
+const aire = (k) => Math.max(AIRE_MIN, AIRE_BASE * Math.pow(k, -EXPOSANT));
+
+const fPct = d3.formatLocale({ decimal: ",", thousands: " ", grouping: [3], currency: ["", " €"] }).format("+.0%");
 const pluriel = (source) => (source === "Hôtel" ? "hôtels" : "Airbnb");
 
 // Étiquette courte d'un quartier : « 11e » pour Paris, « XIII » pour Rome, le nom complet ailleurs.
@@ -58,122 +69,28 @@ function chargerStyle() {
   document.head.append(lien);
 }
 
-// Ce que montre la couleur : l'écart hôtel − Airbnb si les deux sources sont cochées,
-// sinon le prix médian de la seule source cochée.
-function choisirIndicateur(filtres) {
-  const actives = SOURCES.filter((s) => filtres.sources.has(s));
-  if (actives.length === 1) {
-    const source = actives[0];
-    return {
-      type: "prix",
-      source,
-      actives,
-      titre: `Prix médian par nuit des ${pluriel(source)}`,
-      consigne: `Prix médian par nuit des ${pluriel(source)}, par quartier. Cliquez sur un quartier pour voir ses offres.`,
-    };
+// Médiane de chaque source sur toute la ville (sans filtre), puis l'écart de chaque offre à celle de sa source.
+// Les hôtels sans position comptent dans la médiane, même s'ils n'ont pas de triangle.
+function calculerEcarts(offres) {
+  const medianes = d3.rollup(offres, (v) => d3.median(v, (o) => o.prix_nuit_eur), (o) => o.source);
+  const ecarts = new Map();
+  for (const o of offres) {
+    const mediane = medianes.get(o.source);
+    const rapport = o.prix_nuit_eur / mediane;
+    ecarts.set(o.id, {
+      mediane,
+      rapport,
+      haut: o.prix_nuit_eur >= mediane,
+      t: Math.min(Math.abs(Math.log2(rapport)) / LOG_MAX, 1), // 0 à la médiane, 1 au plus loin
+    });
   }
-  return {
-    type: "ecart",
-    actives,
-    titre: "Écart de prix médian par nuit (hôtel − Airbnb)",
-    consigne: "Écart entre le prix médian des hôtels et celui des Airbnb, par quartier. Cliquez sur un quartier pour voir ses offres.",
-  };
+  return { medianes, ecarts };
 }
 
-// Résumé de chaque quartier pour les offres filtrées : nombre d'offres et prix médian par source,
-// puis la valeur à colorer, ou la raison pour laquelle on ne peut pas la calculer.
-//   statut "valeur"      : la valeur est calculée
-//   statut "insuffisant" : des offres, mais pas de quoi comparer (seuils D16, ou prix non comparables D7)
-//   statut "vide"        : aucune offre
-function resumerQuartiers(offres, quartiers, indicateur) {
-  const parQuartier = d3.group(offres, (o) => o.quartier);
-  return new Map(quartiers.features.map((f) => {
-    const nom = f.properties.quartier;
-    const liste = parQuartier.get(nom) ?? [];
-    const r = { quartier: nom, nombre: {}, mediane: {}, valeur: null, statut: "vide", raison: "" };
-    for (const s of SOURCES) {
-      const prix = liste.filter((o) => o.source === s).map((o) => o.prix_nuit_eur);
-      r.nombre[s] = prix.length;
-      r.mediane[s] = d3.median(prix) ?? null;
-    }
-
-    if (liste.length === 0) {
-      r.raison = "Aucune offre avec les filtres actuels.";
-    } else if (indicateur.type === "prix") {
-      const s = indicateur.source;
-      if (r.nombre[s] >= seuil(s)) {
-        r.statut = "valeur";
-        r.valeur = r.mediane[s];
-      } else {
-        r.statut = "insuffisant";
-        r.raison = `Moins de ${seuil(s)} ${pluriel(s)} : médiane peu fiable.`;
-      }
-    } else if (liste.some((o) => o.source === "Hôtel" && o.prix_comparable === false)) {
-      r.statut = "insuffisant";
-      r.raison = "Prix des hôtels non comparables avec les Airbnb (D7).";
-    } else if (r.nombre["Airbnb"] < SEUIL_COMPARABLE.airbnb || r.nombre["Hôtel"] < SEUIL_COMPARABLE.hotel) {
-      r.statut = "insuffisant";
-      r.raison = `Comparaison impossible : il faut au moins ${SEUIL_COMPARABLE.airbnb} Airbnb et ${SEUIL_COMPARABLE.hotel} hôtels (D16).`;
-    } else {
-      r.statut = "valeur";
-      r.valeur = r.mediane["Hôtel"] - r.mediane["Airbnb"]; // négatif : les hôtels sont moins chers
-    }
-    return [nom, r];
-  }));
-}
-
-// Échelle de couleur de l'indicateur, construite avec les couleurs du thème courant (clair ou sombre).
-function creerEchelle(resumes, indicateur) {
-  const valeurs = [...resumes.values()].filter((r) => r.statut === "valeur").map((r) => r.valeur);
-  const surface = lireCouleur("--surface");
-
-  if (indicateur.type === "ecart") {
-    // Échelle divergente : zéro (prix médians égaux) au centre, domaine symétrique.
-    const max = d3.max(valeurs, Math.abs) || 1;
-    const interpolateur = d3.piecewise(d3.interpolateLab, [
-      lireCouleur("--couleur-hotel"), surface, lireCouleur("--couleur-airbnb"),
-    ]);
-    return d3.scaleDiverging([-max, 0, max], interpolateur).clamp(true);
-  }
-
-  // Échelle séquentielle : du plus clair (prix bas) à la couleur de la source (prix haut).
-  const couleur = lireCouleur(indicateur.source === "Hôtel" ? "--couleur-hotel" : "--couleur-airbnb");
-  let [min, max] = d3.extent(valeurs);
-  if (min == null) [min, max] = [0, 1];
-  if (min === max) max = min + 1;
-  const depart = d3.interpolateLab(surface, couleur)(0.12);
-  return d3.scaleSequential([min, max], d3.interpolateLab(depart, couleur)).clamp(true);
-}
-
-function texteEcart(v) {
-  if (v < 0) return `Hôtels moins chers de ${formatPrix(-v)} (médianes)`;
-  if (v > 0) return `Airbnb moins chers de ${formatPrix(v)} (médianes)`;
-  return "Prix médians égaux";
-}
-
-function htmlQuartier(r, indicateur, estZoome) {
-  const lignes = [`<strong>${echapper(r.quartier)}</strong>`];
-  for (const s of indicateur.actives) {
-    lignes.push(
-      `<span class="pastille ${classeSource(s)}"></span>${pluriel(s)} : ${formatEntier(r.nombre[s])} offre(s)` +
-      (r.nombre[s] > 0 ? `, médiane ${formatPrix(r.mediane[s])}` : "")
-    );
-  }
-  if (r.statut === "valeur") {
-    lignes.push(indicateur.type === "ecart" ? `<strong>${texteEcart(r.valeur)}</strong>` : `<strong>Médiane : ${formatPrix(r.valeur)}</strong>`);
-  } else {
-    lignes.push(`<em>${echapper(r.raison)}</em>`);
-  }
-  if (!estZoome && r.statut !== "vide") lignes.push("Cliquez pour voir les offres.");
-  return lignes.join("<br>");
-}
-
-// Motif de hachures : quartiers où la comparaison n'est pas possible (D16, D7).
-function remplirHachures(motif) {
-  motif.attr("patternUnits", "userSpaceOnUse").attr("width", 6).attr("height", 6);
-  motif.append("rect").attr("width", 6).attr("height", 6).style("fill", COULEUR_SANS_DONNEES);
-  motif.append("path").attr("d", "M0,0V6").style("stroke", "var(--texte-discret)").style("stroke-width", 1.2);
-  return motif;
+// Une échelle par source, de la couleur claire (à la médiane) à la plus foncée, lue dans le thème courant.
+function creerEchelles() {
+  const piste = (s) => d3.piecewise(d3.interpolateLab, ["mediane", "moyen", "loin"].map((n) => lireCouleur(`--t1-${s}-${n}`)));
+  return { "Hôtel": piste("hotel"), "Airbnb": piste("airbnb") };
 }
 
 function distanceKm([lon1, lat1], [lon2, lat2]) {
@@ -224,7 +141,6 @@ export function creerVue(conteneur, etat) {
   const boutonPoi = controlesPoi.append("button").attr("type", "button").attr("class", "t1-poi-bouton")
     .attr("aria-pressed", "false")
     .text("Mode point d'intérêt : désactivé");
-  const infoPoi = controlesPoi.append("span").attr("class", "t1-poi-info");
   const boutonEffacerPoi = controlesPoi.append("button").attr("type", "button")
     .attr("class", "t1-poi-effacer").text("Effacer le point").property("disabled", true);
   const boutonRetour = entete.append("button").attr("type", "button").attr("class", "t1-retour")
@@ -232,21 +148,28 @@ export function creerVue(conteneur, etat) {
     .on("click", () => dezoomer());
 
   // La carte : un groupe `carte` qui reçoit la transformation du zoom (les contours),
-  // puis les points et les étiquettes, placés à la main pour garder une taille fixe à l'écran.
-  const svg = racine.append("svg").attr("class", "t1-carte")
-    .attr("role", "img").attr("aria-label", "Carte des quartiers : écart de prix entre hôtels et Airbnb");
-  const motif = svg.append("defs").append("pattern").attr("id", ID_HACHURES);
-  remplirHachures(motif);
-
+  // puis les triangles et les étiquettes, placés à la main pour contrôler leur taille à l'écran.
+  const cadre = racine.append("div").attr("class", "t1-cadre");
+  const svg = cadre.append("svg").attr("class", "t1-carte")
+    .attr("role", "img")
+    .attr("aria-label", "Carte des offres : chaque triangle indique si l'offre est plus ou moins chère que la médiane des hôtels ou des Airbnb");
   const carte = svg.append("g");
   const gQuartiers = carte.append("g").attr("class", "t1-quartiers");
-  const gEtiquettes = svg.append("g").attr("class", "t1-etiquettes");
   const gPoints = svg.append("g").attr("class", "t1-points");
+  const gEtiquettes = svg.append("g").attr("class", "t1-etiquettes");
   const gPoi = svg.append("g").attr("class", "t1-poi").style("display", "none");
   gPoi.append("circle").attr("class", "t1-poi-halo").attr("r", 0);
   gPoi.append("circle").attr("class", "t1-poi-marqueur").attr("r", 5);
   gPoi.append("circle").attr("class", "t1-poi-halo-secondaire").style("display", "none").attr("r", 0);
   gPoi.append("circle").attr("class", "t1-poi-centre-secondaire").style("display", "none").attr("r", 4);
+
+  // Encart du point d'intérêt, posé sur la carte (position absolue) : son texte change à chaque mouvement
+  // de souris pendant le tracé des cercles. Dans l'en-tête, il changeait la hauteur de la page et décalait
+  // la carte sous le curseur, ce qui changeait le rayon, donc le texte : la page tremblait.
+  const bandeauPoi = cadre.append("div").attr("class", "t1-poi-bandeau").attr("aria-live", "polite")
+    .property("hidden", true);
+  const infoPoi = bandeauPoi.append("span").attr("class", "t1-poi-info");
+  const comptePoi = bandeauPoi.append("span").attr("class", "t1-poi-compte");
 
   const legende = racine.append("div").attr("class", "t1-legende");
 
@@ -256,9 +179,9 @@ export function creerVue(conteneur, etat) {
   let hauteur = 0;
   let largeurPrecedente = 0;   // pour ne recaler que si la largeur change
   let quartierZoome = null;    // nom du quartier sur lequel on a cliqué, ou null
-  let resumes = new Map();     // quartier → résumé (resumerQuartiers)
-  let echelle = null;          // échelle de couleur courante (creerEchelle)
-  let indicateur = choisirIndicateur(etat.filtres);
+  let medianes = new Map();    // source → prix médian dans la ville
+  let ecarts = new Map();      // id d'offre → { mediane, rapport, haut, t } (calculerEcarts)
+  let echelles = creerEchelles();
   let positions = new Map();   // id d'offre → [x, y] projetés (sans zoom)
   let centres = new Map();     // quartier → [x, y] du centre de l'étiquette
   let tailles = new Map();     // quartier → [largeur, hauteur] du contour, en pixels sans zoom
@@ -275,6 +198,8 @@ export function creerVue(conteneur, etat) {
   let rayonPoiSecondaireFige = false;
   let idsProchesPoi = new Set();
   let resumePoi = null;
+
+  const couleurOffre = (o) => echelles[o.source](ecarts.get(o.id).t);
 
   const zoom = d3.zoom()
     .scaleExtent([1, ZOOM_MAX])
@@ -294,9 +219,12 @@ export function creerVue(conteneur, etat) {
     });
   svg.call(zoom).on("dblclick.zoom", null);
 
+  let repereDeplace = false;   // le repère a-t-il bougé pendant le geste (un simple clic ne compte pas)
   const dragPoi = d3.drag()
-    .on("start", (e) => e.sourceEvent.stopPropagation())
+    .on("start", (e) => { e.sourceEvent.stopPropagation(); repereDeplace = false; })
+    .on("end", () => { if (repereDeplace) signalerPoiPerso(); })
     .on("drag", (e) => {
+      repereDeplace = true;
       const t = d3.zoomTransform(svg.node());
       const [xCarte, yCarte] = t.invert([e.x, e.y]);
       const geo = projection.invert([xCarte, yCarte]);
@@ -328,19 +256,26 @@ export function creerVue(conteneur, etat) {
     boutonPoi.attr("aria-pressed", modePoi ? "true" : "false")
       .text(`Mode point d'intérêt : ${modePoi ? "activé" : "désactivé"}`);
     boutonEffacerPoi.property("disabled", !poiGeo);
-    infoPoi.text(
-      !poiGeo ? "Placez un point sur la carte."
+    svg.classed("t1-mode-poi", modePoi);
+    ecrireBandeauPoi();
+  }
+
+  // Encart sur la carte : l'étape du tracé, puis le nombre d'offres dans le cercle de recherche.
+  function ecrireBandeauPoi() {
+    bandeauPoi.property("hidden", !modePoi && !resumePoi);
+    infoPoi.text(!modePoi ? ""
+      : !poiGeo ? "Cliquez sur la carte, choisissez un lieu ou glissez le point perso."
         : !rayonPoiFige
           ? (rayonPoiKm == null || rayonPoiKm <= 0
             ? "Déplacez la souris puis cliquez pour figer le 1er rayon."
             : `1er rayon : ${formatKmCourt(rayonPoiKm)} (cliquez pour figer)`)
           : (!rayonPoiSecondaireFige
-            ? (rayonPoiSecondaireKm == null || rayonPoiSecondaireKm <= 0
-              ? `1er rayon figé (${formatKmCourt(rayonPoiKm)}). Déplacez la souris puis cliquez pour figer le 2e cercle.`
-              : `1er rayon : ${formatKmCourt(rayonPoiKm)} · 2e rayon : ${formatKmCourt(rayonPoiSecondaireKm)} (cliquez pour figer)`)
-            : `2e cercle figé (${formatKmCourt(rayonPoiSecondaireKm)}). Déplacez la souris pour tourner ; cliquez pour redimensionner.`)
-    );
-    svg.classed("t1-mode-poi", modePoi);
+            ? `1er rayon : ${formatKmCourt(rayonPoiKm)} · 2e rayon : ${formatKmCourt(rayonPoiSecondaireKm ?? 0)} (cliquez pour figer le 2e cercle)`
+            : `2e cercle figé (${formatKmCourt(rayonPoiSecondaireKm)}). Cliquez sur la carte pour le reprendre.`));
+    comptePoi.text(!resumePoi ? ""
+      : `${resumePoi.secondaire ? "2e cercle" : "Point d'intérêt"} (${formatKmCourt(resumePoi.rayon)}) : `
+        + `${formatEntier(resumePoi.total)} offre(s) proche(s) `
+        + `(${formatEntier(resumePoi.hotel)} hôtels, ${formatEntier(resumePoi.airbnb)} Airbnb).`);
   }
 
   function placerPoi() {
@@ -433,11 +368,20 @@ export function creerVue(conteneur, etat) {
     synchroniserControlesPoi();
   }
 
+  // Un point posé ou déplacé sur la carte devient le point perso de l'état (le panneau le signale).
+  // L'état renvoie l'événement « poi » : surPoi voit que c'est déjà le point affiché et ne fait rien.
+  function signalerPoiPerso() {
+    if (!poiGeo) return;
+    etat.choisirPoi({ id: "perso", nom: "Point perso", lon: poiGeo[0], lat: poiGeo[1], perso: true });
+  }
+
   function gererClicPoi(e) {
     if (!modePoi) return false;
     const pointeur = d3.pointer(e, svg.node());
-    if (!poiGeo) definirPoiDepuisEcran(pointeur);
-    else if (!rayonPoiFige) {
+    if (!poiGeo) {
+      definirPoiDepuisEcran(pointeur);
+      signalerPoiPerso();
+    } else if (!rayonPoiFige) {
       mettrePremierRayonDepuisEcran(pointeur);
       rayonPoiFige = true;
       initialiserSecondCercle(pointeur);
@@ -445,17 +389,16 @@ export function creerVue(conteneur, etat) {
       mettreSecondRayonDepuisEcran(pointeur);
       rayonPoiSecondaireFige = true;
     } else {
+      // 2e cercle figé : un clic le reprend, il suit de nouveau la souris.
       rayonPoiSecondaireFige = false;
+      mettreSecondRayonDepuisEcran(pointeur);
     }
     mettreAJourPoi();
     return true;
   }
 
-  boutonPoi.on("click", () => {
-    modePoi = !modePoi;
-    synchroniserControlesPoi();
-  });
-  boutonEffacerPoi.on("click", () => {
+  // Remet le point d'intérêt et ses deux cercles à zéro (bouton « Effacer », changement de ville).
+  function effacerPoi() {
     poiGeo = null;
     rayonPoiKm = null;
     rayonPoiPx = 0;
@@ -466,8 +409,57 @@ export function creerVue(conteneur, etat) {
     rayonPoiSecondaireFige = false;
     idsProchesPoi = new Set();
     resumePoi = null;
-    mettreAJourPoi();
+  }
+
+  boutonPoi.on("click", () => {
+    modePoi = !modePoi;
+    synchroniserControlesPoi();
   });
+  boutonEffacerPoi.on("click", () => {
+    effacerPoi();
+    mettreAJourPoi();
+    etat.choisirPoi(null);
+  });
+
+  // Lieu choisi dans le panneau (ou point effacé) : le point est placé avec un rayon de départ,
+  // le mode point d'intérêt s'active et, si le lieu est hors de l'écran, la carte revient à la vue d'ensemble.
+  function surPoi() {
+    const p = etat.poi;
+    if (!p) {
+      if (poiGeo) { effacerPoi(); mettreAJourPoi(); }
+      return;
+    }
+    if (poiGeo && poiGeo[0] === p.lon && poiGeo[1] === p.lat) return; // déjà affiché (posé sur la carte)
+    effacerPoi();
+    poiGeo = [p.lon, p.lat];
+    rayonPoiKm = p.perso ? 0 : RAYON_LIEU_PAR_DEFAUT;
+    modePoi = true;
+    const proj = projection(poiGeo);
+    const [x, y] = proj ? d3.zoomTransform(svg.node()).apply(proj) : [-1, -1];
+    if (x < 0 || x > largeur || y < 0 || y > hauteur) dezoomer();
+    mettreAJourPoi();
+  }
+
+  // Dépôt du repère « point perso » glissé depuis le panneau : seule la carte l'accepte.
+  const estDepotPoi = (e) => e.dataTransfer && [...e.dataTransfer.types].includes(TYPE_DEPOT_POI);
+  svg.on("dragover", (e) => {
+    if (!estDepotPoi(e)) return;
+    e.preventDefault();      // autorise le dépôt ici, et seulement ici
+    e.dataTransfer.dropEffect = "copy";
+    svg.classed("t1-cible-depot", true);
+  })
+    .on("dragleave", (e) => {
+      if (!svg.node().contains(e.relatedTarget)) svg.classed("t1-cible-depot", false);
+    })
+    .on("drop", (e) => {
+      if (!estDepotPoi(e)) return;
+      e.preventDefault();
+      svg.classed("t1-cible-depot", false);
+      document.body.classList.remove("poi-en-glisse");
+      modePoi = true;
+      definirPoiDepuisEcran(d3.pointer(e, svg.node()));
+      signalerPoiPerso();
+    });
   synchroniserControlesPoi();
 
   // Clic dans le vide (hors des quartiers) : retour à la vue d'ensemble.
@@ -475,12 +467,20 @@ export function creerVue(conteneur, etat) {
     if (gererClicPoi(e)) return;
     if (quartierZoome || d3.zoomTransform(svg.node()).k > 1) dezoomer();
   });
+  let pointeurEnAttente = null; // dernière position de la souris, dessinée à la prochaine image
   svg.on("pointermove", (e) => {
-    if (!modePoi || !poiGeo) return;
-    const pointeur = d3.pointer(e, svg.node());
-    if (!rayonPoiFige) mettrePremierRayonDepuisEcran(pointeur);
-    else mettreSecondRayonDepuisEcran(pointeur);
-    mettreAJourPoi();
+    if (!modePoi || !poiGeo || rayonPoiSecondaireFige) return;
+    const dejaPrevu = pointeurEnAttente != null;
+    pointeurEnAttente = d3.pointer(e, svg.node());
+    if (dejaPrevu) return;
+    requestAnimationFrame(() => {
+      const pointeur = pointeurEnAttente;
+      pointeurEnAttente = null;
+      if (!modePoi || !poiGeo || rayonPoiSecondaireFige) return;
+      if (!rayonPoiFige) mettrePremierRayonDepuisEcran(pointeur);
+      else mettreSecondRayonDepuisEcran(pointeur);
+      mettreAJourPoi();
+    });
   });
 
   // Cale la projection sur la ville : la largeur vient du conteneur, la hauteur de la forme de la ville.
@@ -509,6 +509,44 @@ export function creerVue(conteneur, etat) {
     }
   }
 
+  // Petit triangle de la couleur de l'offre, pour l'infobulle.
+  function pastilleTriangle(o) {
+    const e = ecarts.get(o.id);
+    return `<svg class="t1-pastille-triangle" width="12" height="12" viewBox="-6 -6 12 12" aria-hidden="true">` +
+      `<path d="${TRIANGLE}" transform="scale(0.75)${e.haut ? "" : " rotate(180)"}" style="fill:${couleurOffre(o)}"></path></svg>`;
+  }
+
+  function texteEcart(o) {
+    const e = ecarts.get(o.id);
+    const ecart = e.rapport - 1;
+    if (Math.abs(ecart) < 0.005) return `Au prix médian des ${pluriel(o.source)} (${formatPrix(e.mediane)})`;
+    return `${fPct(ecart)} par rapport à la médiane des ${pluriel(o.source)} (${formatPrix(e.mediane)})`;
+  }
+
+  const htmlOffre = (o) => `${htmlInfobulleOffre(o)}<br>${pastilleTriangle(o)}<strong>${texteEcart(o)}</strong>`;
+
+  // Nombre de triangles vers le haut et vers le bas d'un quartier, par source cochée.
+  function compterQuartier(nom) {
+    const liste = etat.offresFiltrees().filter((o) => o.quartier === nom);
+    return SOURCES.filter((s) => etat.filtres.sources.has(s)).map((s) => {
+      const l = liste.filter((o) => o.source === s);
+      const haut = l.filter((o) => ecarts.get(o.id).haut).length;
+      return { source: s, nombre: l.length, haut, bas: l.length - haut };
+    });
+  }
+
+  function htmlQuartier(nom) {
+    const lignes = [`<strong>${echapper(nom)}</strong>`];
+    for (const c of compterQuartier(nom)) {
+      lignes.push(
+        `<span class="pastille ${classeSource(c.source)}"></span>${pluriel(c.source)} : ${formatEntier(c.nombre)}` +
+        (c.nombre > 0 ? ` · ${formatEntier(c.haut)} ▲ ${formatEntier(c.bas)} ▼` : "")
+      );
+    }
+    if (nom !== quartierZoome) lignes.push("Cliquez pour zoomer sur le quartier.");
+    return lignes.join("<br>");
+  }
+
   // Contours et étiquettes : ne changent qu'avec la ville ou la taille.
   function dessinerContours() {
     gQuartiers.selectAll("path")
@@ -517,16 +555,14 @@ export function creerVue(conteneur, etat) {
       .attr("d", chemin)
       .on("pointerenter", function (e, f) {
         d3.select(this).raise();
-        afficherInfobulle(e, htmlQuartier(resumes.get(f.properties.quartier), indicateur, f.properties.quartier === quartierZoome));
+        afficherInfobulle(e, htmlQuartier(f.properties.quartier));
       })
-      .on("pointermove", (e, f) => {
-        afficherInfobulle(e, htmlQuartier(resumes.get(f.properties.quartier), indicateur, f.properties.quartier === quartierZoome));
-      })
+      .on("pointermove", (e, f) => afficherInfobulle(e, htmlQuartier(f.properties.quartier)))
       .on("pointerleave", () => masquerInfobulle())
       .on("click", (e, f) => {
         e.stopPropagation();
         if (gererClicPoi(e)) return;
-        // Clic sur le quartier déjà zoomé : on reste (c'est là qu'on vise les points).
+        // Clic sur le quartier déjà zoomé : on reste (c'est là qu'on vise les triangles).
         if (f.properties.quartier !== quartierZoome) zoomerSur(f);
       });
 
@@ -542,30 +578,19 @@ export function creerVue(conteneur, etat) {
       });
   }
 
-  // Couleurs, légende, résumé et points : changent avec les filtres.
-  function dessiner() {
-    if (!etat.donnees) return;
-    indicateur = choisirIndicateur(etat.filtres);
-    resumes = resumerQuartiers(etat.offresFiltrees(), etat.donnees.quartiers, indicateur);
-    echelle = creerEchelle(resumes, indicateur);
-
-    gQuartiers.selectAll("path").style("fill", (f) => {
-      const r = resumes.get(f.properties.quartier);
-      if (r.statut === "valeur") return echelle(r.valeur);
-      if (r.statut === "insuffisant") return `url(#${ID_HACHURES})`;
-      return COULEUR_SANS_DONNEES;
-    });
-
-    dessinerLegende(echelle);
-    dessinerPoints();
+  // Position, taille (qui dépend du zoom) et sens du triangle, en une seule transformation.
+  function transformOffre(o, t) {
+    const [x, y] = t.apply(positions.get(o.id));
+    const a = aire(t.k) * (o === etat.selection ? AGRANDI : 1);
+    const s = Math.sqrt(a / 100) * (o === etat.survol ? AGRANDI_SURVOL : 1);
+    return `translate(${x},${y}) scale(${s})${ecarts.get(o.id).haut ? "" : " rotate(180)"}`;
   }
 
   // Applique la transformation du zoom : le groupe des contours bouge,
-  // les points et les étiquettes sont replacés pour garder leur taille à l'écran.
+  // les triangles et les étiquettes sont replacés (et les triangles redimensionnés).
   function placer(t) {
     carte.attr("transform", t);
-    motif.attr("patternTransform", `scale(${1 / t.k}) rotate(45)`); // hachures de taille constante
-    gPoints.selectAll("path").attr("transform", (o) => `translate(${t.apply(positions.get(o.id))})`);
+    gPoints.selectAll("path").attr("transform", (o) => transformOffre(o, t));
     placerEtiquettes(t);
     placerPoi();
   }
@@ -573,70 +598,42 @@ export function creerVue(conteneur, etat) {
   // Une étiquette n'est affichée que si elle tient dans son quartier et ne chevauche pas une autre.
   // Les grands quartiers passent en premier : en cas de conflit, c'est le petit qui perd son étiquette.
   function placerEtiquettes(t) {
-    const pointsVisibles = !gPoints.select("path").empty();
     const placees = [];  // rectangles [x0, y0, x1, y1] des étiquettes déjà affichées
     const visibles = new Set();
-    if (!pointsVisibles) {
-      const parTaille = [...tailles.entries()].sort((a, b) => d3.descending(a[1][0] * a[1][1], b[1][0] * b[1][1]));
-      for (const [nom, [l, h]] of parTaille) {
-        const w = longueurs.get(nom) ?? 0;
-        if (l * t.k * 0.75 < w + 4 || h * t.k < 18) continue;
-        const [x, y] = t.apply(centres.get(nom));
-        const r = [x - w / 2 - 3, y - 8, x + w / 2 + 3, y + 8];
-        if (placees.some((p) => r[0] < p[2] && r[2] > p[0] && r[1] < p[3] && r[3] > p[1])) continue;
-        placees.push(r);
-        visibles.add(nom);
-      }
+    const parTaille = [...tailles.entries()].sort((a, b) => d3.descending(a[1][0] * a[1][1], b[1][0] * b[1][1]));
+    for (const [nom, [l, h]] of parTaille) {
+      const w = longueurs.get(nom) ?? 0;
+      if (l * t.k * 0.75 < w + 4 || h * t.k < 18) continue;
+      const [x, y] = t.apply(centres.get(nom));
+      const r = [x - w / 2 - 3, y - 8, x + w / 2 + 3, y + 8];
+      if (placees.some((p) => r[0] < p[2] && r[2] > p[0] && r[1] < p[3] && r[3] > p[1])) continue;
+      placees.push(r);
+      visibles.add(nom);
     }
     gEtiquettes.selectAll("text")
       .attr("transform", (f) => `translate(${t.apply(centres.get(f.properties.quartier))})`)
-      .attr("display", (f) => (visibles.has(f.properties.quartier) ? null : "none"));
+      .attr("display", (f) => (visibles.has(f.properties.quartier) && f.properties.quartier !== quartierZoome ? null : "none"));
   }
 
-  // Zoom sémantique : au-delà de SEUIL_POINTS, ou dans un quartier zoomé, on montre les offres visibles.
-  // Les hôtels sans coordonnées (environ 30 %, D19) comptent dans la couleur mais n'ont pas de point.
+  // Les offres visibles à l'écran, dès la vue d'ensemble. Ordre de dessin : Airbnb puis hôtels,
+  // et dans chaque source les plus proches de la médiane d'abord (les écarts forts restent au-dessus).
+  // Les hôtels sans coordonnées (environ 30 %, D19) comptent dans la médiane mais n'ont pas de triangle.
   function dessinerPoints() {
     if (!etat.donnees) return;
     const t = d3.zoomTransform(svg.node());
     const toutes = etat.offresFiltrees();
+
+    // Point d'intérêt : les offres (avec position) dans le cercle de recherche.
     idsProchesPoi = new Set();
     resumePoi = null;
     const centreRecherche = modePoi ? poiSecondaireGeo : (rayonPoiFige ? poiSecondaireGeo : poiGeo);
     const rayonRecherche = modePoi ? rayonPoiSecondaireKm : (rayonPoiFige ? rayonPoiSecondaireKm : rayonPoiKm);
-    if (centreRecherche && rayonRecherche != null && rayonRecherche > 0) {
-      const proches = toutes.filter((o) => {
-        if (o.lat == null || o.lon == null) return false;
-        return distanceKm(centreRecherche, [o.lon, o.lat]) <= rayonRecherche;
-      });
+    const rechercheActive = centreRecherche != null && rayonRecherche != null && rayonRecherche > 0;
+    if (rechercheActive) {
+      const proches = toutes.filter((o) => positions.has(o.id)
+        && distanceKm(centreRecherche, [o.lon, o.lat]) <= rayonRecherche);
       idsProchesPoi = new Set(proches.map((o) => o.id));
-    }
-
-    let offres = [];
-    if (modePoi) {
-      offres = toutes
-        .filter((o) => idsProchesPoi.has(o.id))
-        .sort((a, b) => d3.ascending(a.source === "Hôtel", b.source === "Hôtel"));
-    } else if (quartierZoome || t.k >= SEUIL_POINTS) {
-      const [x0, y0] = t.invert([0, 0]);
-      const [x1, y1] = t.invert([largeur, hauteur]);
-      offres = toutes
-        .filter((o) => {
-          const p = positions.get(o.id);
-          return p && p[0] >= x0 && p[0] <= x1 && p[1] >= y0 && p[1] <= y1;
-        })
-        .sort((a, b) => d3.ascending(a.source === "Hôtel", b.source === "Hôtel")); // hôtels au-dessus
-    } else if (centreRecherche && rayonRecherche != null && rayonRecherche > 0) {
-      offres = toutes
-        .filter((o) => idsProchesPoi.has(o.id))
-        .sort((a, b) => d3.ascending(a.source === "Hôtel", b.source === "Hôtel"));
-    }
-
-    if (centreRecherche && rayonRecherche != null && rayonRecherche > 0) {
-      const comptes = d3.rollup(
-        toutes.filter((o) => idsProchesPoi.has(o.id)),
-        (v) => v.length,
-        (o) => o.source
-      );
+      const comptes = d3.rollup(proches, (v) => v.length, (o) => o.source);
       resumePoi = {
         total: idsProchesPoi.size,
         hotel: comptes.get("Hôtel") ?? 0,
@@ -646,152 +643,128 @@ export function creerVue(conteneur, etat) {
       };
     }
 
+    // Affichage ciblé : en mode point d'intérêt, ou en vue d'ensemble avec un cercle, seules les offres
+    // du cercle sont dessinées. Sinon, toutes les offres visibles à l'écran.
+    const zoome = quartierZoome != null || t.k >= SEUIL_POINTS;
+    let offres;
+    if (modePoi || (rechercheActive && !zoome)) {
+      offres = toutes.filter((o) => idsProchesPoi.has(o.id));
+    } else {
+      const [x0, y0] = t.invert([0, 0]);
+      const [x1, y1] = t.invert([largeur, hauteur]);
+      offres = toutes.filter((o) => {
+        const p = positions.get(o.id);
+        return p && p[0] >= x0 - 5 && p[0] <= x1 + 5 && p[1] >= y0 - 5 && p[1] <= y1 + 5;
+      });
+    }
+    offres.sort((a, b) => d3.ascending(a.source === "Hôtel", b.source === "Hôtel")
+      || d3.ascending(ecarts.get(a.id).t, ecarts.get(b.id).t));
+
     gPoints.selectAll("path")
       .data(offres, (o) => o.id)
       .join("path")
-      .attr("d", (o) => symbole(o, o === etat.selection))
-      .attr("transform", (o) => `translate(${t.apply(positions.get(o.id))})`)
-      .style("fill", (o) => couleurSource(o.source))
+      .attr("d", TRIANGLE)
+      .attr("transform", (o) => transformOffre(o, t))
+      .style("fill", couleurOffre)
       .classed("t1-proche-poi", (o) => poiGeo != null && idsProchesPoi.has(o.id))
-      .on("pointerenter", (e, o) => { etat.survoler(o); afficherInfobulle(e, htmlInfobulleOffre(o)); })
-      .on("pointermove", (e, o) => afficherInfobulle(e, htmlInfobulleOffre(o)))
+      .on("pointerenter", (e, o) => { etat.survoler(o); afficherInfobulle(e, htmlOffre(o)); })
+      .on("pointermove", (e, o) => afficherInfobulle(e, htmlOffre(o)))
       .on("pointerleave", () => { etat.survoler(null); masquerInfobulle(); })
       .on("click", (e, o) => {
         e.stopPropagation();
         if (!(modePoi && rayonPoiSecondaireFige) && gererClicPoi(e)) return;
         etat.selectionner(o);
-      });
+      })
+      .order();
 
-    // Avec les points, les couleurs des quartiers passent au second plan (sinon un hôtel bleu disparaît sur un quartier bleu).
-    gQuartiers.classed("t1-avec-points", offres.length > 0);
+    // Les triangles captent le survol et le clic à tous les niveaux de zoom ; le quartier ne reçoit
+    // que ce qui tombe entre les triangles.
     gQuartiers.selectAll("path")
       .classed("t1-zoome", (f) => f.properties.quartier === quartierZoome)
       .classed("t1-estompe", (f) => quartierZoome != null && f.properties.quartier !== quartierZoome);
     boutonRetour.property("hidden", !(quartierZoome || t.k > 1));
     placerEtiquettes(t);
-    ecrireResume(offres.length);
+    ecrireResume(offres.length, t);
     surligner();
   }
 
-  function ecrireResume(nbPoints) {
+  function ecrireResume(nbPoints, t) {
     resume.selectAll("*").remove();
     resume.text("");
     if (quartierZoome) {
-      // Le quartier zoomé : sa valeur, avec une pastille de sa couleur (lisible même sous les points).
-      const r = resumes.get(quartierZoome);
       resume.append("strong").text(`${quartierZoome} : `);
-      if (r.statut === "valeur") {
-        resume.append("span").attr("class", "t1-pastille-valeur").style("background", echelle(r.valeur));
-        const texte = indicateur.type === "ecart" ? texteEcart(r.valeur) : `prix médian ${formatPrix(r.valeur)}`;
-        resume.append("strong").text(texte.charAt(0).toLowerCase() + texte.slice(1));
-      } else {
-        resume.append("em").text(r.raison.replace(/\.$/, "").toLowerCase());
-      }
-
+      const morceaux = compterQuartier(quartierZoome)
+        .map((c) => `${formatEntier(c.nombre)} ${c.nombre > 1 ? pluriel(c.source) : c.source === "Hôtel" ? "hôtel" : "Airbnb"} (${formatEntier(c.haut)} ▲, ${formatEntier(c.bas)} ▼)`);
       const sansPosition = etat.offresFiltrees()
         .filter((o) => o.quartier === quartierZoome && !positions.has(o.id)).length;
-      const nombres = indicateur.actives
-        .map((s) => `${formatEntier(r.nombre[s])} ${r.nombre[s] > 1 ? pluriel(s) : s === "Hôtel" ? "hôtel" : "Airbnb"}`)
-        .join(" et ");
       resume.append("span").text(
-        `. ${nombres || "Aucune offre"}` +
+        (morceaux.join(" et ") || "aucune offre") +
         (sansPosition > 0 ? `, dont ${formatEntier(sansPosition)} hôtel(s) sans position, absent(s) de la carte` : "") +
         ". Cliquez sur une offre pour afficher sa fiche."
       );
-    } else if (nbPoints > 0) {
+    } else if (modePoi) {
+      // Le nombre d'offres du cercle est dans l'encart sur la carte (ecrireBandeauPoi).
+      resume.text("Mode point d'intérêt : seules les offres du cercle de recherche sont affichées.");
+    } else if (t.k >= SEUIL_POINTS) {
       resume.text(`${formatEntier(nbPoints)} offres visibles. Cliquez sur une offre pour afficher sa fiche.`);
     } else {
-      resume.text(indicateur.consigne);
+      resume.text("Chaque triangle est une offre, comparée au prix médian des hôtels ou des Airbnb de la ville. Survolez un triangle pour voir l'offre, cliquez entre les triangles pour zoomer sur un quartier.");
     }
-    if (resumePoi) {
-      resume.append("span")
-        .attr("class", "t1-resume-poi")
-        .text(
-          ` ${resumePoi.secondaire ? "2e cercle" : "Point d'intérêt"} (${formatKmCourt(resumePoi.rayon)}) : `
-          + `${formatEntier(resumePoi.total)} offre(s) proche(s) `
-          + `(${formatEntier(resumePoi.hotel)} hôtels, ${formatEntier(resumePoi.airbnb)} Airbnb).`
-        );
-    } else if (modePoi) {
-      resume.append("span")
-        .attr("class", "t1-resume-poi")
-        .text(poiGeo ? (!rayonPoiFige
-          ? " Déplacez la souris puis cliquez pour figer le 1er rayon."
-          : (!rayonPoiSecondaireFige
-            ? " Déplacez la souris puis cliquez pour figer le 2e cercle."
-            : " Déplacez la souris pour faire tourner le 2e cercle, cliquez pour ajuster son rayon."))
-          : " Mode point d'intérêt activé : cliquez sur la carte puis faites glisser le repère.");
-    }
+    ecrireBandeauPoi();
   }
 
-  function dessinerLegende(echelle) {
+  function dessinerLegende() {
     legende.selectAll("*").remove();
 
-    // Barre de couleur avec son axe, ou un message si aucun quartier n'a de valeur.
-    const bloc = legende.append("div").attr("class", "t1-legende-bloc");
-    bloc.append("span").attr("class", "t1-legende-titre").text(indicateur.titre);
-    if ([...resumes.values()].some((r) => r.statut === "valeur")) {
-      dessinerBarre(bloc, echelle);
-    } else {
-      bloc.append("span").attr("class", "t1-legende-note").text(
-        indicateur.type === "ecart"
-          ? "Aucun quartier comparable avec ces filtres. Décochez une source pour voir les prix médians de l'autre."
-          : "Aucun quartier n'a assez d'offres avec ces filtres."
-      );
-    }
-
-    // Cas particuliers : hachures et gris.
-    const cas = legende.append("div").attr("class", "t1-legende-cas");
-    const ajouterCas = (fond, texte) => {
-      const item = cas.append("span").attr("class", "t1-legende-item");
-      const pastille = item.append("svg").attr("width", 14).attr("height", 14);
-      if (fond === "hachures") {
-        // Motif propre à la légende : celui de la carte change d'échelle avec le zoom.
-        remplirHachures(pastille.append("defs").append("pattern").attr("id", `${ID_HACHURES}-legende`)
-          .attr("patternTransform", "rotate(45)"));
-        fond = `url(#${ID_HACHURES}-legende)`;
-      }
-      pastille.append("rect").attr("width", 14).attr("height", 14).style("fill", fond);
-      item.append("span").text(texte);
-    };
-    ajouterCas("hachures", "Pas assez d'offres pour comparer, ou prix non comparables");
-    ajouterCas(COULEUR_SANS_DONNEES, "Aucune offre");
-
-    // Points (visibles au zoom).
-    const points = legende.append("div").attr("class", "t1-legende-cas");
-    for (const s of SOURCES) {
-      const item = points.append("span").attr("class", "t1-legende-item t1-points");
+    // Sens du triangle.
+    const sens = legende.append("div").attr("class", "t1-legende-bloc");
+    sens.append("span").attr("class", "t1-legende-titre").text("Prix par rapport à la médiane (hôtels ou Airbnb)");
+    for (const [haut, texte] of [[true, "Plus cher que la médiane"], [false, "Moins cher que la médiane"]]) {
+      const item = sens.append("span").attr("class", "t1-legende-item");
       item.append("svg").attr("width", 14).attr("height", 14).attr("viewBox", [-7, -7, 14, 14])
-        .append("path").attr("d", symbole({ source: s })).style("fill", couleurSource(s));
-      item.append("span").text(s === "Hôtel" ? "Hôtel (carré)" : "Airbnb (rond)");
+        .append("path").attr("d", TRIANGLE).attr("transform", `scale(0.85)${haut ? "" : " rotate(180)"}`)
+        .style("fill", "var(--texte-secondaire)");
+      item.append("span").text(texte);
     }
-    points.append("span").attr("class", "t1-legende-note")
-      .text("Points visibles au zoom. Environ 30 % des hôtels n'ont pas de position : ils comptent dans la couleur du quartier, sans point.");
-  }
+    sens.append("span").attr("class", "t1-legende-note").text("La taille diminue quand on zoome, pour séparer les offres proches.");
 
-  // Dégradé de l'échelle de couleur, avec un axe gradué en euros.
-  function dessinerBarre(bloc, echelle) {
-    const L = 240;
+    // Éloignement de la médiane : une barre par source.
+    const couleur = legende.append("div").attr("class", "t1-legende-bloc");
+    couleur.append("span").attr("class", "t1-legende-titre").text("Éloignement de la médiane");
+    const L = 200;
     const H = 10;
-    const domaine = echelle.domain();
-    const [d0, d1] = [domaine[0], domaine[domaine.length - 1]];
-    const svgL = bloc.append("svg").attr("width", L + 24).attr("height", H + 20).attr("viewBox", [0, 0, L + 24, H + 20]);
-    svgL.append("defs").append("linearGradient").attr("id", ID_DEGRADE)
-      .selectAll("stop").data(d3.range(11)).join("stop")
-      .attr("offset", (i) => i / 10)
-      .attr("stop-color", (i) => echelle(d0 + ((d1 - d0) * i) / 10));
-    svgL.append("rect").attr("x", 12).attr("width", L).attr("height", H).attr("fill", `url(#${ID_DEGRADE})`);
-    const x = d3.scaleLinear([d0, d1], [12, 12 + L]);
-    const format = indicateur.type === "ecart"
-      ? (v) => (v === 0 ? "0" : `${v < 0 ? "−" : "+"}${formatPrix(Math.abs(v))}`)
-      : formatPrix;
-    svgL.append("g").attr("class", "axe").attr("transform", `translate(0,${H})`)
-      .call(d3.axisBottom(x).ticks(indicateur.type === "ecart" ? 5 : 4).tickFormat(format).tickSize(4))
-      .call((g) => g.select(".domain").remove());
-    if (indicateur.type === "ecart") {
-      const sens = bloc.append("div").attr("class", "t1-legende-sens");
-      sens.append("span").text("← hôtels moins chers");
-      sens.append("span").text("Airbnb moins chers →");
+    for (const s of SOURCES) {
+      const avecAxe = s === SOURCES[SOURCES.length - 1];
+      const ligne = couleur.append("div").attr("class", "t1-legende-barre");
+      ligne.append("span").text(s === "Hôtel" ? "Hôtels" : "Airbnb");
+      const hBarre = avecAxe ? H + 18 : H + 2;
+      const g = ligne.append("svg").attr("width", L + 30).attr("height", hBarre).attr("viewBox", [0, 0, L + 30, hBarre]);
+      const id = `t1-degrade-${classeSource(s)}`;
+      g.append("defs").append("linearGradient").attr("id", id)
+        .selectAll("stop").data(d3.range(11)).join("stop")
+        .attr("offset", (i) => i / 10)
+        .attr("stop-color", (i) => echelles[s](i / 10));
+      g.append("rect").attr("x", 10).attr("y", 1).attr("width", L).attr("height", H).attr("rx", 2).attr("fill", `url(#${id})`);
+      if (avecAxe) {
+        const x = d3.scaleLinear([0, 1], [10, 10 + L]);
+        g.append("g").attr("class", "axe").attr("transform", `translate(0,${H + 1})`)
+          .call(d3.axisBottom(x).tickValues([0, 0.5, 1]).tickSize(4)
+            .tickFormat((v) => (v === 0 ? "médiane" : v === 0.5 ? "×1,4 ou ÷1,4" : "×2 ou ÷2 et +")))
+          .call((a) => a.select(".domain").remove());
+      }
     }
+
+    // Médianes de référence.
+    const ref = legende.append("div").attr("class", "t1-legende-bloc");
+    ref.append("span").attr("class", "t1-legende-titre").text(`Médianes de référence à ${etat.ville.nom}`);
+    const dl = ref.append("dl").attr("class", "t1-medianes");
+    for (const s of SOURCES) {
+      if (!medianes.has(s)) continue;
+      dl.append("dt").text(s === "Hôtel" ? "Hôtels" : "Airbnb");
+      dl.append("dd").text(`${formatPrix(medianes.get(s))} / nuit`);
+    }
+    ref.append("span").attr("class", "t1-legende-note")
+      .text("Toutes les offres de la ville, sans filtre. Environ 30 % des hôtels n'ont pas de position : ils comptent dans la médiane, sans triangle.");
   }
 
   // Zoom sur un quartier : son rectangle occupe 90 % de la vue (modèle « Zoom to bounding box »).
@@ -819,8 +792,9 @@ export function creerVue(conteneur, etat) {
     const lies = new Set([etat.survol?.quartier, etat.selection?.quartier].filter((q) => q != null));
     gQuartiers.selectAll("path").classed("t1-lie", (f) => lies.has(f.properties.quartier));
     gQuartiers.selectAll("path.t1-zoome, path.t1-lie").raise();
+    const t = d3.zoomTransform(svg.node());
     gPoints.selectAll("path")
-      .attr("d", (o) => symbole(o, o === etat.selection))
+      .attr("transform", (o) => transformOffre(o, t))
       .classed("selectionnee", (o) => o === etat.selection)
       .classed("survolee", (o) => o === etat.survol);
     gPoints.selectAll("path.selectionnee, path.survolee").raise();
@@ -837,19 +811,22 @@ export function creerVue(conteneur, etat) {
     surligner();
   }
 
+  // Couleurs (thème), légende et triangles.
+  function dessiner() {
+    if (!etat.donnees) return;
+    echelles = creerEchelles();
+    dessinerLegende();
+    dessinerPoints();
+  }
+
   function surDonnees() {
     quartierZoome = null;
-    poiGeo = null;
-    rayonPoiKm = null;
-    rayonPoiPx = 0;
-    rayonPoiFige = false;
-    poiSecondaireGeo = null;
-    rayonPoiSecondaireKm = null;
-    rayonPoiSecondairePx = 0;
-    rayonPoiSecondaireFige = false;
-    idsProchesPoi = new Set();
-    resumePoi = null;
+    effacerPoi();
     svg.interrupt();
+    // Les offres de la ville précédente n'ont ni position ni écart dans la nouvelle : on retire leurs
+    // triangles avant le retour au zoom initial, qui replace les triangles existants (placer).
+    gPoints.selectAll("path").remove();
+    ({ medianes, ecarts } = calculerEcarts(etat.donnees.offres));
     caler();
     dessinerContours();
     svg.call(zoom.transform, d3.zoomIdentity);
@@ -876,8 +853,9 @@ export function creerVue(conteneur, etat) {
   new MutationObserver(dessiner).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
   etat.on("donnees", surDonnees)
-    .on("filtres", dessiner)
+    .on("filtres", dessinerPoints)
     .on("selection", suivreSelection)
-    .on("survol", surligner);
+    .on("survol", surligner)
+    .on("poi", surPoi);
   if (etat.donnees) surDonnees();
 }

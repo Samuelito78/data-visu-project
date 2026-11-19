@@ -43,3 +43,16 @@ Les coordonnées de `data/external/hotels_geocodage.csv` viennent d'OpenStreetMa
 
 La licence des données dérivées de Paris et de Rome est l'ODbL : les fichiers `quartiers_paris.geojson` et `quartiers_rome.geojson` restent sous ODbL, avec obligation d'attribution.
 
+
+## Points d'intérêt
+
+Les lieux prédéfinis du panneau des points d'intérêt (`viz/commun/points-interet.js`) sont placés avec les coordonnées des registres officiels du patrimoine, relevées le 19 novembre 2026. Rome fait exception : la base « Luoghi della cultura » du ministère italien de la Culture (dati.cultura.gov.it) ne répondait pas et Roma Capitale ne publie pas de liste de monuments géolocalisés ; les lieux viennent donc d'OpenStreetMap, comme les contours des municipi. Chaque lieu garde la référence de sa fiche (champ `source`), affichée au survol de son bouton.
+
+| Ville | Source | Accès | Point retenu | Licence |
+|---|---|---|---|---|
+| Paris | Ministère de la Culture : base Mérimée (immeubles protégés au titre des monuments historiques) et base Muséofile (musées de France, pour le Louvre) | https://ministere-culture.s3.sbg.io.cloud.ovh.net/POP/merimee.csv et `.../POP/museofile.csv` (data.gouv.fr) | champ `coordonnees_au_format_WGS84` (Mérimée) ou `Coordonnees` (Muséofile) de la notice | Licence Ouverte Etalab 2.0 |
+| Berlin | Landesdenkmalamt Berlin, Denkmaldatenbank (service WFS `denkmale` du Geoportal Berlin) | https://gdi.berlin.de/services/wfs/denkmale, fiche : https://denkmaldatenbank.berlin.de/daobj.php?obj_dok_nr=<numéro> | centroïde du contour officiel du monument | Datenlizenz Deutschland – Zero 2.0 |
+| Londres | Historic England, National Heritage List for England (NHLE), couche « Listed Building points » | https://services-eu1.arcgis.com/ZOdPfBS3aqqDYPUQ/arcgis/rest/services/National_Heritage_List_for_England_NHLE_v02_VIEW/FeatureServer/0 | point de la fiche (numéro `ListEntry`) | Open Government Licence, « © Historic England » ; contient des données Ordnance Survey |
+| Rome | OpenStreetMap, via Overpass (objets choisis par leur étiquette `wikidata` ou leur nom) | https://overpass-api.de/api/interpreter, fiche : https://www.openstreetmap.org/<type>/<numéro> | centroïde du contour OSM du monument ou de la place | ODbL, « © les contributeurs d'OpenStreetMap » |
+
+Limites : ces registres placent le monument protégé, pas son entrée. Le point du Sacré-Cœur est le centre de l'ensemble « basilique, annexes et square Louise-Michel », environ 140 m au sud de la basilique ; celui de l'Île aux Musées est le centre de l'ensemble classé, et celui du Palais de Westminster le centre du palais, pas la tour de Big Ben. Les lieux absents des registres ont été remplacés : London Eye par la National Gallery, East Side Gallery par la cathédrale de Berlin, Alexanderplatz par la tour de télévision voisine.

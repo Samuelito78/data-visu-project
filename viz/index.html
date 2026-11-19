@@ -33,12 +33,17 @@
         <div class="vue-contenu"></div>
       </section>
     </div>
-    <!-- Détails à la demande : commun/detail.js -->
-    <aside id="detail" class="detail" aria-label="Fiche de l'offre sélectionnée" aria-live="polite"></aside>
+    <aside class="detail" aria-label="Fiche de l'offre et points d'intérêt">
+      <!-- Détails à la demande : commun/detail.js -->
+      <div id="detail" aria-live="polite"></div>
+      <!-- Points d'intérêt (technique 1) : commun/points-interet.js -->
+      <section id="points-interet" class="poi-panneau" aria-label="Points d'intérêt"></section>
+    </aside>
   </main>
 
   <footer class="pied">
     Données : Kaggle (CC0) · contours : Ville de Paris, Geoportal Berlin, ONS, © contributeurs OpenStreetMap.
+    Points d'intérêt : ministère de la Culture (Mérimée, Muséofile), Landesdenkmalamt Berlin, © Historic England (OGL), © contributeurs OpenStreetMap.
     Détail des licences dans <code>docs/sources.md</code>.
   </footer>
 </body>
