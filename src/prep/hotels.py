@@ -1,7 +1,7 @@
 """Source B : 7500 hotels from Airbnb, Booking and Hotels.com (Kaggle, mykhailozub).
 
 On ne garde que la liste `bookingHotels` : c'est la seule qui porte les étoiles, le quartier,
-la distance au centre et l'accès au métro (voir docs/decisions.md).
+la distance au centre et l'accès au métro (voir notebooks/02_hotels_booking.ipynb).
 """
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ from .schema import conformer
 FICHIERS = {"london": "London", "berlin": "Berlin", "paris": "Paris", "rome": "Rome"}
 
 # Villes dont les prix Booking divergent des autres : gardées, mais signalées par
-# prix_comparable = False pour afficher un avertissement (voir docs/decisions.md, D7).
+# prix_comparable = False pour afficher un avertissement (voir le notebook 02).
 VILLES_PRIX_NON_COMPARABLES = {"Rome"}
 
 
@@ -84,7 +84,7 @@ def normaliser_quartier(location: str, ville_en: str) -> str | None:
 
 
 def transformer(brut: pd.DataFrame) -> pd.DataFrame:
-    """Passe du format brut Booking au schéma commun (voir docs/schema.md)."""
+    """Passe du format brut Booking au schéma commun (voir src/prep/schema.py)."""
     return transformer_avec_liens(brut)[0]
 
 
@@ -95,7 +95,7 @@ def transformer_avec_liens(brut: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFra
     """
     ville = brut["ville_brut"].map({k: v[0] for k, v in VILLES.items()})
     # Prix affiché seul : `taxesAndCharges` manque pour 95 % des hôtels de Londres et 58 % de
-    # Berlin, et vaut 2 à 5 % du prix ailleurs (taxe de séjour). Voir docs/decisions.md, D4.
+    # Berlin, et vaut 2 à 5 % du prix ailleurs (taxe de séjour). Voir le notebook 02.
     prix_usd = brut["price"]
     logement_entier = brut["highlights"].str.contains(r"\bEntire ", regex=True, na=False)
     out = pd.DataFrame({

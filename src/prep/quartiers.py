@@ -1,6 +1,6 @@
 """Contours des quartiers et rattachement des offres à un quartier.
 
-Niveau retenu par ville (voir docs/decisions.md, D16) :
+Niveau retenu par ville (justifié dans notebooks/03_quartiers.ipynb) :
 Paris = 20 arrondissements, Berlin = 12 Bezirke, Londres = 33 boroughs, Rome = 15 municipi.
 """
 from __future__ import annotations

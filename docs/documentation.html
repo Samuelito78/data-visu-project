@@ -82,7 +82,7 @@ pre{white-space:pre-wrap}
 <nav class="sidebar" aria-label="Table des matières">
 <details open>
 <summary>Table des matières</summary>
-<ul><li class="toc-sec"><a href="#readme" data-sec="readme">Hôtel ou Airbnb ?</a><ul><li><a href="#readme-description-du-projet">Description du projet</a></li><li><a href="#readme-sources">Sources</a></li><li><a href="#readme-documentation">Documentation</a></li><li><a href="#readme-workflow-en-bref">Workflow en bref</a></li><li><a href="#readme-repartition-du-travail">Répartition du travail</a></li><li><a href="#readme-lancer-la-visualisation">Lancer la visualisation</a></li><li><a href="#readme-preparation-des-donnees-installation-et-execution">Préparation des données : installation et exécution</a></li><li><a href="#readme-travailler-a-deux">Travailler à deux</a></li><li><a href="#readme-fichiers-charges-par-d3">Fichiers chargés par D3</a></li><li><a href="#readme-organisation-du-depot">Organisation du dépôt</a></li></ul></li><li class="toc-sec"><a href="#utilisateurs-taches" data-sec="utilisateurs-taches">Utilisateurs visés, besoins et tâches</a><ul><li><a href="#utilisateurs-taches-1-utilisateur-vise">1. Utilisateur visé</a></li><li><a href="#utilisateurs-taches-2-besoins">2. Besoins</a></li><li><a href="#utilisateurs-taches-3-des-objectifs-aux-taches">3. Des objectifs aux tâches</a></li><li><a href="#utilisateurs-taches-4-catalogue-des-taches-utilisateur">4. Catalogue des tâches utilisateur</a></li><li><a href="#utilisateurs-taches-5-ce-que-les-donnees-permettent-et-leurs-limites">5. Ce que les données permettent, et leurs limites</a></li><li><a href="#utilisateurs-taches-6-liste-des-taches-a-presenter-en-soutenance">6. Liste des tâches à présenter en soutenance</a></li></ul></li><li class="toc-sec"><a href="#workflow" data-sec="workflow">Workflow de préparation des données</a><ul><li><a href="#workflow-1-vue-densemble">1. Vue d&#x27;ensemble</a></li><li><a href="#workflow-2-etape-0-recuperer-les-donnees-brutes">2. Étape 0 : récupérer les données brutes</a></li><li><a href="#workflow-3-etape-1-transformer-les-annonces-airbnb">3. Étape 1 : transformer les annonces Airbnb</a></li><li><a href="#workflow-4-etape-2-transformer-les-hotels-booking">4. Étape 2 : transformer les hôtels Booking</a></li><li><a href="#workflow-5-etape-3-construire-le-referentiel-de-quartiers">5. Étape 3 : construire le référentiel de quartiers</a></li><li><a href="#workflow-6-etape-4-geolocaliser-les-hotels">6. Étape 4 : géolocaliser les hôtels</a></li><li><a href="#workflow-7-etape-5-construire-la-table-commune">7. Étape 5 : construire la table commune</a></li><li><a href="#workflow-8-le-dataset-a-visualiser">8. Le dataset à visualiser</a></li></ul></li><li class="toc-sec"><a href="#schema" data-sec="schema">Schéma de la table commune offres</a><ul><li><a href="#schema-dictionnaire-de-donnees">Dictionnaire de données</a></li><li><a href="#schema-format-csv-pour-d3">Format CSV pour D3</a></li><li><a href="#schema-place-dans-le-modele-de-pipeline-du-cours">Place dans le modèle de pipeline du cours</a></li></ul></li><li class="toc-sec"><a href="#decisions" data-sec="decisions">Journal des décisions de préparation des données</a><ul><li><a href="#decisions-d1-villes-retenues">D1. Villes retenues</a></li><li><a href="#decisions-d2-source-des-hotels">D2. Source des hôtels</a></li><li><a href="#decisions-d3-prix-airbnb">D3. Prix Airbnb</a></li><li><a href="#decisions-d4-prix-booking">D4. Prix Booking</a></li><li><a href="#decisions-d5-conversion-de-devise">D5. Conversion de devise</a></li><li><a href="#decisions-d6-distance-au-centre-cote-booking">D6. Distance au centre côté Booking</a></li><li><a href="#decisions-d7-rome-prix-booking">D7. Rome, prix Booking</a></li><li><a href="#decisions-d8-proximite-du-metro-cote-airbnb">D8. Proximité du métro côté Airbnb</a></li><li><a href="#decisions-d9-note">D9. Note</a></li><li><a href="#decisions-d10-etoiles">D10. Étoiles</a></li><li><a href="#decisions-d11-type-dhebergement-cote-booking">D11. Type d&#x27;hébergement côté Booking</a></li><li><a href="#decisions-d12-doublons">D12. Doublons</a></li><li><a href="#decisions-d13-prix-aberrants">D13. Prix aberrants</a></li><li><a href="#decisions-d14-tranches-de-distance">D14. Tranches de distance</a></li><li><a href="#decisions-d15-quartiers">D15. Quartiers</a></li><li><a href="#decisions-d16-niveau-de-decoupage-par-ville">D16. Niveau de découpage par ville</a></li><li><a href="#decisions-d17-rattachement-des-offres-aux-quartiers">D17. Rattachement des offres aux quartiers</a></li><li><a href="#decisions-d18-centre-de-reference-des-distances">D18. Centre de référence des distances</a></li><li><a href="#decisions-d19-geocodage-des-hotels">D19. Géocodage des hôtels</a></li><li><a href="#decisions-annexe-detail-du-geocodage-des-hotels-g1-a-g5">Annexe : détail du géocodage des hôtels (G1 à G5)</a></li><li><a href="#decisions-questions-encore-ouvertes">Questions encore ouvertes</a></li></ul></li><li class="toc-sec"><a href="#sources" data-sec="sources">Sources de données</a><ul><li><a href="#sources-airbnb-prices-in-european-cities">Airbnb Prices in European Cities</a></li><li><a href="#sources-7500-hotels-from-airbnb-booking-and-hotelscom">7500 hotels from Airbnb, Booking and Hotels.com</a></li><li><a href="#sources-telechargement">Téléchargement</a></li><li><a href="#sources-contours-des-quartiers">Contours des quartiers</a></li><li><a href="#sources-geocodage-des-hotels">Géocodage des hôtels</a></li></ul></li></ul>
+<ul><li class="toc-sec"><a href="#description" data-sec="description">Description du projet</a></li><li class="toc-sec"><a href="#utilisateurs-taches" data-sec="utilisateurs-taches">Utilisateurs visés et tâches</a><ul><li><a href="#utilisateurs-taches-utilisateur-vise">Utilisateur visé</a></li><li><a href="#utilisateurs-taches-taches">Tâches</a></li><li><a href="#utilisateurs-taches-limites-des-donnees">Limites des données</a></li></ul></li><li class="toc-sec"><a href="#workflow" data-sec="workflow">Workflow des données</a></li><li class="toc-sec"><a href="#technique-1" data-sec="technique-1">Technique 1 : la carte des offres</a><ul><li><a href="#technique-1-donnees-et-variables-visuelles">Données et variables visuelles</a></li><li><a href="#technique-1-interactions">Interactions</a></li></ul></li><li class="toc-sec"><a href="#technique-2" data-sec="technique-2">Technique 2 : les points d&#x27;intérêt</a><ul><li><a href="#technique-2-donnees-et-variables-visuelles">Données et variables visuelles</a></li><li><a href="#technique-2-lieux-predefinis">Lieux prédéfinis</a></li><li><a href="#technique-2-interactions">Interactions</a></li></ul></li><li class="toc-sec"><a href="#technique-3" data-sec="technique-3">Technique 3 : le nuage de points</a><ul><li><a href="#technique-3-donnees-et-variables-visuelles">Données et variables visuelles</a></li><li><a href="#technique-3-interactions">Interactions</a></li></ul></li></ul>
 <div class="tools"><button type="button" id="theme-btn">Clair / sombre</button><a href="#top">Haut de page</a></div>
 </details>
 </nav>
@@ -90,1661 +90,320 @@ pre{white-space:pre-wrap}
 <header class="top">
 <h1>Hôtel ou Airbnb ? — Documentation</h1>
 <p>Documentation du projet de visualisation de données — Luca VIZIO &amp; Samuel BOIX-SEGURA</p>
-<p>Généré le 13/11/2026 à 19:50</p>
+<p>Généré le 19/11/2026 à 23:25</p>
 </header>
 <main>
-<section id="readme" class="doc-section">
-<h1 id="readme-hotel-ou-airbnb">Hôtel ou Airbnb ?</h1>
-<p>Projet de visualisation de données. Master MIAGE MBDS, cours <em>Information Visualization</em> de Marco Winckler (Université Côte d'Azur). Par Luca VIZIO et Samuel BOIX-SEGURA.</p>
+<section id="description" class="doc-section">
+<h1 id="description-description-du-projet">Description du projet</h1>
 <blockquote>
 <p>Pour un voyageur avec un budget donné, vaut-il mieux réserver un hôtel ou un Airbnb, et dans quel secteur de la ville ?</p>
 </blockquote>
-<h2 id="readme-description-du-projet">Description du projet</h2>
-<p>Quand on prépare un court séjour dans une grande ville, on hésite souvent entre un hôtel et un Airbnb, sans savoir lequel est le plus avantageux, ni où loger. Les sites de réservation présentent les deux offres séparément, ce qui empêche de les comparer.</p>
-<p>Notre projet réunit ces deux offres dans une même visualisation interactive, pour quatre capitales européennes : Londres, Berlin, Paris et Rome. Il s'adresse à un voyageur non expert qui part à deux, avec un budget par nuit en tête. Il compare les deux types d'hébergement sur quatre critères qui comptent pour lui :</p>
+<p>Pour un court séjour en ville, on hésite souvent entre un hôtel et un Airbnb. Les sites de réservation les présentent séparément, ce qui empêche de les comparer.</p>
+<p>Notre projet les réunit dans une même visualisation interactive, pour Londres, Berlin, Paris et Rome. Il s'adresse à un voyageur non expert qui part à deux avec un budget par nuit en tête. Il compare les deux offres sur le prix par nuit, la note, la distance au centre et l'accès au métro, quartier par quartier.</p>
+<p>Les données viennent de deux datasets Kaggle sous licence CC0 : 28 192 annonces Airbnb et 1 705 hôtels Booking. Nous les avons unifiées en une seule table de 29 315 offres : prix en euros par nuit, notes sur 100, distances mesurées depuis un même centre et quartier officiel pour chaque offre. Les hôtels, sans coordonnées au départ, ont été géolocalisés à 69 %.</p>
+<p>L'application, écrite en D3.js, relie trois techniques par un état partagé :</p>
 <ul>
-<li>le prix par nuit ;</li>
-<li>la note des clients ;</li>
-<li>la distance au centre ;</li>
-<li>l'accès au métro.</li>
+<li>une carte des offres, où chaque triangle indique si l'offre est plus ou moins chère que la médiane de sa source ;</li>
+<li>des points d'intérêt sur cette carte, pour ne garder que les offres autour d'un lieu ;</li>
+<li>un nuage de points qui croise la distance au centre et le prix.</li>
 </ul>
-<p>Il montre comment ces critères varient d'un quartier à l'autre.</p>
-<p>Les données viennent de deux datasets Kaggle :</p>
-<ul>
-<li>environ 28 000 annonces Airbnb ;</li>
-<li>1 700 hôtels Booking.</li>
-</ul>
-<p>Nous les avons transformés en une table commune d'environ 29 000 offres : prix convertis en euros par nuit, notes ramenées sur 100, distances mesurées depuis un même centre et accès au métro aligné. Chaque offre est rattachée à un quartier officiel : arrondissement, Bezirk, borough ou municipio. Les hôtels, qui n'avaient pas de coordonnées, ont été géolocalisés pour 69 % d'entre eux.</p>
-<p>La visualisation, développée en D3.js, propose une vue d'ensemble par ville, par distance et par quartier. Elle permet ensuite de filtrer selon ses critères, puis d'afficher le détail d'une offre. La problématique reste descriptive : on montre où et comment les deux offres diffèrent, sans chercher à l'expliquer.</p>
-<h2 id="readme-sources">Sources</h2>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Dataset</th>
-<th>Lien</th>
-<th>Ce qui est utilisé</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Airbnb Prices in European Cities</td>
-<td><a href="https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities" target="_blank" rel="noopener noreferrer">kaggle.com/datasets/thedevastator/…</a></td>
-<td>8 CSV, pour Londres, Berlin, Paris et Rome en semaine et le week-end : 28 192 annonces</td>
-</tr>
-<tr>
-<td>7500 hotels from Airbnb, Booking and Hotels.com</td>
-<td><a href="https://www.kaggle.com/datasets/mykhailozub/500-hotels-from-airbnb-booking-and-hotelscom" target="_blank" rel="noopener noreferrer">kaggle.com/datasets/mykhailozub/…</a></td>
-<td>la liste Booking des 4 mêmes villes : 1 705 hôtels</td>
-</tr>
-</tbody>
-</table></div>
-<p>Les deux datasets sont sous licence CC0. Les contours des quartiers (Ville de Paris, Geoportal Berlin, ONS, OpenStreetMap) et le géocodage (OpenStreetMap) ont leurs propres licences et mentions obligatoires, détaillées dans <a href="#sources"><code>docs/sources.md</code></a>.</p>
-<h2 id="readme-documentation">Documentation</h2>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Document</th>
-<th>Contenu</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="#utilisateurs-taches"><code>docs/utilisateurs_taches.md</code></a></td>
-<td>Utilisateurs visés, besoins, catalogue des tâches utilisateur et limites des données</td>
-</tr>
-<tr>
-<td><a href="#workflow"><code>docs/workflow.md</code></a></td>
-<td>Workflow complet : chaque script, ce qu'il lit, ce qu'il fait, ce qu'il produit, jusqu'au dataset visualisé</td>
-</tr>
-<tr>
-<td><a href="#schema"><code>docs/schema.md</code></a></td>
-<td>Dictionnaire de données de la table commune : types de Munzner, unités, dérivation par source</td>
-</tr>
-<tr>
-<td><a href="#decisions"><code>docs/decisions.md</code></a></td>
-<td>Journal des choix de préparation (D1 à D19), avec leur justification chiffrée</td>
-</tr>
-<tr>
-<td><a href="#sources"><code>docs/sources.md</code></a></td>
-<td>Sources, licences et attributions</td>
-</tr>
-<tr>
-<td><a href="documentation.html"><code>docs/documentation.html</code></a></td>
-<td>Toute la documentation ci-dessus, sur une seule page lisible dans un navigateur</td>
-</tr>
-<tr>
-<td><a href="../viz/README.md"><code>viz/README.md</code></a></td>
-<td>Application D3 : organisation, contrat d'une vue, état partagé, règles communes</td>
-</tr>
-</tbody>
-</table></div>
-<h2 id="readme-workflow-en-bref">Workflow en bref</h2>
-<p>Le découpage suit le modèle de pipeline du cours (Ward, Grinstein et Keim). Le détail de chaque étape est dans <a href="#workflow"><code>docs/workflow.md</code></a>.</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Étape du modèle</th>
-<th>Script</th>
-<th>Sortie</th>
-<th>Lignes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Raw data</td>
-<td><code>scripts/download_data.sh</code>, <code>scripts/download_geo.sh</code></td>
-<td><code>data/raw/</code> (non versionné)</td>
-<td>51 707 annonces, 5 JSON, 4 jeux de contours</td>
-</tr>
-<tr>
-<td>Data transformation</td>
-<td><code>notebooks/01_airbnb.ipynb</code></td>
-<td><code>data/interim/airbnb.parquet</code></td>
-<td>28 192</td>
-</tr>
-<tr>
-<td>Data transformation</td>
-<td><code>notebooks/02_hotels_booking.ipynb</code></td>
-<td><code>data/interim/hotels.parquet</code></td>
-<td>1 705</td>
-</tr>
-<tr>
-<td>Data transformation</td>
-<td><code>notebooks/03_quartiers.ipynb</code></td>
-<td><code>data/external/quartiers_*.geojson</code>, <code>data/processed/quartiers_*.geojson</code></td>
-<td>80 quartiers</td>
-</tr>
-<tr>
-<td>Data transformation</td>
-<td><code>notebooks/04_geocodage_hotels.ipynb</code></td>
-<td><code>data/external/hotels_geocodage.csv</code></td>
-<td>1 183 positions fiables</td>
-</tr>
-<tr>
-<td>Data tables</td>
-<td><code>notebooks/05_table_commune.ipynb</code></td>
-<td><code>data/processed/offres*.csv</code></td>
-<td>29 315</td>
-</tr>
-<tr>
-<td>Visual mapping → Views</td>
-<td><code>viz/</code> (application D3, voir <a href="../viz/README.md"><code>viz/README.md</code></a>)</td>
-<td><code>viz/index.html</code></td>
-<td></td>
-</tr>
-</tbody>
-</table></div>
-<p>La logique de préparation est dans <code>src/prep/</code>, que les notebooks importent. Le schéma de la table commune est défini dans <code>src/prep/schema.py</code>, et chaque étape le vérifie avant d'écrire.</p>
-<h2 id="readme-repartition-du-travail">Répartition du travail</h2>
-<p><em>À compléter par l'équipe : chacun indique la partie réalisée par l'autre.</em></p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Partie</th>
-<th>Réalisée par</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Choix des datasets, problématique</td>
-<td></td>
-</tr>
-<tr>
-<td>Collecte et préparation des données (notebooks 01, 02, 05)</td>
-<td></td>
-</tr>
-<tr>
-<td>Quartiers et géolocalisation des hôtels (notebooks 03, 04)</td>
-<td></td>
-</tr>
-<tr>
-<td>Documentation (utilisateurs, tâches, workflow)</td>
-<td></td>
-</tr>
-<tr>
-<td>Technique de visualisation 1 (D3)</td>
-<td></td>
-</tr>
-<tr>
-<td>Technique de visualisation 2 (D3)</td>
-<td></td>
-</tr>
-<tr>
-<td>Rapport et soutenance</td>
-<td></td>
-</tr>
-</tbody>
-</table></div>
-<h2 id="readme-lancer-la-visualisation">Lancer la visualisation</h2>
-<p>Rien à installer : les données traitées et D3 sont dans le dépôt.</p>
-<pre><code class="language-bash">./scripts/serve.sh        # serveur local à la racine du dépôt (Python 3, déjà présent sur macOS et Linux)
-</code></pre>
-<p>Puis ouvrir <a href="http://localhost:8000/viz/" target="_blank" rel="noopener noreferrer">http://localhost:8000/viz/</a>. Ouvrir <code>viz/index.html</code> directement ne marche pas : le navigateur bloque le chargement des CSV en <code>file://</code>. L'organisation du code D3 et le contrat d'une vue sont décrits dans <a href="../viz/README.md"><code>viz/README.md</code></a>.</p>
-<h2 id="readme-preparation-des-donnees-installation-et-execution">Préparation des données : installation et exécution</h2>
-<p>Seulement pour modifier ou rejouer la préparation (Python 3.11+).</p>
-<pre><code class="language-bash">python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-.venv/bin/nbstripout --install        # une fois par poste : retire les sorties des notebooks au commit
-./scripts/build_data.sh               # télécharge les données si besoin, puis exécute les notebooks
-                                      # (GEOCODER=1 ./scripts/build_data.sh rejoue aussi le géocodage, ~15 min)
-.venv/bin/python scripts/build_doc.py # régénère docs/documentation.html
-.venv/bin/jupyter lab                 # pour explorer les notebooks
-</code></pre>
-<p>Le téléchargement Kaggle est anonyme : aucun jeton n'est nécessaire. Les données traitées sont versionnées. On peut donc lancer la visualisation sans rien exécuter.</p>
-<h2 id="readme-travailler-a-deux">Travailler à deux</h2>
-<ul>
-<li><strong><code>main</code> reste toujours démontrable</strong> : on n'y pousse pas directement, tout passe par une pull request relue par l'autre.</li>
-<li><strong>Une branche par sujet</strong>, partie de <code>main</code> à jour (<code>git switch main &amp;&amp; git pull</code>) :<ul>
-<li><code>viz/technique-1</code>, <code>viz/technique-2</code> : chacun sa technique, dans son dossier <code>viz/technique-N/</code> ;</li>
-<li><code>viz/commun-…</code> : une modification du socle partagé (<code>viz/noyau/</code>, <code>viz/composants/</code>, <code>viz/styles/</code>, <code>index.html</code>, <code>main.js</code>), dans une PR à part et courte, pour limiter les conflits ;</li>
-<li><code>data/…</code> : une modification de la préparation.</li>
-</ul>
-</li>
-<li><strong>Ne jamais modifier <code>data/processed/</code> à la main</strong> : ces fichiers sont produits par <code>notebooks/05_table_commune.ipynb</code>. Pour changer une colonne, modifier <code>src/prep/</code> puis relancer <code>./scripts/build_data.sh</code>, et commiter les CSV régénérés avec le code.</li>
-<li><strong>Notebooks</strong> : lancer <code>.venv/bin/nbstripout --install</code> une fois par poste, sinon les sorties des notebooks partent dans les commits.</li>
-<li><strong>Décisions</strong> : un choix de préparation ou d'encodage qui change ce que montre la visualisation s'ajoute dans <code>docs/decisions.md</code>. Il servira au rapport.</li>
-</ul>
-<h2 id="readme-fichiers-charges-par-d3">Fichiers chargés par D3</h2>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Fichier</th>
-<th>Contenu</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>data/processed/offres.csv</code></td>
-<td>table complète : une ligne par hébergement, 19 colonnes</td>
-</tr>
-<tr>
-<td><code>data/processed/offres_&lt;ville&gt;.csv</code></td>
-<td>une ville (<code>londres</code>, <code>berlin</code>, <code>paris</code>, <code>rome</code>), pour « changer de dataset »</td>
-</tr>
-<tr>
-<td><code>data/processed/quartiers_&lt;ville&gt;.geojson</code></td>
-<td>contours simplifiés des quartiers, orientés pour <code>d3.geoPath</code></td>
-</tr>
-</tbody>
-</table></div>
-<pre><code class="language-js">const offres = await d3.csv(&quot;data/processed/offres_paris.csv&quot;, d3.autoType);
-const zones = await d3.json(&quot;data/processed/quartiers_paris.geojson&quot;);  // relier par offre.quartier = feature.properties.quartier
-</code></pre>
-<h2 id="readme-organisation-du-depot">Organisation du dépôt</h2>
-<pre><code>data/raw/        données brutes téléchargées (ignorées par Git)
-data/interim/    une table par source, au schéma commun
-data/external/   contours des quartiers, correspondance des noms Booking, géocodage des hôtels
-data/processed/  table commune et contours, chargés par D3
-viz/             application D3 : socle (viz/noyau/), composants communs (viz/composants/) et une technique par étudiant
-notebooks/       01 Airbnb, 02 Booking, 03 quartiers, 04 géocodage, 05 table commune
-src/prep/        code de préparation : schéma, transformations, quartiers, géocodage, fusion
-scripts/         téléchargement, exécution de la chaîne, serveur local, génération de la doc HTML
-docs/            documentation (et docs/archives/ : documents de travail)
-</code></pre>
+<p>Une offre survolée ou cliquée dans une vue est surlignée dans l'autre. Des filtres communs, le changement de ville et une fiche détaillée complètent la vue d'ensemble. La problématique reste descriptive : montrer où et comment les deux offres diffèrent, sans chercher à l'expliquer.</p>
+<p>Luca VIZIO et Samuel BOIX-SEGURA, Master MIAGE MBDS, Université Côte d'Azur.</p>
 </section>
 <section id="utilisateurs-taches" class="doc-section">
-<h1 id="utilisateurs-taches-utilisateurs-vises-besoins-et-taches">Utilisateurs visés, besoins et tâches</h1>
-<p>Ce document décrit à qui s'adresse la visualisation, ce que ces utilisateurs cherchent à savoir, et les tâches qu'ils doivent pouvoir accomplir avec les données. Il suit la démarche du cours : partir des <strong>objectifs</strong> de l'utilisateur, en déduire des <strong>tâches</strong>, puis choisir les <strong>visualisations</strong> qui les servent. C'est la démarche que le cours applique à la carte de John Snow. Chaque tâche est classée avec les taxonomies du cours et reliée aux colonnes de la table commune qui la rendent possible (<code>docs/schema.md</code>).</p>
-<h2 id="utilisateurs-taches-1-utilisateur-vise">1. Utilisateur visé</h2>
-<p><strong>Un voyageur non expert qui prépare un court séjour à deux dans une grande ville européenne</strong>, et qui hésite entre un hôtel et un Airbnb.</p>
+<h1 id="utilisateurs-taches-utilisateurs-vises-et-taches">Utilisateurs visés et tâches</h1>
+<h2 id="utilisateurs-taches-utilisateur-vise">Utilisateur visé</h2>
+<p>Un voyageur non expert qui prépare un séjour de 2 à 4 nuits à deux, avant de réserver. Il a un budget par nuit en tête, par exemple 150 €. Il lit une carte et un graphique simple, sans être statisticien.</p>
+<p>Ses questions : hôtel ou Airbnb ? Dans quel secteur ? Que perd-il en s'éloignant du centre pour payer moins ?</p>
+<h2 id="utilisateurs-taches-taches">Tâches</h2>
+<p>Les tâches sont dans ses mots, classées selon Shneiderman (Sh) et Keller et Keller (KK).</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
-<th>Caractéristique</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Qui</td>
-<td>Un couple ou deux amis : 2 personnes. Le prix Airbnb du dataset est calculé pour 2 personnes, et les offres Booking sont en grande majorité des chambres doubles.</td>
-</tr>
-<tr>
-<td>Séjour</td>
-<td>2 à 4 nuits, à Londres, Berlin, Paris ou Rome.</td>
-</tr>
-<tr>
-<td>Moment</td>
-<td>Avant la réservation, pendant la phase de préparation, sur ordinateur.</td>
-</tr>
-<tr>
-<td>Contrainte principale</td>
-<td>Un <strong>budget par nuit</strong> en tête, par exemple « 150 € maximum ».</td>
-</tr>
-<tr>
-<td>Questions qu'il se pose</td>
-<td>Hôtel ou Airbnb ? Dans quel secteur ? Est-ce que je perds en qualité ou en accès aux transports si je m'éloigne du centre pour payer moins ?</td>
-</tr>
-<tr>
-<td>Compétences</td>
-<td>Il lit une carte, un classement et un graphique simple. Il n'est <strong>pas</strong> statisticien : pas de jargon, pas de graphique qui demande une formation.</td>
-</tr>
-<tr>
-<td>Ce qu'il n'est pas</td>
-<td>Un professionnel du tourisme ou un analyste du marché locatif. La problématique est <strong>descriptive</strong> : montrer où et comment les offres diffèrent, sans expliquer pourquoi.</td>
-</tr>
-</tbody>
-</table></div>
-<h3 id="utilisateurs-taches-trois-situations-types">Trois situations types</h3>
-<p>Ces situations servent à vérifier que chaque tâche répond à un besoin réel.</p>
-<ul>
-<li><strong>Situation A : un couple, un week-end à Paris, 150 € par nuit au plus.</strong> Il veut être central, près d'un métro, dans un logement bien noté. Sa question : « Pour ce budget, l'hôtel ou l'Airbnb me rapproche-t-il le plus du centre ? »</li>
-<li><strong>Situation B : deux amis qui hésitent entre Berlin et Londres.</strong> Ils veulent savoir dans quelle ville leur budget va le plus loin, et si la réponse dépend du type d'hébergement. Leur question : « Dans quelle ville l'écart entre hôtel et Airbnb nous est-il le plus favorable ? »</li>
-<li><strong>Situation C : un voyageur qui a choisi sa ville et cherche un logement précis.</strong> Il veut d'abord la vue d'ensemble des quartiers, puis comparer quelques offres concrètes avant d'aller réserver sur le site. Sa question : « Dans ce quartier, quelles sont les meilleures offres sous mon budget ? »</li>
-</ul>
-<h2 id="utilisateurs-taches-2-besoins">2. Besoins</h2>
-<p>Les besoins sont formulés avec les mots de l'utilisateur. La colonne de droite indique les données qui y répondent.</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Besoin</th>
-<th>Ce que l'utilisateur veut savoir</th>
-<th>Données</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>B1. Le prix</td>
-<td>Combien coûte une nuit, selon le type d'offre, dans la ville choisie ?</td>
-<td><code>prix_nuit_eur</code>, <code>source</code>, <code>type</code>, <code>ville</code></td>
-</tr>
-<tr>
-<td>B2. L'emplacement</td>
-<td>Dans quel secteur loger pour un bon rapport qualité-prix ?</td>
-<td><code>quartier</code> et ses contours, <code>lat</code>/<code>lon</code></td>
-</tr>
-<tr>
-<td>B3. Le compromis distance / prix</td>
-<td>Que gagne-t-on à s'éloigner du centre ?</td>
-<td><code>dist_centre_km</code>, <code>tranche_dist</code>, <code>prix_nuit_eur</code></td>
-</tr>
-<tr>
-<td>B4. La qualité</td>
-<td>Les offres moins chères sont-elles moins bien notées ?</td>
-<td><code>note_100</code>, <code>etoiles</code>, <code>superhost</code>, <code>nb_avis</code></td>
-</tr>
-<tr>
-<td>B5. Les transports</td>
-<td>Pourra-t-on rejoindre le centre en métro ?</td>
-<td><code>metro_proche</code></td>
-</tr>
-<tr>
-<td>B6. Le choix final</td>
-<td>Quelles offres précises correspondent à mes critères, et que valent-elles ?</td>
-<td>toutes les colonnes d'une ligne</td>
-</tr>
-<tr>
-<td>B7. La ville</td>
-<td>Dans quelle ville le budget va-t-il le plus loin ?</td>
-<td><code>ville</code> (un fichier par ville)</td>
-</tr>
-</tbody>
-</table></div>
-<h2 id="utilisateurs-taches-3-des-objectifs-aux-taches">3. Des objectifs aux tâches</h2>
-<p>Comme dans l'exemple de John Snow, on décompose l'objectif principal en objectifs intermédiaires, puis en tâches que la visualisation doit rendre possibles.</p>
-<ul>
-<li><strong>Objectif principal</strong> : choisir un type d'hébergement et un secteur de la ville qui respectent le budget.<ul>
-<li><strong>Objectif 1 : comprendre le marché de la ville</strong> (B1, B3, B7).<ul>
-<li>Tâches : comparer les prix des deux offres (T1), voir comment le prix évolue avec la distance au centre (T2), comparer les villes (T7) et les périodes (T8).</li>
-</ul>
-</li>
-<li><strong>Objectif 2 : repérer les bons secteurs</strong> (B2, B5).<ul>
-<li>Tâches : localiser les quartiers favorables à l'une ou l'autre offre (T3), vérifier l'accès au métro selon les secteurs (T10).</li>
-</ul>
-</li>
-<li><strong>Objectif 3 : choisir une offre</strong> (B4, B6).<ul>
-<li>Tâches : restreindre aux offres compatibles avec ses contraintes (T4), trouver les mieux notées sous le budget (T5), repérer les bonnes affaires (T9), consulter le détail d'une offre (T6).</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="utilisateurs-taches-4-catalogue-des-taches-utilisateur">4. Catalogue des tâches utilisateur</h2>
-<p>Abréviations des taxonomies du cours :</p>
-<ul>
-<li><strong>Sh</strong> : Shneiderman (1996), <em>overview, zoom, filter, details on demand, relate, history, extract</em> ;</li>
-<li><strong>KK</strong> : Keller et Keller (1994), <em>identify, locate, distinguish, categorize, cluster, order, compare, associate, correlate</em> ;</li>
-<li><strong>AS</strong> : Amar et Stasko (2005), tâches analytiques de bas niveau ;</li>
-<li><strong>Mu</strong> : Munzner (2014), action et cible.</li>
-</ul>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>#</th>
-<th>Tâche (formulée par l'utilisateur)</th>
+<th>Tâche</th>
 <th>Classement</th>
-<th>Données utilisées</th>
-<th>Niveau</th>
+<th>Données</th>
+<th>Où</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>T1</td>
-<td>« Dans cette ville, un hôtel coûte-t-il plus cher qu'un Airbnb ? De combien ? »</td>
-<td>Sh <em>overview</em>, <em>relate</em> ; KK <em>compare</em> ; AS <em>compute derived value</em> (médiane), <em>characterize distribution</em> ; Mu <em>compare</em> / distribution</td>
-<td><code>ville</code>, <code>source</code>, <code>prix_nuit_eur</code></td>
-<td>vue d'ensemble</td>
+<td>T1. « Ici, un hôtel coûte-t-il plus cher qu'un Airbnb ? »</td>
+<td>Sh vue d'ensemble ; KK comparer</td>
+<td><code>prix_nuit_eur</code>, <code>source</code></td>
+<td>carte, nuage</td>
 </tr>
 <tr>
-<td>T2</td>
-<td>« À partir de quelle distance du centre l'une des offres devient-elle moins chère que l'autre ? »</td>
-<td>Sh <em>relate</em> ; KK <em>correlate</em> ; AS <em>determine threshold</em>, <em>correlate</em> ; Mu <em>discover</em> / tendance</td>
-<td><code>dist_centre_km</code>, <code>tranche_dist</code>, <code>prix_nuit_eur</code>, <code>source</code></td>
-<td>vue d'ensemble</td>
+<td>T2. « Les prix baissent-ils loin du centre ? »</td>
+<td>KK corréler</td>
+<td><code>dist_centre_km</code>, <code>prix_nuit_eur</code></td>
+<td>nuage</td>
 </tr>
 <tr>
-<td>T3</td>
-<td>« Dans quels quartiers l'Airbnb est-il le plus avantageux par rapport à l'hôtel, et inversement ? »</td>
-<td>Sh <em>overview</em>, <em>zoom</em> ; KK <em>locate</em>, <em>compare</em> ; AS <em>find extremum</em> ; Mu <em>locate</em> / spatial</td>
-<td><code>quartier</code> + <code>quartiers_&lt;ville&gt;.geojson</code>, <code>prix_nuit_eur</code>, <code>note_100</code>, <code>source</code></td>
-<td>vue d'ensemble, puis zoom</td>
+<td>T3. « Dans quels quartiers est-ce moins cher que d'habitude ? »</td>
+<td>Sh zoom ; KK localiser</td>
+<td><code>lat</code>, <code>lon</code>, <code>quartier</code></td>
+<td>carte</td>
 </tr>
 <tr>
-<td>T4</td>
-<td>« Je ne veux voir que ce qui respecte mon budget, une note minimale, près d'un métro. »</td>
-<td>Sh <em>filter</em> ; AS <em>filter</em></td>
-<td><code>prix_nuit_eur</code>, <code>note_100</code>, <code>type</code>, <code>etoiles</code>, <code>metro_proche</code>, <code>periode</code>, <code>superhost</code></td>
-<td>toutes vues</td>
+<td>T4. « Seulement mon budget, une bonne note, près d'un métro. »</td>
+<td>Sh filtrer</td>
+<td><code>prix_nuit_eur</code>, <code>note_100</code>, <code>type</code>, <code>etoiles</code>, <code>metro_proche</code></td>
+<td>filtres communs</td>
 </tr>
 <tr>
-<td>T5</td>
-<td>« Quelles sont les offres les mieux notées sous 150 € ? »</td>
-<td>KK <em>order</em> ; AS <em>sort</em>, <em>find extremum</em> ; Mu <em>lookup</em></td>
-<td><code>prix_nuit_eur</code>, <code>note_100</code>, <code>source</code></td>
-<td>détail</td>
+<td>T5. « Que trouve-t-on près de la tour Eiffel ? »</td>
+<td>KK localiser ; Sh filtrer</td>
+<td><code>lat</code>, <code>lon</code></td>
+<td>points d'intérêt</td>
 </tr>
 <tr>
-<td>T6</td>
-<td>« Que vaut exactement cette offre ? »</td>
-<td>Sh <em>details on demand</em> ; KK <em>identify</em> ; AS <em>retrieve value</em> ; Mu <em>identify</em></td>
-<td><code>nom</code>, <code>type</code>, <code>etoiles</code>, <code>note_100</code>, <code>nb_avis</code>, <code>capacite</code>, <code>superhost</code>, <code>dist_centre_km</code>, <code>metro_proche</code>, <code>quartier</code></td>
-<td>détail</td>
+<td>T6. « Que vaut exactement cette offre ? »</td>
+<td>Sh détails à la demande ; KK identifier</td>
+<td>toutes les colonnes</td>
+<td>infobulle, fiche</td>
 </tr>
 <tr>
-<td>T7</td>
-<td>« Dans quelle ville mon budget va-t-il le plus loin ? »</td>
-<td>Sh <em>relate</em> ; KK <em>compare</em>, <em>order</em> ; changement de dataset (consigne du projet)</td>
-<td><code>ville</code>, <code>offres_&lt;ville&gt;.csv</code></td>
-<td>vue d'ensemble</td>
+<td>T7. « Dans quelle ville mon budget va-t-il le plus loin ? »</td>
+<td>KK comparer ; changement de dataset</td>
+<td><code>ville</code></td>
+<td>sélecteur de ville</td>
 </tr>
 <tr>
-<td>T8</td>
-<td>« Un Airbnb est-il plus cher le week-end ? »</td>
-<td>KK <em>compare</em> ; AS <em>characterize distribution</em></td>
-<td><code>periode</code>, <code>prix_nuit_eur</code> (Airbnb seulement)</td>
-<td>vue d'ensemble</td>
-</tr>
-<tr>
-<td>T9</td>
-<td>« Y a-t-il des offres très bien notées pour un prix bas ? »</td>
-<td>KK <em>distinguish</em> ; AS <em>find anomalies</em> ; Mu <em>discover</em> / valeurs atypiques</td>
-<td><code>note_100</code>, <code>prix_nuit_eur</code></td>
-<td>détail</td>
-</tr>
-<tr>
-<td>T10</td>
-<td>« Les quartiers moins chers sont-ils mal desservis ? »</td>
-<td>KK <em>associate</em> ; AS <em>correlate</em></td>
-<td><code>metro_proche</code>, <code>quartier</code>, <code>tranche_dist</code>, <code>prix_nuit_eur</code></td>
-<td>vue d'ensemble</td>
+<td>T8. « Un Airbnb est-il plus cher le week-end ? »</td>
+<td>KK comparer</td>
+<td><code>periode</code></td>
+<td>filtre de période</td>
 </tr>
 </tbody>
 </table></div>
-<h3 id="utilisateurs-taches-lien-avec-le-mantra-de-shneiderman-et-les-deux-niveaux-de-vue">Lien avec le mantra de Shneiderman et les deux niveaux de vue</h3>
-<p>La consigne demande deux niveaux de visualisation : une vue d'ensemble et des détails. Les tâches s'y répartissent selon le mantra « <em>overview first, zoom and filter, then details on demand</em> » :</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Étape du mantra</th>
-<th>Tâches</th>
-<th>Ce que l'interface doit offrir</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><em>Overview</em></td>
-<td>T1, T2, T3, T7, T8, T10</td>
-<td>Comparaison des deux offres par ville, par tranche de distance et par quartier.</td>
-</tr>
-<tr>
-<td><em>Zoom &amp; filter</em></td>
-<td>T3, T4</td>
-<td>Sélection d'une ville (changement de dataset), d'un quartier ou d'une tranche ; filtres de budget, de note, de type, d'étoiles, de métro et de période.</td>
-</tr>
-<tr>
-<td><em>Details on demand</em></td>
-<td>T5, T6, T9</td>
-<td>Liste ou distribution des offres d'une sélection, puis fiche d'une offre au survol ou au clic.</td>
-</tr>
-</tbody>
-</table></div>
-<h2 id="utilisateurs-taches-5-ce-que-les-donnees-permettent-et-leurs-limites">5. Ce que les données permettent, et leurs limites</h2>
-<p>Les tâches ci-dessus ne promettent que ce que les données savent dire. Les limites suivantes doivent être visibles dans l'interface, sous forme d'avertissement ou de zone grisée, et dans le rapport.</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Limite</th>
-<th>Effet sur les tâches</th>
-<th>Référence</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Les prix des hôtels de Rome sont 2 à 5 fois plus élevés qu'ailleurs, sans correction possible.</td>
-<td>T1, T2, T3, T7 : un avertissement s'affiche dès que Rome est sélectionnée (<code>prix_comparable = false</code>).</td>
-<td>D7</td>
-</tr>
-<tr>
-<td>Les notes Airbnb (médiane 95/100) et Booking (médiane 80/100) ne suivent pas le même barème.</td>
-<td>T5, T9 : comparer les notes <strong>au sein</strong> d'une source, ou relativement, pas en absolu entre sources.</td>
-<td>D9</td>
-</tr>
-<tr>
-<td>Le prix Booking n'inclut pas les taxes (taxe de séjour de 2 à 5 % ailleurs qu'à Londres).</td>
-<td>T1 : léger avantage apparent pour les hôtels.</td>
-<td>D4</td>
-</tr>
-<tr>
-<td>Le dataset Airbnb ne couvre que 14 boroughs centraux de Londres sur 33.</td>
-<td>T3 : les boroughs sans données sont grisés.</td>
-<td>D16</td>
-</tr>
-<tr>
-<td>156 hôtels sur 207 sont dans le Municipio I à Rome.</td>
-<td>T3 : une seule zone de Rome permet de comparer les deux offres.</td>
-<td>D16</td>
-</tr>
-<tr>
-<td>69 % des hôtels ont une position GPS, surtout les chaînes.</td>
-<td>T3, T6 : une carte de points d'hôtels surreprésente les chaînes. Les comparaisons par quartier utilisent tous les hôtels.</td>
-<td>D19</td>
-</tr>
-<tr>
-<td>Aucune date de séjour ni disponibilité.</td>
-<td>Les prix sont des ordres de grandeur, pas des tarifs réservables.</td>
-<td>D3, D4</td>
-</tr>
-<tr>
-<td>Pas de capacité côté hôtels.</td>
-<td>Pas de comparaison du prix par personne pour un groupe de plus de 2.</td>
-<td>D11</td>
-</tr>
-</tbody>
-</table></div>
-<h2 id="utilisateurs-taches-6-liste-des-taches-a-presenter-en-soutenance">6. Liste des tâches à présenter en soutenance</h2>
-<p>Voici la version courte, à projeter :</p>
-<ol>
-<li><strong>T1</strong> : comparer le prix d'un hôtel et d'un Airbnb dans une ville.</li>
-<li><strong>T2</strong> : trouver à quelle distance du centre l'une des offres devient moins chère que l'autre.</li>
-<li><strong>T3</strong> : localiser les quartiers favorables à l'hôtel ou à l'Airbnb.</li>
-<li><strong>T4</strong> : filtrer selon le budget, la note, le type, les étoiles, le métro et la période.</li>
-<li><strong>T5</strong> : trouver les offres les mieux notées sous un budget.</li>
-<li><strong>T6</strong> : consulter le détail d'une offre.</li>
-<li><strong>T7</strong> : comparer les quatre villes, en changeant de dataset.</li>
-<li><strong>T8</strong> : comparer la semaine et le week-end côté Airbnb.</li>
-<li><strong>T9</strong> : repérer les offres atypiques, très bien notées pour un prix bas.</li>
-<li><strong>T10</strong> : vérifier si les secteurs moins chers sont moins bien desservis par le métro.</li>
-</ol>
+<p>Les tâches suivent le mantra de Shneiderman : vue d'ensemble (T1, T2, T7), zoom et filtre (T3, T4, T5, T8), puis détails (T6).</p>
+<h2 id="utilisateurs-taches-limites-des-donnees">Limites des données</h2>
+<ul>
+<li>Les hôtels de Rome sont 2 à 5 fois plus chers qu'ailleurs : prix non comparables aux Airbnb.</li>
+<li>Les notes Airbnb et Booking n'ont pas le même barème : on les compare au sein d'une source.</li>
+<li>69 % des hôtels seulement ont une position sur la carte.</li>
+</ul>
 </section>
 <section id="workflow" class="doc-section">
-<h1 id="workflow-workflow-de-preparation-des-donnees">Workflow de préparation des données</h1>
-<p>Ce document suit les données depuis les fichiers Kaggle bruts jusqu'au dataset chargé par D3. Pour chaque étape, il indique quel script s'exécute, ce qu'il lit, ce qu'il fait et ce qu'il produit, avec le nombre de lignes. Les choix de nettoyage sont justifiés dans <code>docs/decisions.md</code> (références D1 à D19), et les colonnes de la table finale sont décrites dans <code>docs/schema.md</code>.</p>
-<h2 id="workflow-1-vue-densemble">1. Vue d'ensemble</h2>
-<p>Le découpage suit le modèle de pipeline du cours (Ward, Grinstein et Keim) : <em>Raw data → Data transformation → Data tables → Visual mapping → Views</em>. Ce document couvre les trois premières étapes. Les deux dernières relèvent de l'application D3.</p>
-<pre class="mermaid">flowchart TD
-    subgraph RAW[&quot;Raw data : data/raw/, non versionné&quot;]
-        K1[&quot;Kaggle : Airbnb Prices in European Cities&lt;br/&gt;20 CSV, 51 707 annonces&quot;]
-        K2[&quot;Kaggle : 7500 hotels from Airbnb, Booking and Hotels.com&lt;br/&gt;5 JSON&quot;]
-        G0[&quot;Contours officiels et OpenStreetMap&lt;br/&gt;4 villes&quot;]
-    end
-    K1 -- &quot;download_data.sh&quot; --&gt; N1
-    K2 -- &quot;download_data.sh&quot; --&gt; N2
-    G0 -- &quot;download_geo.sh&quot; --&gt; N3
-    subgraph TRANS[&quot;Data transformation : notebooks/ + src/prep/&quot;]
-        N1[&quot;01_airbnb&lt;br/&gt;8 CSV → 28 192 annonces&quot;]
-        N2[&quot;02_hotels_booking&lt;br/&gt;1 708 → 1 705 hôtels&quot;]
-        N3[&quot;03_quartiers&lt;br/&gt;80 contours + correspondance des noms&quot;]
-        N4[&quot;04_geocodage_hotels&lt;br/&gt;1 183 positions fiables&quot;]
-    end
-    K2 -. &quot;noms des hôtels&quot; .-&gt; N4
-    N1 -- &quot;interim/airbnb.parquet&quot; --&gt; N5
-    N2 -- &quot;interim/hotels.parquet&lt;br/&gt;interim/hotels_liens.parquet&quot; --&gt; N5
-    N3 -- &quot;external/quartiers_*.geojson&lt;br/&gt;external/correspondance_quartiers.csv&quot; --&gt; N5
-    N4 -- &quot;external/hotels_geocodage.csv&quot; --&gt; N5
-    subgraph TABLE[&quot;Data tables : data/processed/, versionné&quot;]
-        N5[&quot;05_table_commune&lt;br/&gt;29 897 → 29 315 offres&quot;]
-        O1[&quot;offres.csv&lt;br/&gt;offres_&amp;lt;ville&amp;gt;.csv&quot;]
-        O2[&quot;quartiers_&amp;lt;ville&amp;gt;.geojson&quot;]
-    end
-    N5 --&gt; O1
-    N3 --&gt; O2
-    O1 --&gt; D3[&quot;Application D3 : visual mapping et vues&quot;]
-    O2 --&gt; D3
+<h1 id="workflow-workflow-des-donnees">Workflow des données</h1>
+<p>Les données suivent le modèle du cours : données brutes, transformation, table commune, puis visualisation. Toute la chaîne se rejoue avec <code>./scripts/build_data.sh</code>.</p>
+<pre class="mermaid">flowchart LR
+    A[&quot;Kaggle Airbnb&lt;br/&gt;51 707 annonces&quot;] --&gt; N1[&quot;01 Airbnb&lt;br/&gt;28 192&quot;]
+    B[&quot;Kaggle hôtels&quot;] --&gt; N2[&quot;02 Booking&lt;br/&gt;1 705&quot;]
+    B --&gt; N4[&quot;04 géocodage&lt;br/&gt;1 183 positions&quot;]
+    C[&quot;Contours officiels&quot;] --&gt; N3[&quot;03 quartiers&lt;br/&gt;80 zones&quot;]
+    N1 --&gt; N5[&quot;05 table commune&lt;br/&gt;29 315 offres&quot;]
+    N2 --&gt; N5
+    N3 --&gt; N5
+    N4 --&gt; N5
+    N5 --&gt; V[&quot;Application D3&quot;]
 </pre>
 <div class="table-wrap"><table>
 <thead>
 <tr>
-<th>Étape du modèle</th>
 <th>Script</th>
-<th>Entrée</th>
+<th>Ce qu'il fait</th>
 <th>Sortie</th>
-<th>Lignes</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Raw data</td>
 <td><code>scripts/download_data.sh</code></td>
-<td>API Kaggle</td>
-<td><code>data/raw/airbnb/</code>, <code>data/raw/hotels/</code></td>
-<td>51 707 annonces, 5 JSON</td>
+<td>Télécharge les deux datasets Kaggle par l'API publique.</td>
+<td><code>data/raw/</code></td>
 </tr>
 <tr>
-<td>Raw data</td>
 <td><code>scripts/download_geo.sh</code></td>
-<td>4 services de contours</td>
+<td>Télécharge les contours des quartiers des quatre villes.</td>
 <td><code>data/raw/geo/</code></td>
-<td>4 fichiers</td>
 </tr>
 <tr>
-<td>Data transformation</td>
 <td><code>notebooks/01_airbnb.ipynb</code></td>
-<td>8 CSV</td>
-<td><code>data/interim/airbnb.parquet</code></td>
-<td>28 192</td>
+<td>Garde les 4 villes communes, calcule le prix par nuit (<code>realSum / 2</code>) et recalcule la distance depuis le centre de Booking.</td>
+<td>28 192 annonces</td>
 </tr>
 <tr>
-<td>Data transformation</td>
 <td><code>notebooks/02_hotels_booking.ipynb</code></td>
-<td>4 JSON</td>
-<td><code>data/interim/hotels.parquet</code></td>
-<td>1 705</td>
+<td>Aplatit le JSON, retire 3 doublons, convertit les dollars en euros, ramène la note sur 100 et signale Rome.</td>
+<td>1 705 hôtels</td>
 </tr>
 <tr>
-<td>Data transformation</td>
 <td><code>notebooks/03_quartiers.ipynb</code></td>
-<td>contours bruts</td>
-<td><code>data/external/quartiers_*.geojson</code>, <code>data/processed/quartiers_*.geojson</code></td>
-<td>80 zones</td>
+<td>Met les contours au même format et relie chaque nom de quartier Booking à un contour officiel.</td>
+<td>80 quartiers</td>
 </tr>
 <tr>
-<td>Data transformation</td>
 <td><code>notebooks/04_geocodage_hotels.ipynb</code></td>
-<td>4 JSON, OSM, Nominatim</td>
-<td><code>data/external/hotels_geocodage.csv</code></td>
-<td>1 705, dont 1 183 fiables</td>
+<td>Retrouve la position des hôtels dans OpenStreetMap et ne garde que celles qui passent trois contrôles.</td>
+<td>1 183 positions</td>
 </tr>
 <tr>
-<td>Data tables</td>
 <td><code>notebooks/05_table_commune.ipynb</code></td>
-<td>tout ce qui précède</td>
-<td><code>data/processed/offres*.csv</code></td>
-<td>29 315</td>
+<td>Fusionne les deux sources, rattache chaque offre à un quartier, retire 582 prix aberrants et valide le schéma.</td>
+<td><code>offres.csv</code> : 29 315 offres, 19 colonnes</td>
 </tr>
 </tbody>
 </table></div>
-<p>Toute la chaîne se rejoue avec une seule commande : <code>./scripts/build_data.sh</code>. Elle télécharge ce qui manque, puis exécute les notebooks dans l'ordre. Le notebook 04 n'est rejoué qu'avec <code>GEOCODER=1</code>, parce qu'il interroge des services en ligne pendant environ 15 minutes. Son résultat est versionné.</p>
-<h3 id="workflow-organisation-du-code">Organisation du code</h3>
-<p>Les notebooks explorent les données, montrent les constats et justifient les choix. La logique réutilisable est dans <code>src/prep/</code>, que les notebooks importent :</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Module</th>
-<th>Rôle</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>src/prep/common.py</code></td>
-<td>Constantes partagées : villes, taux USD → EUR, seuil du métro, tranches de distance, centres de référence ; calcul des distances et des identifiants.</td>
-</tr>
-<tr>
-<td><code>src/prep/schema.py</code></td>
-<td><strong>Le contrat de la table commune</strong> : liste des colonnes, types, valeurs autorisées. <code>valider()</code> refuse toute table qui ne le respecte pas. Chaque étape l'appelle avant d'écrire.</td>
-</tr>
-<tr>
-<td><code>src/prep/airbnb.py</code></td>
-<td>Chargement et transformation des CSV Airbnb.</td>
-</tr>
-<tr>
-<td><code>src/prep/hotels.py</code></td>
-<td>Chargement et transformation du JSON Booking.</td>
-</tr>
-<tr>
-<td><code>src/prep/quartiers.py</code></td>
-<td>Contours des quartiers, jointure spatiale, export pour D3.</td>
-</tr>
-<tr>
-<td><code>src/prep/geocodage.py</code></td>
-<td>Recherche des positions des hôtels (OSM, Nominatim) et contrôles de qualité.</td>
-</tr>
-<tr>
-<td><code>src/prep/fusion.py</code></td>
-<td>Fusion des sources, rattachement aux quartiers, retrait des aberrants, contrôles et export CSV.</td>
-</tr>
-</tbody>
-</table></div>
-<h2 id="workflow-2-etape-0-recuperer-les-donnees-brutes">2. Étape 0 : récupérer les données brutes</h2>
-<h3 id="workflow-scriptsdownload_datash"><code>scripts/download_data.sh</code></h3>
-<ul>
-<li><strong>Fait</strong> : télécharge les deux datasets Kaggle par l'API publique (<code>https://www.kaggle.com/api/v1/datasets/download/&lt;auteur&gt;/&lt;dataset&gt;</code>), sans jeton d'authentification, puis les décompresse.</li>
-<li><strong>Produit</strong> :<ul>
-<li><code>data/raw/airbnb/</code> : 20 CSV (10 villes × semaine / week-end), 51 707 annonces ;</li>
-<li><code>data/raw/hotels/</code> : 5 JSON (Londres, Berlin, Paris, Rome, Madrid). Chaque JSON contient trois listes : <code>bookingHotels</code> (500 par ville, 208 à Rome), <code>hotelsComHotels</code> (500) et <code>airbnbHotels</code> (270).</li>
-</ul>
-</li>
-<li>Les données brutes ne sont <strong>pas versionnées</strong> (<code>.gitignore</code>) : le script suffit à les retrouver. Les deux datasets sont sous licence CC0 (<code>docs/sources.md</code>).</li>
-</ul>
-<h3 id="workflow-scriptsdownload_geosh"><code>scripts/download_geo.sh</code></h3>
-<ul>
-<li><strong>Fait</strong> : télécharge les contours des quartiers de chaque ville.</li>
-<li><strong>Produit</strong> dans <code>data/raw/geo/</code> :<ul>
-<li>les 20 arrondissements de Paris (Ville de Paris, GeoJSON) ;</li>
-<li>les 12 Bezirke de Berlin (Geoportal Berlin, service WFS) ;</li>
-<li>les 33 boroughs de Londres (ONS Open Geography Portal, GeoJSON) ;</li>
-<li>les 15 municipi de Rome (OpenStreetMap, via Overpass).</li>
-</ul>
-</li>
-</ul>
-<h2 id="workflow-3-etape-1-transformer-les-annonces-airbnb">3. Étape 1 : transformer les annonces Airbnb</h2>
-<h3 id="workflow-notebooks01_airbnbipynb-module-srcprepairbnbpy"><code>notebooks/01_airbnb.ipynb</code> (module <code>src/prep/airbnb.py</code>)</h3>
-<ul>
-<li><strong>Lit</strong> : les 8 CSV des 4 villes communes aux deux datasets (<code>london</code>, <code>berlin</code>, <code>paris</code>, <code>rome</code>, × <code>weekdays</code> / <code>weekends</code>). Madrid n'existe pas côté Airbnb, et les 6 autres villes n'existent pas côté hôtels (D1).</li>
-<li><strong>Explore</strong> : types de colonnes, valeurs manquantes (aucune), distributions du prix, de la note et des distances, types de logement, doublons (aucun strictement identique).</li>
-<li><strong>Fait</strong> :<ol>
-<li>ajoute la ville et la période (<code>semaine</code> / <code>weekend</code>), tirées du nom de fichier ;</li>
-<li>calcule le <strong>prix par nuit</strong> : <code>realSum / 2</code>, puisque <code>realSum</code> est le prix total pour 2 personnes et 2 nuits (D3) ;</li>
-<li>garde la note <code>guest_satisfaction_overall</code>, déjà sur 100 (D9) ;</li>
-<li>dérive le booléen <code>metro_proche</code> : station à moins de 500 m (D8) ;</li>
-<li><strong>recalcule la distance au centre</strong> depuis le même point que Booking. Le notebook montre que la distance d'origine part d'Alexanderplatz à Berlin et de la gare Termini à Rome, au lieu de la porte de Brandebourg et de la piazza Venezia (D18) ;</li>
-<li>range chaque annonce dans une tranche de distance : 0–1, 1–2, 2–4, &gt; 4 km (D14) ;</li>
-<li>traduit les types de logement : logement entier, chambre privée, chambre partagée ;</li>
-<li>génère un identifiant stable (<code>PAR-A-00001</code>…) et valide le schéma.</li>
-</ol>
-</li>
-<li><strong>Produit</strong> : <code>data/interim/airbnb.parquet</code>, <strong>28 192 annonces</strong> au schéma commun.</li>
-</ul>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Ville</th>
-<th>Semaine</th>
-<th>Week-end</th>
-<th>Total</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Londres</td>
-<td>4 614</td>
-<td>5 379</td>
-<td>9 993</td>
-</tr>
-<tr>
-<td>Berlin</td>
-<td>1 284</td>
-<td>1 200</td>
-<td>2 484</td>
-</tr>
-<tr>
-<td>Paris</td>
-<td>3 130</td>
-<td>3 558</td>
-<td>6 688</td>
-</tr>
-<tr>
-<td>Rome</td>
-<td>4 492</td>
-<td>4 535</td>
-<td>9 027</td>
-</tr>
-</tbody>
-</table></div>
-<h2 id="workflow-4-etape-2-transformer-les-hotels-booking">4. Étape 2 : transformer les hôtels Booking</h2>
-<h3 id="workflow-notebooks02_hotels_bookingipynb-module-srcprephotelspy"><code>notebooks/02_hotels_booking.ipynb</code> (module <code>src/prep/hotels.py</code>)</h3>
-<ul>
-<li><strong>Lit</strong> : les JSON de Londres, Berlin, Paris et Rome.</li>
-<li><strong>Explore</strong> et <strong>décide</strong> :<ul>
-<li><strong>seule la liste Booking est gardée</strong> : Hotels.com n'a ni quartier, ni distance, ni métro, ni étoiles (D2) ;</li>
-<li>le prix Booking est un <strong>prix par nuit</strong> : ses médianes sont proches de celles de Hotels.com (D4) ;</li>
-<li><strong>Rome est une anomalie</strong> : prix 2 à 5 fois plus élevés à étoiles égales. Les hôtels de Rome sont gardés, mais marqués <code>prix_comparable = false</code> (D7) ;</li>
-<li>le champ des taxes est absent pour 95 % des hôtels de Londres : on garde le prix affiché seul (D4) ;</li>
-<li>les distances ≥ 100 sont des mètres lus comme des kilomètres (D6).</li>
-</ul>
-</li>
-<li><strong>Fait</strong> :<ol>
-<li>aplatit la liste <code>bookingHotels</code> du JSON en table : <strong>1 708 hôtels</strong> ;</li>
-<li>retire 3 doublons, repérés par leur lien Booking : <strong>1 705 hôtels</strong> (D12) ;</li>
-<li>convertit le prix en euros : 1 € = 1,0813 $, moyenne BCE 2023 (D5) ;</li>
-<li>ramène la note sur 100 (score × 10) ; « No rating » devient vide (D9) ;</li>
-<li>corrige les distances en mètres et calcule la tranche de distance ;</li>
-<li>repère les 134 logements entiers proposés sur Booking (D11) ;</li>
-<li>normalise le nom de quartier : « 7th arr., Paris » devient « 7e arrondissement » (D15) ;</li>
-<li>génère l'identifiant (<code>PAR-H-00001</code>…) et valide le schéma.</li>
-</ol>
-</li>
-<li><strong>Produit</strong> :<ul>
-<li><code>data/interim/hotels.parquet</code> : 1 705 hôtels au schéma commun ;</li>
-<li><code>data/interim/hotels_liens.parquet</code> : la correspondance identifiant → lien Booking, qui sert de clé pour le géocodage.</li>
-</ul>
-</li>
-</ul>
-<h2 id="workflow-5-etape-3-construire-le-referentiel-de-quartiers">5. Étape 3 : construire le référentiel de quartiers</h2>
-<h3 id="workflow-notebooks03_quartiersipynb-module-srcprepquartierspy"><code>notebooks/03_quartiers.ipynb</code> (module <code>src/prep/quartiers.py</code>)</h3>
-<ul>
-<li><strong>Lit</strong> : les contours bruts de <code>data/raw/geo/</code>.</li>
-<li><strong>Fait</strong> :<ol>
-<li>ramène les 4 villes au même format (<code>ville</code>, <code>quartier</code>, <code>code</code>) et en coordonnées WGS84. Londres est reprojeté depuis le système britannique, et les municipi de Rome sont reconstitués à partir des chemins OpenStreetMap (D16) ;</li>
-<li>vérifie la table de correspondance <code>data/external/correspondance_quartiers.csv</code>, écrite à la main. Elle associe les 85 noms de quartier Booking à un contour : nom identique, quartier contenu dans le contour (Chiswick → Hounslow, Trevi → Municipio I), ou approximation (D17) ;</li>
-<li>rattache les annonces Airbnb par jointure spatiale (point dans le polygone) : 28 187 sur 28 192 tombent dans un contour, et les 5 autres, en bordure de Rome, sont à moins de 250 m (D17) ;</li>
-<li>mesure où la comparaison est possible : zones avec au moins 30 Airbnb et 10 hôtels (D16) ;</li>
-<li>simplifie les contours (tolérance 25 m) et oriente les polygones comme l'attend <code>d3.geoPath</code>.</li>
-</ol>
-</li>
-<li><strong>Produit</strong> :<ul>
-<li><code>data/external/quartiers_&lt;ville&gt;.geojson</code> : contours en pleine précision, utilisés pour les jointures ;</li>
-<li><code>data/processed/quartiers_&lt;ville&gt;.geojson</code> : contours allégés pour D3, de 10 à 103 Ko.</li>
-</ul>
-</li>
-</ul>
-<h2 id="workflow-6-etape-4-geolocaliser-les-hotels">6. Étape 4 : géolocaliser les hôtels</h2>
-<h3 id="workflow-notebooks04_geocodage_hotelsipynb-module-srcprepgeocodagepy"><code>notebooks/04_geocodage_hotels.ipynb</code> (module <code>src/prep/geocodage.py</code>)</h3>
-<ul>
-<li><strong>Pourquoi</strong> : le dataset Booking ne donne pas de coordonnées. Sans elles, les hôtels ne peuvent pas être placés sur une carte, ni rattachés à un quartier aussi précisément que les Airbnb.</li>
-<li><strong>Lit</strong> : les noms des 1 705 hôtels, leur quartier Booking et leur distance au centre.</li>
-<li><strong>Fait</strong> :<ol>
-<li>cherche chaque hôtel dans OpenStreetMap (Overpass) en comparant les noms (similarité floue) : 1 036 positions fiables ;</li>
-<li>interroge Nominatim pour les hôtels restants : 93 de plus ;</li>
-<li>intègre les corrections relues à la main (<code>data/external/hotels_geocodage_corrections.csv</code>, 95 lignes) : 54 de plus ;</li>
-<li>contrôle chaque position :<ul>
-<li>elle est dans l'emprise de la ville ;</li>
-<li>elle est cohérente avec la distance Booking : écart de 0,5 km au plus ;</li>
-<li>elle tombe dans le quartier annoncé ;</li>
-</ul>
-</li>
-<li>estime au passage le « centre » d'où Booking mesure ses distances (G1).</li>
-</ol>
-</li>
-<li><strong>N'a pas fait</strong> : extraire les pages Booking, ce que les conditions d'utilisation du site interdisent (G4).</li>
-<li><strong>Produit</strong> : <code>data/external/hotels_geocodage.csv</code>. Il contient une ligne par hôtel, avec la position, la méthode, le score de similarité, les contrôles et le statut <code>fiable</code>. <strong>1 183 positions sont fiables sur 1 705 (69 %)</strong> (D19).</li>
-</ul>
-<h2 id="workflow-7-etape-5-construire-la-table-commune">7. Étape 5 : construire la table commune</h2>
-<h3 id="workflow-notebooks05_table_communeipynb-module-srcprepfusionpy"><code>notebooks/05_table_commune.ipynb</code> (module <code>src/prep/fusion.py</code>)</h3>
-<ul>
-<li><strong>Lit</strong> : les deux tables intermédiaires, les contours, la correspondance des noms et le géocodage.</li>
-<li><strong>Fait</strong> :<ol>
-<li><strong>fusionne</strong> Airbnb et hôtels en une seule table, une ligne par offre : <strong>29 897 lignes</strong> ;</li>
-<li>ajoute la position des hôtels dont le géocodage est fiable ;</li>
-<li><strong>rattache chaque offre à un quartier</strong> du référentiel commun : par la position si elle existe (tous les Airbnb, 1 183 hôtels), sinon par le nom Booking. Quand les deux méthodes sont possibles, elles s'accordent dans 98 à 99 % des cas (D17) ;</li>
-<li><strong>retire les prix aberrants</strong>, hors des percentiles 1–99 % calculés par ville et par source : 582 lignes, soit 1,9 % (D13) ;</li>
-<li>exécute les <strong>contrôles qualité</strong> :<ul>
-<li>effectifs avant et après nettoyage ;</li>
-<li>valeurs manquantes par source ;</li>
-<li>distributions des prix et des notes ;</li>
-<li>cohérence des distances entre sources ;</li>
-<li>couverture des quartiers ;</li>
-</ul>
-</li>
-<li><strong>exporte</strong> les fichiers lus par D3.</li>
-</ol>
-</li>
-<li><strong>Produit</strong> :<ul>
-<li><code>data/processed/offres.csv</code> : <strong>29 315 offres</strong>, 19 colonnes, 3,9 Mo ;</li>
-<li><code>data/processed/offres_&lt;ville&gt;.csv</code> : une ville par fichier, pour la consigne « changer de dataset ».</li>
-</ul>
-</li>
-</ul>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Ville</th>
-<th>Airbnb</th>
-<th>Hôtels</th>
-<th>dont hôtels géolocalisés</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Londres</td>
-<td>9 795</td>
-<td>490</td>
-<td>336</td>
-</tr>
-<tr>
-<td>Berlin</td>
-<td>2 434</td>
-<td>491</td>
-<td>356</td>
-</tr>
-<tr>
-<td>Paris</td>
-<td>6 569</td>
-<td>490</td>
-<td>335</td>
-</tr>
-<tr>
-<td>Rome</td>
-<td>8 845</td>
-<td>201</td>
-<td>139</td>
-</tr>
-<tr>
-<td><strong>Total</strong></td>
-<td><strong>27 643</strong></td>
-<td><strong>1 672</strong></td>
-<td><strong>1 166</strong></td>
-</tr>
-</tbody>
-</table></div>
-<h2 id="workflow-8-le-dataset-a-visualiser">8. Le dataset à visualiser</h2>
-<p>La table finale <code>offres.csv</code> contient une ligne par hébergement. Ses colonnes relèvent de plusieurs types de données (Munzner) :</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Type de donnée</th>
-<th>Colonnes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Catégorielle</td>
-<td><code>ville</code>, <code>source</code>, <code>type</code>, <code>quartier</code>, <code>periode</code></td>
-</tr>
-<tr>
-<td>Ordinale</td>
-<td><code>etoiles</code>, <code>tranche_dist</code></td>
-</tr>
-<tr>
-<td>Quantitative</td>
-<td><code>prix_nuit_eur</code>, <code>note_100</code>, <code>nb_avis</code>, <code>dist_centre_km</code>, <code>capacite</code></td>
-</tr>
-<tr>
-<td>Booléenne</td>
-<td><code>metro_proche</code>, <code>superhost</code>, <code>prix_comparable</code></td>
-</tr>
-<tr>
-<td>Spatiale</td>
-<td><code>lat</code>, <code>lon</code> (points) ; <code>quartier</code> relié aux polygones de <code>quartiers_&lt;ville&gt;.geojson</code></td>
-</tr>
-<tr>
-<td>Identifiant</td>
-<td><code>id</code>, <code>nom</code></td>
-</tr>
-</tbody>
-</table></div>
-<p>C'est un dataset <strong>multivarié</strong>, avec 19 attributs pour 29 315 objets, dont une dimension spatiale. Le dictionnaire complet est dans <code>docs/schema.md</code>.</p>
-<p>Côté D3, les fichiers se chargent tels quels :</p>
-<pre><code class="language-js">const offres = await d3.csv(&quot;data/processed/offres_paris.csv&quot;, d3.autoType);   // nombres et booléens convertis
-const zones  = await d3.json(&quot;data/processed/quartiers_paris.geojson&quot;);       // relier par offre.quartier = feature.properties.quartier
-</code></pre>
+<p>La logique réutilisable est dans <code>src/prep/</code>. Le module <code>schema.py</code> est le contrat de la table : chaque étape le vérifie avant d'écrire. L'application charge directement <code>offres_&lt;ville&gt;.csv</code> et <code>quartiers_&lt;ville&gt;.geojson</code>.</p>
 </section>
-<section id="schema" class="doc-section">
-<h1 id="schema-schema-de-la-table-commune-offres">Schéma de la table commune <code>offres</code></h1>
-<p>Ce document décrit <code>data/processed/offres.csv</code> : une ligne par hébergement, 19 colonnes, dans l'ordre de <code>COLONNES</code> (<code>src/prep/schema.py</code>). Le code fait foi : en cas d'écart, corriger ce document.</p>
-<p>Les types de donnée suivent la classification de Munzner (<em>Visualization Analysis and Design</em>) : catégorielle, ordinale, quantitative, spatiale. On ajoute « identifiant » pour les clés et libellés non analysés.</p>
-<h2 id="schema-dictionnaire-de-donnees">Dictionnaire de données</h2>
+<section id="technique-1" class="doc-section">
+<h1 id="technique-1-technique-1-la-carte-des-offres">Technique 1 : la carte des offres</h1>
+<p><img alt="Carte des offres de Paris : un triangle par offre sur les arrondissements" src="images/technique-1.png" ></p>
+<p>Chaque offre qui a une position devient un triangle sur la carte des quartiers. Le triangle ne montre pas le prix lui-même, mais sa place par rapport au prix habituel de sa source dans la ville : la médiane des hôtels pour un hôtel, celle des Airbnb pour un Airbnb.</p>
+<h2 id="technique-1-donnees-et-variables-visuelles">Données et variables visuelles</h2>
 <div class="table-wrap"><table>
 <thead>
 <tr>
-<th>Colonne</th>
-<th>Type pandas</th>
-<th>Type (Munzner)</th>
-<th>Valeurs / unité</th>
-<th>Airbnb</th>
-<th>Hôtel (Booking)</th>
-<th>Commentaire</th>
+<th>Donnée</th>
+<th>Variable visuelle</th>
+<th>À quoi elle sert</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>id</code></td>
-<td>string</td>
-<td>identifiant</td>
-<td><code>PAR-A-00001</code>, <code>PAR-H-00001</code>…</td>
-<td>généré : code ville + <code>A</code> + rang dans la ville</td>
-<td>généré : code ville + <code>H</code> + rang dans la ville</td>
-<td>Unique. Jamais vide.</td>
+<td><code>lat</code>, <code>lon</code></td>
+<td>position, projection de Mercator</td>
+<td>situer l'offre dans la ville (T3)</td>
 </tr>
 <tr>
-<td><code>ville</code></td>
-<td>category</td>
-<td>catégorielle</td>
-<td>Londres, Berlin, Paris, Rome</td>
-<td>nom du fichier source</td>
-<td>nom du fichier source</td>
-<td>Jamais vide.</td>
+<td><code>prix_nuit_eur</code> comparé à la médiane</td>
+<td>orientation : ▲ plus cher, ▼ moins cher</td>
+<td>voir d'un coup d'œil où l'on paie plus ou moins que d'habitude (T1, T3)</td>
+</tr>
+<tr>
+<td>écart à la médiane</td>
+<td>luminosité, de clair à foncé, maximale à ×2 ou ÷2</td>
+<td>repérer les offres très chères ou très bon marché</td>
 </tr>
 <tr>
 <td><code>source</code></td>
-<td>category</td>
-<td>catégorielle</td>
-<td><code>Airbnb</code>, <code>Hôtel</code></td>
-<td>constante <code>Airbnb</code></td>
-<td>constante <code>Hôtel</code></td>
-<td>Variable principale de la comparaison.</td>
+<td>teinte : bleu pour les hôtels, rouge pour les Airbnb</td>
+<td>distinguer les deux offres</td>
 </tr>
 <tr>
-<td><code>type</code></td>
-<td>category</td>
-<td>catégorielle</td>
-<td>Logement entier, Chambre privée, Chambre partagée, Hôtel</td>
-<td><code>room_type</code> traduit</td>
-<td><code>Logement entier</code> si <code>highlights</code> contient « Entire », sinon <code>Hôtel</code></td>
-<td>Voir D11.</td>
+<td><code>quartier</code> et ses contours</td>
+<td>aires sur fond gris neutre, étiquettes</td>
+<td>se repérer et zoomer sur un quartier, sans orienter la lecture</td>
 </tr>
 <tr>
-<td><code>etoiles</code></td>
-<td>Int64</td>
-<td>ordinale</td>
-<td>1 à 5</td>
-<td>vide</td>
-<td><code>stars</code> arrondi</td>
-<td>Vide pour 25 % des établissements Booking (D10) et par construction pour Airbnb.</td>
+<td>toutes les colonnes</td>
+<td>infobulle au survol, fiche au clic</td>
+<td>détails à la demande (T6)</td>
+</tr>
+</tbody>
+</table></div>
+<p>La taille du triangle ne code pas de donnée : elle diminue quand on zoome, pour séparer les offres proches, et grandit pour l'offre sélectionnée.</p>
+<h2 id="technique-1-interactions">Interactions</h2>
+<ul>
+<li>Un clic entre les triangles zoome sur le quartier : c'est le zoom sémantique du cours.</li>
+<li>Le survol et le clic d'une offre la surlignent aussi dans le nuage de points.</li>
+<li>Les filtres et le changement de ville agissent sur les triangles affichés.</li>
+<li>Les points d'intérêt (technique 2) se posent sur cette carte.</li>
+</ul>
+<p>La médiane est calculée sur toute la ville, sans filtre : la référence ne bouge pas quand on filtre.</p>
+</section>
+<section id="technique-2" class="doc-section">
+<h1 id="technique-2-technique-2-les-points-dinteret">Technique 2 : les points d'intérêt</h1>
+<p><img alt="Points d'intérêt à Paris : la tour Eiffel, ses deux cercles et les offres retenues, à côté de la liste des lieux" src="images/technique-2.png" ></p>
+<p>Le voyageur part souvent d'un lieu à visiter. Il choisit un monument dans le panneau de droite, ou glisse un point perso sur la carte, qui ne garde alors que les offres autour et les compte par source.</p>
+<h2 id="technique-2-donnees-et-variables-visuelles">Données et variables visuelles</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Donnée</th>
+<th>Variable visuelle</th>
+<th>À quoi elle sert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>position du lieu</td>
+<td>repère orange sur la carte</td>
+<td>situer le monument choisi (T5)</td>
 </tr>
 <tr>
-<td><code>nom</code></td>
-<td>string</td>
-<td>identifiant</td>
-<td>texte libre</td>
-<td>vide</td>
-<td><code>title</code></td>
-<td>Libellé d'affichage (infobulle).</td>
+<td>distance au lieu, choisie à la souris</td>
+<td>rayon du 1er cercle, en orange</td>
+<td>fixer à quelle distance du lieu on accepte de loger</td>
+</tr>
+<tr>
+<td>zone de recherche</td>
+<td>2e cercle, en bleu, centré sur le 1er</td>
+<td>délimiter le secteur où l'on cherche, dans la direction choisie</td>
+</tr>
+<tr>
+<td><code>lat</code>, <code>lon</code> des offres</td>
+<td>seules les offres du cercle restent affichées, avec un contour foncé</td>
+<td>voir ce qui est vraiment accessible depuis le lieu</td>
+</tr>
+<tr>
+<td><code>source</code> des offres retenues</td>
+<td>encart : nombre d'hôtels et d'Airbnb</td>
+<td>comparer les deux offres autour du lieu (T1, T5)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Les distances sont à vol d'oiseau. Les triangles gardent leur encodage de la carte.</p>
+<h2 id="technique-2-lieux-predefinis">Lieux prédéfinis</h2>
+<p>Six lieux par ville, placés avec les coordonnées des registres officiels du patrimoine : bases Mérimée et Muséofile à Paris, Denkmaldatenbank à Berlin, Historic England à Londres. À Rome, faute de registre accessible, elles viennent d'OpenStreetMap.</p>
+<h2 id="technique-2-interactions">Interactions</h2>
+<ul>
+<li>Un clic sur un lieu le place et active le mode point d'intérêt.</li>
+<li>Le point perso se glisse depuis le panneau et ne se dépose que sur la carte.</li>
+<li>Un clic fige le 1er cercle, un autre fige le 2e ; le repère se déplace à la souris.</li>
+<li>Une offre retenue reste survolable et cliquable, et se surligne dans le nuage de points.</li>
+</ul>
+</section>
+<section id="technique-3" class="doc-section">
+<h1 id="technique-3-technique-3-le-nuage-de-points">Technique 3 : le nuage de points</h1>
+<p><img alt="Nuage de points de Paris : distance au centre en abscisse, prix par nuit en ordonnée" src="images/technique-3.png" ></p>
+<p>Chaque offre est un point placé selon sa distance au centre et son prix par nuit. Le nuage répond à la question du compromis : que gagne-t-on à s'éloigner du centre, et la réponse est-elle la même pour un hôtel et pour un Airbnb ?</p>
+<h2 id="technique-3-donnees-et-variables-visuelles">Données et variables visuelles</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Donnée</th>
+<th>Variable visuelle</th>
+<th>À quoi elle sert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dist_centre_km</code></td>
+<td>position horizontale, échelle linéaire en km</td>
+<td>voir l'effet de l'éloignement sur le prix (T2)</td>
 </tr>
 <tr>
 <td><code>prix_nuit_eur</code></td>
-<td>float64</td>
-<td>quantitative</td>
-<td>euros par nuit, 2 décimales</td>
-<td><code>realSum / 2</code> (D3)</td>
-<td><code>price.value / 1,0813</code> (D4, D5)</td>
-<td>Jamais vide. Sans taxes côté Booking.</td>
+<td>position verticale, échelle linéaire en euros</td>
+<td>comparer les prix des offres (T1)</td>
 </tr>
 <tr>
-<td><code>prix_comparable</code></td>
-<td>boolean</td>
-<td>catégorielle (binaire)</td>
-<td><code>true</code> / <code>false</code></td>
-<td>toujours <code>true</code></td>
-<td><code>false</code> pour Rome, <code>true</code> sinon</td>
-<td>Voir D7.</td>
+<td><code>source</code></td>
+<td>teinte : bleu pour les hôtels, orange pour les Airbnb</td>
+<td>comparer les deux nuages entre eux</td>
 </tr>
 <tr>
-<td><code>note_100</code></td>
-<td>Float64</td>
-<td>quantitative</td>
-<td>0 à 100</td>
-<td><code>guest_satisfaction_overall</code></td>
-<td><code>score</code> × 10</td>
-<td>« No rating » devient vide (D9). Échelles de notation différentes.</td>
+<td>aucune</td>
+<td>taille et opacité constantes, points semi-transparents</td>
+<td>la superposition fait apparaître les zones denses</td>
 </tr>
 <tr>
-<td><code>nb_avis</code></td>
-<td>Int64</td>
-<td>quantitative</td>
-<td>entier</td>
-<td>vide</td>
-<td><code>reviews</code> arrondi</td>
-<td>Vide par construction pour Airbnb.</td>
-</tr>
-<tr>
-<td><code>dist_centre_km</code></td>
-<td>float64</td>
-<td>quantitative</td>
-<td>km à vol d'oiseau depuis le centre Booking, 2 décimales</td>
-<td>recalculée depuis <code>lat</code>/<code>lng</code> et le centre Booking (D18)</td>
-<td><code>distanceFromCenter</code>, valeurs ≥ 100 divisées par 1000 (D6)</td>
-<td>Jamais vide. Même point de référence pour les deux sources (D18).</td>
-</tr>
-<tr>
-<td><code>tranche_dist</code></td>
-<td>category (ordonnée)</td>
-<td>ordinale</td>
-<td><code>0–1 km</code>, <code>1–2 km</code>, <code>2–4 km</code>, <code>&gt; 4 km</code></td>
-<td>dérivée de <code>dist_centre_km</code></td>
-<td>idem</td>
-<td>Bornes fermées à gauche (D14).</td>
-</tr>
-<tr>
-<td><code>metro_proche</code></td>
-<td>boolean</td>
-<td>catégorielle (binaire)</td>
-<td><code>true</code> / <code>false</code></td>
-<td><code>metro_dist &lt; 0,5</code> km (D8)</td>
-<td><code>subwayAccess</code></td>
-<td>Définitions différentes entre sources.</td>
-</tr>
-<tr>
-<td><code>quartier</code></td>
-<td>string</td>
-<td>catégorielle</td>
-<td>nom du contour : arrondissement (Paris), Bezirk (Berlin), borough (Londres), municipio (Rome)</td>
-<td>jointure spatiale de <code>lat</code>/<code>lon</code> sur les contours (D17)</td>
-<td>nom Booking traduit par <code>data/external/correspondance_quartiers.csv</code> ; jointure spatiale une fois géocodé (D17)</td>
-<td>Même référentiel pour les deux sources : clé de jointure avec <code>properties.quartier</code> de <code>quartiers_&lt;ville&gt;.geojson</code>. Vide pour 1 à 5 % des hôtels (Booking ne donne que la ville).</td>
-</tr>
-<tr>
-<td><code>lat</code></td>
-<td>Float64</td>
-<td>spatiale</td>
-<td>degrés décimaux (WGS84)</td>
-<td><code>lat</code></td>
-<td>géocodage fiable (<code>data/external/hotels_geocodage.csv</code>, D19)</td>
-<td>Renseignée pour environ 70 % des hôtels.</td>
-</tr>
-<tr>
-<td><code>lon</code></td>
-<td>Float64</td>
-<td>spatiale</td>
-<td>degrés décimaux (WGS84)</td>
-<td><code>lng</code></td>
-<td>géocodage fiable (D19)</td>
-<td>Comme <code>lat</code>.</td>
-</tr>
-<tr>
-<td><code>periode</code></td>
-<td>category</td>
-<td>catégorielle</td>
-<td><code>semaine</code>, <code>weekend</code></td>
-<td>fichier <code>weekdays</code> / <code>weekends</code></td>
-<td>vide</td>
-<td>Vide par construction pour les hôtels.</td>
-</tr>
-<tr>
-<td><code>capacite</code></td>
-<td>Int64</td>
-<td>quantitative</td>
-<td>personnes</td>
-<td><code>person_capacity</code></td>
-<td>vide</td>
-<td>Vide par construction pour les hôtels.</td>
-</tr>
-<tr>
-<td><code>superhost</code></td>
-<td>boolean</td>
-<td>catégorielle (binaire)</td>
-<td><code>true</code> / <code>false</code></td>
-<td><code>host_is_superhost</code></td>
-<td>vide</td>
-<td>Vide par construction pour les hôtels.</td>
+<td>toutes les colonnes</td>
+<td>infobulle au survol, fiche au clic</td>
+<td>détails à la demande (T6)</td>
 </tr>
 </tbody>
 </table></div>
-<p>Colonnes obligatoires (jamais vides, contrôlées par <code>valider</code>) : <code>id</code>, <code>ville</code>, <code>source</code>, <code>type</code>, <code>prix_nuit_eur</code>, <code>prix_comparable</code>, <code>dist_centre_km</code>, <code>tranche_dist</code>, <code>metro_proche</code>.</p>
-<p>Contrôles supplémentaires de <code>valider</code> : <code>id</code> unique, prix &gt; 0, <code>note_100</code> dans [0, 100], distance ≥ 0, étoiles dans [1, 5], valeurs des colonnes catégorielles dans les ensembles autorisés.</p>
-<h2 id="schema-format-csv-pour-d3">Format CSV pour D3</h2>
+<p>La position est la variable visuelle la plus précise : elle est réservée aux deux grandeurs que l'utilisateur veut comparer. La couleur ne sert qu'à séparer les deux sources, avec la même paire bleu et orange que dans le reste de l'interface.</p>
+<h2 id="technique-3-interactions">Interactions</h2>
 <ul>
-<li>Les booléens sont écrits <code>true</code> / <code>false</code>.</li>
-<li>Les valeurs manquantes sont des cellules vides.</li>
-<li>Prix, note et distance sont arrondis à 2 décimales.</li>
-<li>Avec ces conventions, <code>d3.csv(url, d3.autoType)</code> convertit directement les nombres et les booléens, et les cellules vides deviennent <code>null</code>.</li>
-<li>Les champs texte qui ressemblent à des nombres n'existent pas : <code>id</code> et <code>quartier</code> restent des chaînes.</li>
+<li>Le survol et le clic d'un point surlignent la même offre sur la carte, et le clic ouvre sa fiche.</li>
+<li>Les filtres communs s'appliquent ; avec le filtre de distance, l'axe horizontal s'arrête à la distance choisie.</li>
+<li>Un résumé au-dessus du graphique compte les offres affichées par source.</li>
 </ul>
-<p>Fichiers produits dans <code>data/processed/</code> :</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Fichier</th>
-<th>Contenu</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>offres.csv</code></td>
-<td>les quatre villes</td>
-</tr>
-<tr>
-<td><code>quartiers_&lt;ville&gt;.geojson</code></td>
-<td>contours simplifiés (tolérance 25 m), propriétés <code>ville</code>, <code>quartier</code>, <code>code</code> ; anneaux extérieurs dans le sens horaire pour <code>d3.geoPath</code></td>
-</tr>
-<tr>
-<td><code>offres_londres.csv</code>, <code>offres_berlin.csv</code>, <code>offres_paris.csv</code>, <code>offres_rome.csv</code></td>
-<td>une ville chacun, même schéma</td>
-</tr>
-</tbody>
-</table></div>
-<p>Pour « changer de dataset » dans l'interface, il suffit de charger un autre fichier : les colonnes sont identiques.</p>
-<h2 id="schema-place-dans-le-modele-de-pipeline-du-cours">Place dans le modèle de pipeline du cours</h2>
-<p>Modèle de Ward, Grinstein et Keim : Raw data → Data transformation → Data tables → Visual mapping → Views.</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Étape du modèle</th>
-<th>Éléments du projet</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Raw data</td>
-<td><code>data/raw/</code> : CSV Airbnb et JSON Booking téléchargés depuis Kaggle (voir <code>sources.md</code>)</td>
-</tr>
-<tr>
-<td>Data transformation</td>
-<td><code>notebooks/01_airbnb.ipynb</code> et <code>notebooks/02_hotels_booking.ipynb</code> (module <code>src/prep/</code>) : nettoyage, conversion, dérivation, vers <code>data/interim/*.parquet</code></td>
-</tr>
-<tr>
-<td>Data transformation (espace)</td>
-<td><code>notebooks/03_quartiers.ipynb</code> : contours normalisés et correspondance des noms Booking ; <code>notebooks/04_geocodage_hotels.ipynb</code> : coordonnées des hôtels (OSM, Nominatim, corrections relues)</td>
-</tr>
-<tr>
-<td>Data tables</td>
-<td><code>notebooks/05_table_commune.ipynb</code> : fusion, rattachement aux quartiers, contrôles, écrêtage des aberrants, export de <code>data/processed/offres*.csv</code></td>
-</tr>
-<tr>
-<td>Visual mapping</td>
-<td><code>viz/</code> : encodages D3 (position, couleur, taille), voir <code>viz/README.md</code></td>
-</tr>
-<tr>
-<td>Views</td>
-<td><code>viz/index.html</code> : deux techniques liées par un état partagé (<code>viz/noyau/etat.js</code>)</td>
-</tr>
-</tbody>
-</table></div>
-</section>
-<section id="decisions" class="doc-section">
-<h1 id="decisions-journal-des-decisions-de-preparation-des-donnees">Journal des décisions de préparation des données</h1>
-<p>Chaque décision donne : ce qui est décidé, la justification chiffrée, la conséquence ou limite. Les constantes sont dans <code>src/prep/common.py</code>.</p>
-<h2 id="decisions-d1-villes-retenues">D1. Villes retenues</h2>
-<ul>
-<li>Décision : Londres, Berlin, Paris, Rome.</li>
-<li>Justification : ce sont les villes communes aux deux datasets. Madrid existe côté hôtels mais pas côté Airbnb.</li>
-<li>Conséquence : Madrid est exclue.</li>
-</ul>
-<h2 id="decisions-d2-source-des-hotels">D2. Source des hôtels</h2>
-<ul>
-<li>Décision : liste <code>bookingHotels</code> seule.</li>
-<li>Justification : <code>hotelsComHotels</code> n'a ni étoiles, ni quartier (la localisation est presque toujours la ville ; à Rome, les 500 valent « Rome City Centre »), ni distance, ni métro. <code>airbnbHotels</code> (270 par ville, prix « per night » en dollars, note sur 5) sert seulement de contrôle de cohérence.</li>
-<li>Conséquence : <code>airbnbHotels</code> n'est pas intégrée. Une seule plateforme représente l'offre hôtelière.</li>
-</ul>
-<h2 id="decisions-d3-prix-airbnb">D3. Prix Airbnb</h2>
-<ul>
-<li>Décision : <code>prix_nuit_eur = realSum / 2</code>.</li>
-<li>Justification : <code>realSum</code> est le total pour 2 personnes et 2 nuits ; on obtient le prix par nuit du logement.</li>
-<li>Conséquence : prix du logement, pas par personne.</li>
-</ul>
-<h2 id="decisions-d4-prix-booking">D4. Prix Booking</h2>
-<ul>
-<li>Décision : on utilise <code>price.value</code> seul, sans <code>taxesAndCharges</code>, et on le traite comme un prix par nuit.</li>
-<li>Justification : <code>taxesAndCharges</code> manque pour 95 % des hôtels de Londres (23 renseignés sur 500, avec des ratios incohérents de 2 % à 1100 %) et pour 58 % de Berlin. Ailleurs il vaut 2 à 5 % du prix (taxe de séjour). Les médianes Booking et Hotels.com sont proches à Berlin (109 contre 112 $) et à Londres (197,5 contre 204 $), ce qui soutient l'hypothèse « par nuit ».</li>
-<li>Conséquence : légère sous-estimation du prix réel des hôtels (taxes exclues).</li>
-</ul>
-<h2 id="decisions-d5-conversion-de-devise">D5. Conversion de devise</h2>
-<ul>
-<li>Décision : 1 EUR = 1,0813 USD (<code>USD_PAR_EUR</code>).</li>
-<li>Justification : moyenne annuelle 2023 du taux de référence de la BCE, année de collecte des hôtels. À citer dans le rapport.</li>
-<li>Conséquence : seuls les prix Booking (en USD) sont convertis ; les prix Airbnb sont déjà en euros.</li>
-</ul>
-<h2 id="decisions-d6-distance-au-centre-cote-booking">D6. Distance au centre côté Booking</h2>
-<ul>
-<li>Décision : les valeurs ≥ 100 sont des mètres lus comme des kilomètres ; on les divise par 1000.</li>
-<li>Justification : le champ contient des valeurs de 100 à 500 par pas de 50, qui correspondent à « 450 m » lu 450. La plus petite valeur en km est 0,5, donc aucun chevauchement. La valeur de 26,9 km (Berlin) est conservée.</li>
-<li>Conséquence : la règle repose sur le seuil de 100 ; un établissement réellement à plus de 100 km serait mal converti (aucun cas observé).</li>
-</ul>
-<h2 id="decisions-d7-rome-prix-booking">D7. Rome, prix Booking</h2>
-<ul>
-<li>Décision (validée par l'équipe le 6 novembre 2026) : les hôtels de Rome (208 bruts, 207 après dédoublonnage) sont <strong>gardés, y compris dans les comparaisons de prix</strong>. Ils sont marqués <code>prix_comparable = false</code> pour que l'interface et le rapport signalent la divergence.</li>
-<li>Justification de la divergence :<ul>
-<li>Leurs prix sont 2 à 5 fois plus élevés qu'ailleurs à étoiles égales. Médiane 3 étoiles : 513 $ contre 104 à 155 $ ; 5 étoiles : 863 $ contre 345 à 472 $.</li>
-<li>Le rapport n'est pas constant, donc un nombre de nuits ne corrige pas l'écart.</li>
-<li>Les autres sources du même dataset ne montrent pas une Rome aussi chère : Airbnb 77 $ la nuit, Hotels.com 297 $, contre 581 $ pour Booking.</li>
-<li>La recherche Booking de Rome semble faite dans d'autres conditions que les autres villes : 207 résultats au lieu de 500, et 68 % des hôtels à moins de 2 km du centre contre environ 20 % ailleurs. C'est probablement dû à d'autres dates ou à un filtre, ce qui n'est pas vérifiable faute de dates dans les données.</li>
-</ul>
-</li>
-<li>Conséquence : toute vue qui compare des prix d'hôtels doit afficher un avertissement quand Rome est sélectionnée, en s'appuyant sur <code>prix_comparable</code>. Le rapport doit présenter cette limite avec les chiffres ci-dessus. Les Airbnb de Rome ne sont pas concernés.</li>
-</ul>
-<h2 id="decisions-d8-proximite-du-metro-cote-airbnb">D8. Proximité du métro côté Airbnb</h2>
-<ul>
-<li>Décision : <code>metro_proche = metro_dist &lt; 0,5</code> km.</li>
-<li>Justification : alignement sur le booléen <code>subwayAccess</code> des hôtels. Part « proche » Airbnb / Hôtels : Berlin 0,57 / 0,70 ; Londres 0,47 / 0,76 ; Paris 0,97 / 0,98 ; Rome 0,43 / 0,55.</li>
-<li>Conséquence : les deux définitions ne sont pas identiques ; la comparaison reste indicative.</li>
-</ul>
-<h2 id="decisions-d9-note">D9. Note</h2>
-<ul>
-<li>Décision : Airbnb <code>guest_satisfaction_overall</code> (déjà sur 100) ; Booking <code>score</code> × 10 ; « No rating » (33 hôtels) devient vide.</li>
-<li>Justification : mise sur une échelle commune de 0 à 100.</li>
-<li>Conséquence : les médianes diffèrent (Airbnb environ 95, Booking environ 80). Cela reflète surtout deux systèmes de notation, pas forcément une différence de qualité.</li>
-</ul>
-<h2 id="decisions-d10-etoiles">D10. Étoiles</h2>
-<ul>
-<li>Décision : les étoiles absentes restent vides.</li>
-<li>Justification : 25 % des établissements Booking n'en ont pas ; les inventer biaiserait les comparaisons.</li>
-<li>Conséquence : les vues par étoiles excluent ces lignes.</li>
-</ul>
-<h2 id="decisions-d11-type-dhebergement-cote-booking">D11. Type d'hébergement côté Booking</h2>
-<ul>
-<li>Décision : les 134 logements entiers (« Entire … » dans <code>highlights</code>) ont <code>type = Logement entier</code> et <code>source = Hôtel</code>.</li>
-<li>Justification : la source reflète la plateforme, le type reflète le bien.</li>
-<li>Conséquence : la comparaison « Hôtel contre Airbnb » par <code>source</code> mélange quelques logements entiers côté hôtels ; filtrer par <code>type</code> pour comparer à type égal.</li>
-</ul>
-<h2 id="decisions-d12-doublons">D12. Doublons</h2>
-<ul>
-<li>Décision : Airbnb, retrait des lignes strictement identiques (aucune trouvée) ; Booking, un établissement = un lien par ville (3 doublons retirés).</li>
-<li>Justification : Airbnb n'a pas d'identifiant d'annonce, donc une même annonce en semaine et en week-end reste deux lignes distinctes, distinguées par <code>periode</code>.</li>
-<li>Conséquence : on ne peut pas apparier une annonce entre les deux périodes.</li>
-</ul>
-<h2 id="decisions-d13-prix-aberrants">D13. Prix aberrants</h2>
-<ul>
-<li>Décision : retrait, à la fusion, des lignes dont le prix est hors des percentiles 1 % et 99 % de leur groupe (ville et source).</li>
-<li>Justification : environ 2 % des lignes retirées ; limite l'effet des valeurs extrêmes sur les échelles.</li>
-<li>Conséquence : les très bas et très hauts prix légitimes sont aussi retirés. Les lignes écartées sont listées dans le notebook 05.</li>
-</ul>
-<h2 id="decisions-d14-tranches-de-distance">D14. Tranches de distance</h2>
-<ul>
-<li>Décision : 0–1, 1–2, 2–4, &gt; 4 km, intervalles fermés à gauche.</li>
-<li>Justification : donner des classes lisibles et ordonnées pour les vues agrégées.</li>
-<li>Conséquence : une distance de 1,00 km tombe dans « 1–2 km ».</li>
-</ul>
-<h2 id="decisions-d15-quartiers">D15. Quartiers</h2>
-<ul>
-<li>Décision : côté Booking, <code>location</code> est normalisé (suffixe de ville retiré ; « 7th arr. » devient « 7e arrondissement » ; ville seule devient vide). Ce nom intermédiaire est ensuite traduit vers les contours officiels (D16, D17).</li>
-<li>Justification : le découpage est hétérogène selon les villes : Paris par arrondissements ; Londres surtout par boroughs avec quelques quartiers ; Berlin par Bezirke avec quelques Ortsteile ; Rome par quartiers touristiques.</li>
-<li>Conséquence : le nom Booking ne sert que d'étape intermédiaire ; la table finale utilise les contours (D16).</li>
-</ul>
-<h2 id="decisions-d16-niveau-de-decoupage-par-ville">D16. Niveau de découpage par ville</h2>
-<ul>
-<li>Décision : Paris en 20 arrondissements, Berlin en 12 Bezirke, Londres en 33 boroughs, Rome en 15 municipi.</li>
-<li>Justification :<ul>
-<li>Paris, Berlin et Londres : c'est le découpage administratif que Booking utilise déjà, presque tous les noms correspondent. Le niveau plus fin de Paris (80 quartiers administratifs) laisserait environ 6 hôtels par zone.</li>
-<li>Rome : les noms Booking sont des repères touristiques (« Spagna », « Central Station »…) qui mélangent des rioni minuscules et de grands quartieri. Les municipi sont des zones de taille comparable, et chaque nom s'y rattache.</li>
-</ul>
-</li>
-<li>Conséquence (couverture, après nettoyage ; zone « comparable » si ≥ 30 Airbnb et ≥ 10 hôtels) :</li>
-</ul>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Ville</th>
-<th>Zones</th>
-<th>Avec Airbnb</th>
-<th>Avec hôtels</th>
-<th>Comparables</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Paris</td>
-<td>20</td>
-<td>20</td>
-<td>20</td>
-<td>18</td>
-</tr>
-<tr>
-<td>Berlin</td>
-<td>12</td>
-<td>12</td>
-<td>12</td>
-<td>10</td>
-</tr>
-<tr>
-<td>Londres</td>
-<td>33</td>
-<td>13</td>
-<td>20</td>
-<td>10</td>
-</tr>
-<tr>
-<td>Rome</td>
-<td>15</td>
-<td>13</td>
-<td>13</td>
-<td>1</td>
-</tr>
-</tbody>
-</table></div>
-<pre><code>- Londres : le dataset Airbnb ne couvre que les boroughs centraux. Les boroughs périphériques seront grisés.
-- Rome : 156 hôtels sur 207 sont dans le Municipio I. La carte de Rome sert surtout aux Airbnb ; la comparaison entre sources par zone n'y est pas significative. C'est une limite à ajouter à D7.
-</code></pre>
-<h2 id="decisions-d17-rattachement-des-offres-aux-quartiers">D17. Rattachement des offres aux quartiers</h2>
-<ul>
-<li>Décision :<ul>
-<li>Une offre avec coordonnées (tous les Airbnb, et les hôtels géocodés de façon fiable, D19) est rattachée par jointure spatiale : point contenu dans le contour, sinon contour le plus proche à moins de 250 m.</li>
-<li>Une offre sans coordonnées (hôtels pour l'instant) est rattachée par son nom Booking, via <code>data/external/correspondance_quartiers.csv</code>, table écrite à la main. Chaque ligne y est qualifiée : <code>identique</code>, <code>contenance</code> (quartier contenu dans le contour, par ex. Chiswick → Hounslow) ou <code>approximation</code>.</li>
-</ul>
-</li>
-<li>Justification :<ul>
-<li>Airbnb : 28 187 annonces sur 28 192 tombent dans un contour, et les 5 autres, en bordure de Rome, sont à moins de 250 m.</li>
-<li>Hôtels : tous les noms Booking ont un contour. Les approximations concernent 36 hôtels à Rome (« Rome City Center », « Central Station », « Tiburtino », « Trionfale », « San Giovanni ») et 1 à Londres (« West End »).</li>
-</ul>
-</li>
-<li>Contours de Londres : on utilise les limites « BFE » de l'ONS, qui passent au milieu de la Tamise, et non la version « Excluding MHW » du London Datastore, qui s'arrête aux berges.<ul>
-<li>Les contours de Paris, Berlin et Rome couvrent déjà leur fleuve. Avec « Excluding MHW », seule la carte de Londres montrait un fleuve, sous la forme d'un vide entre les quartiers. Les quatre cartes sont maintenant traitées de la même façon : pas de cours d'eau.</li>
-<li>On n'ajoute pas de couche d'eau aux autres villes : l'eau ne sert pas aux tâches de la carte (comparer des prix par quartier), et le bleu y code déjà les hôtels.</li>
-<li>Effet sur les données : les 34 annonces de Londres au bord de la Tamise, auparavant rattachées au contour le plus proche, tombent maintenant dans un contour. 5 annonces changent de borough, à cause des retouches de limites entre 2011 et 2023 ; la seule annonce de Brent passe à Hammersmith and Fulham.</li>
-</ul>
-</li>
-<li>Conséquence : les deux sources partagent le même référentiel de quartiers. Pour les hôtels qui ont à la fois une position et un nom Booking, les deux méthodes donnent le même quartier dans 98 à 99 % des cas (Rome : 97,7 %). Cet accord valide à la fois le géocodage et la table de correspondance.</li>
-</ul>
-<h2 id="decisions-d18-centre-de-reference-des-distances">D18. Centre de référence des distances</h2>
-<ul>
-<li>Décision : la distance au centre des Airbnb est <strong>recalculée</strong> à vol d'oiseau depuis le centre utilisé par Booking. La colonne <code>dist</code> d'origine est abandonnée.</li>
-<li>Justification :<ul>
-<li>Booking mesure <code>distanceFromCenter</code> depuis un point fixe par ville, estimé par le géocodage avec un écart médian de 20 à 30 m : Trafalgar Square, porte de Brandebourg, Hôtel de Ville, piazza Venezia (G1, en annexe).</li>
-<li>La même méthode appliquée aux Airbnb (notebook 01, section 3 bis) explique <code>dist</code> avec un écart médian de 2 à 7 m. Le point trouvé est le même que celui de Booking à Londres (0,08 km d'écart) et à Paris (0,10 km). Il diffère à Berlin, où c'est Alexanderplatz, à 2,83 km, et à Rome, où c'est la gare Termini, à 1,75 km.</li>
-<li>On recalcule côté Airbnb parce que les hôtels sans coordonnées ne sont situés que par leur distance Booking.</li>
-</ul>
-</li>
-<li>Conséquence : les tranches de distance (D14) mesurent la même chose pour les deux sources. Avant cette correction, les tranches Airbnb de Berlin et de Rome étaient décalées.</li>
-</ul>
-<h2 id="decisions-d19-geocodage-des-hotels">D19. Géocodage des hôtels</h2>
-<ul>
-<li>Décision : on intègre les coordonnées des hôtels seulement quand le géocodage est <code>fiable</code>. Le détail de la méthode figure en annexe, décisions G1 à G5 :<ul>
-<li>appariement des noms avec OpenStreetMap, puis Nominatim, puis corrections relues à la main ;</li>
-<li>aucune extraction des pages Booking ;</li>
-<li>contrôles d'emprise, d'écart de distance (≤ 0,5 km) et de quartier.</li>
-</ul>
-</li>
-<li>Justification : 1 183 hôtels sur 1 705 sont fiables (69 % ; de 67 à 73 % selon la ville). Parmi eux, l'écart médian à la distance Booking est de 0,03 km.</li>
-<li>Conséquence :<ul>
-<li>Dans la table finale, 1 166 hôtels ont une position. Les autres ont été écartés comme prix aberrants (D13).</li>
-<li>Les hôtels non géocodés gardent un quartier par leur nom (D17), mais pas de point sur la carte.</li>
-<li><strong>Biais à signaler</strong> : les hôtels non géocodés sont surtout des indépendants et des logements entiers. Une carte de points surreprésente donc les chaînes, bien cartographiées dans OSM.</li>
-</ul>
-</li>
-</ul>
-<h2 id="decisions-annexe-detail-du-geocodage-des-hotels-g1-a-g5">Annexe : détail du géocodage des hôtels (G1 à G5)</h2>
-<p>Code : <code>src/prep/geocodage.py</code> ; exploration et contrôles : <code>notebooks/04_geocodage_hotels.ipynb</code>. Le contrat d'origine de cette étape (méthodes, format de sortie, contrôles) est archivé dans <code>docs/archives/handoff_geocodage_hotels.md</code>.</p>
-<h3 id="decisions-resultats">Résultats</h3>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Ville</th>
-<th>Hôtels</th>
-<th>OSM</th>
-<th>Nominatim</th>
-<th>Manuel</th>
-<th><strong>Fiables</strong></th>
-<th>Taux</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Londres</td>
-<td>499</td>
-<td>307</td>
-<td>34</td>
-<td>0</td>
-<td><strong>341</strong></td>
-<td>68 %</td>
-</tr>
-<tr>
-<td>Berlin</td>
-<td>499</td>
-<td>334</td>
-<td>28</td>
-<td>0</td>
-<td><strong>362</strong></td>
-<td>73 %</td>
-</tr>
-<tr>
-<td>Paris</td>
-<td>500</td>
-<td>320</td>
-<td>17</td>
-<td>0</td>
-<td><strong>337</strong></td>
-<td>67 %</td>
-</tr>
-<tr>
-<td>Rome</td>
-<td>207</td>
-<td>75</td>
-<td>14</td>
-<td>54</td>
-<td><strong>143</strong></td>
-<td>69 %</td>
-</tr>
-<tr>
-<td><strong>Total</strong></td>
-<td>1 705</td>
-<td>1 036</td>
-<td>93</td>
-<td>54</td>
-<td><strong>1 183</strong></td>
-<td><strong>69 %</strong></td>
-</tr>
-</tbody>
-</table></div>
-<p>(comptes des lignes <code>fiable = true</code>, par méthode.) Parmi les points fiables, l'écart médian de distance au centre est de 0,03 km, le maximum de 0,35 km ; aucun doublon exact de coordonnées.</p>
-<p>Les 522 hôtels sans point fiable ne sont pas tirés au hasard : ce sont surtout des hôtels indépendants absents d'OSM ou mal nommés, des logements entiers (D11) et des annonces sans adresse publique. <strong>La carte surreprésente donc les chaînes</strong>, bien cartographiées dans OSM. À signaler dans le rapport.</p>
-<h3 id="decisions-g1-le-centre-de-booking">G1. Le « centre » de Booking</h3>
-<ul>
-<li>
-<p>Constat : en cherchant le point qui minimise l'écart médian entre distance haversine et <code>distanceFromCenter</code> (sur ~280 appariements OSM sûrs par ville, 55 à Rome), l'écart médian tombe à <strong>20-30 m</strong>, c'est-à-dire l'arrondi de Booking. La distance Booking est une distance à vol d'oiseau depuis un point fixe :</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Ville</th>
-<th>Centre estimé</th>
-<th>Repère</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Londres</td>
-<td>51.50774, -0.12789</td>
-<td>Charing Cross / Trafalgar Square</td>
-</tr>
-<tr>
-<td>Berlin</td>
-<td>52.51622, 13.37657</td>
-<td>porte de Brandebourg</td>
-</tr>
-<tr>
-<td>Paris</td>
-<td>48.85642, 2.35138</td>
-<td>Hôtel de Ville</td>
-</tr>
-<tr>
-<td>Rome</td>
-<td>41.89582, 12.48230</td>
-<td>piazza Venezia</td>
-</tr>
-</tbody>
-</table></div>
-</li>
-<li>
-<p>Conséquence : la question ouverte « définition du centre » est réglée côté hôtels. Côté Airbnb, voir D18.</p>
-</li>
-</ul>
-<h3 id="decisions-g2-similarite-des-noms">G2. Similarité des noms</h3>
-<ul>
-<li>Décision : noms normalisés (minuscules, sans accents ni ponctuation, sans mots génériques : « hotel », « the », nom de la ville…), puis score = 80 % Jaccard pondéré par l'IDF des mots dans la ville + 20 % <code>token_sort_ratio</code> (rapidfuzz).</li>
-<li>Justification : avec un simple ratio flou, « AMANO Covent Garden » s'appariait à « Covent Garden Hotel » (les mots de lieu sont partout). L'IDF fait peser les mots rares (le nom propre de l'hôtel) plus que les mots de lieu.</li>
-</ul>
-<h3 id="decisions-g3-paliers-dacceptation-et-seuil-de-distance">G3. Paliers d'acceptation et seuil de distance</h3>
-<ul>
-<li>
-<p>Décision : un candidat est retenu s'il passe un palier ; il est <code>fiable</code> s'il passe en plus tous les contrôles.</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Méthode</th>
-<th>Similarité</th>
-<th>Exigence</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>OSM</td>
-<td>≥ 90</td>
-<td>aucune pour être retenu</td>
-</tr>
-<tr>
-<td>OSM</td>
-<td>≥ 75</td>
-<td>écart ≤ 0,5 km et quartier cohérent</td>
-</tr>
-<tr>
-<td>OSM</td>
-<td>≥ 60</td>
-<td>écart ≤ 0,15 km et quartier cohérent</td>
-</tr>
-<tr>
-<td>Nominatim</td>
-<td>≥ 60 / ≥ 45</td>
-<td>écart ≤ 0,5 / 0,15 km, quartier cohérent, catégorie <code>tourism</code>, <code>amenity</code>, <code>building</code> ou <code>leisure</code> (jamais une rue)</td>
-</tr>
-</tbody>
-</table></div>
-</li>
-<li>
-<p>Seuil de distance : <strong>0,5 km</strong> au lieu du 1 km envisagé. 95 % des appariements sûrs ont un écart &lt; 0,11 km ; 1 km laissait passer la mauvaise succursale d'une chaîne.</p>
-</li>
-<li>Contrôle de quartier : un point à moins de 200 m du contour attendu est accepté (erreurs de géocodage en bordure). Rome : indicatif seulement, il n'entre pas dans <code>fiable</code>.</li>
-<li>Doublons : un objet OSM revendiqué par plusieurs hôtels reste au mieux apparié ; les autres passent à leur candidat suivant. Des coordonnées identiques restantes rendent l'hôtel le moins bien apparié non fiable (1 cas : Rome Vatican Inn / BQ House).</li>
-</ul>
-<h3 id="decisions-g4-corrections-relues-et-pages-booking">G4. Corrections relues et pages Booking</h3>
-<ul>
-<li>Décision : <strong>aucune extraction des pages Booking</strong> (méthode 3 du handoff) : CGU contraires et protection anti-robot. Les cas restants ont été traités par relecture assistée : variantes de nom dans Nominatim, ou adresse postale relevée sur le web (site de l'hôtel, sites d'avis) puis géocodée avec son numéro. Un point n'est gardé que s'il passe les mêmes contrôles (écart ≤ 0,5 km, quartier).</li>
-<li>Fichier : <code>data/external/hotels_geocodage_corrections.csv</code> (95 lignes, colonne <code>note</code> = source et écart). C'est une <strong>entrée</strong> versionnée de la chaîne, à côté de la sortie <code>hotels_geocodage.csv</code>, pour que le résultat reste reproductible.</li>
-<li>Effort limité : la relecture a été complète à Rome (taux de 40 % à 69 %), partielle ailleurs (≈ 30 hôtels par ville, recherches par nom seulement). C'est le levier principal pour améliorer le taux si besoin.</li>
-<li>Méthode dans la sortie : <code>nominatim</code> si l'objet trouvé est l'hôtel nommé, <code>manuel</code> si le point vient d'une adresse relevée à la main. Points à surveiller signalés dans <code>note</code> : plusieurs points romains sont posés sur un autre commerce du même numéro (bar ou restaurant de l'hôtel), et quelques hôtels ont changé de nom depuis 2023 (Grange St Paul's → Leonardo Royal St Paul's, Kyriad La Villette → Campanile, Vibe Nazionale → ex-Giolli).</li>
-</ul>
-<h3 id="decisions-g5-reproductibilite">G5. Reproductibilité</h3>
-<ul>
-<li>Toutes les réponses (Overpass, Nominatim, contours) sont en cache sous <code>data/external/cache/</code> (ignoré par Git, ~13 Mo). Sans cache, une exécution complète du notebook refait 4 requêtes Overpass, 6 téléchargements de contours et ~670 requêtes Nominatim (≈ 15 min à 1 requête/s).</li>
-<li>Dépendances ajoutées à <code>requirements.txt</code> : <code>rapidfuzz</code>, <code>shapely</code>, <code>requests</code>.</li>
-<li>Intégration : jointure de <code>hotels_geocodage.csv</code> sur <code>link</code> au notebook 05, en ne gardant que <code>fiable = true</code> (D19).</li>
-</ul>
-<h2 id="decisions-questions-encore-ouvertes">Questions encore ouvertes</h2>
-<ul>
-<li>Semaine et week-end : les garder séparés ou les fusionner ?</li>
-<li>Décalage temporel : Airbnb sans date de collecte, hôtels collectés en 2023.</li>
-<li>Validation du croisement des deux datasets par le superviseur.</li>
-</ul>
-</section>
-<section id="sources" class="doc-section">
-<h1 id="sources-sources-de-donnees">Sources de données</h1>
-<h2 id="sources-airbnb-prices-in-european-cities">Airbnb Prices in European Cities</h2>
-<ul>
-<li>URL : https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities</li>
-<li>Auteur : thedevastator</li>
-<li>Fichiers utilisés : 8 CSV (<code>&lt;ville&gt;_weekdays.csv</code> et <code>&lt;ville&gt;_weekends.csv</code> pour london, berlin, paris, rome). Les 12 autres fichiers (autres villes) sont téléchargés mais ignorés.</li>
-<li>Volume brut utilisé : 28 192 lignes.</li>
-<li>Limite : aucune date de collecte dans les fichiers.</li>
-<li>Licence : CC0 (domaine public), d'après les métadonnées Kaggle consultées le 6 novembre 2026. Les données dérivées peuvent être versionnées.</li>
-</ul>
-<h2 id="sources-7500-hotels-from-airbnb-booking-and-hotelscom">7500 hotels from Airbnb, Booking and Hotels.com</h2>
-<ul>
-<li>URL : https://www.kaggle.com/datasets/mykhailozub/500-hotels-from-airbnb-booking-and-hotelscom</li>
-<li>Auteur : mykhailozub</li>
-<li>Fichiers utilisés : <code>London.json</code>, <code>Berlin.json</code>, <code>Paris.json</code>, <code>Rome.json</code>, liste <code>bookingHotels</code> uniquement (<code>Madrid.json</code> ignoré).</li>
-<li>Volume brut utilisé : 1 708 lignes, dont 208 pour Rome.</li>
-<li>Limite : collecte en 2023, pas de coordonnées, dates de séjour non précisées.</li>
-<li>Licence : CC0 (domaine public), d'après les métadonnées Kaggle consultées le 6 novembre 2026. Les données dérivées peuvent être versionnées.</li>
-</ul>
-<h2 id="sources-telechargement">Téléchargement</h2>
-<ul>
-<li>Script : <code>scripts/download_data.sh</code>.</li>
-<li>Le téléchargement est anonyme, via <code>https://www.kaggle.com/api/v1/datasets/download/&lt;owner&gt;/&lt;slug&gt;</code>. Aucun jeton Kaggle n'est requis.</li>
-<li>Les archives sont décompressées dans <code>data/raw/airbnb/</code> et <code>data/raw/hotels/</code>.</li>
-</ul>
-<h2 id="sources-contours-des-quartiers">Contours des quartiers</h2>
-<p>Téléchargés par <code>scripts/download_geo.sh</code> dans <code>data/raw/geo/</code> (non versionné). Ils sont normalisés par le notebook 03 dans <code>data/external/quartiers_&lt;ville&gt;.geojson</code>, et simplifiés pour D3 dans <code>data/processed/</code>.</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Ville</th>
-<th>Niveau</th>
-<th>Source</th>
-<th>URL</th>
-<th>Licence</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Paris</td>
-<td>20 arrondissements</td>
-<td>Ville de Paris</td>
-<td>https://opendata.paris.fr/explore/dataset/arrondissements/</td>
-<td>ODbL</td>
-</tr>
-<tr>
-<td>Berlin</td>
-<td>12 Bezirke</td>
-<td>Geoportal Berlin (ALKIS Bezirke, service WFS)</td>
-<td>https://gdi.berlin.de/services/wfs/alkis_bezirke</td>
-<td>Datenlizenz Deutschland – Zero 2.0</td>
-</tr>
-<tr>
-<td>Londres</td>
-<td>33 boroughs (Local Authority Districts, décembre 2023, version BFE : les limites couvrent la Tamise, D17)</td>
-<td>Office for National Statistics, Open Geography Portal</td>
-<td>https://geoportal.statistics.gov.uk/ (couche <code>Local_Authority_Districts_December_2023_Boundaries_UK_BFE</code>, codes <code>E09</code>)</td>
-<td>Open Government Licence ; contient des données Ordnance Survey (à citer)</td>
-</tr>
-<tr>
-<td>Rome</td>
-<td>15 municipi</td>
-<td>OpenStreetMap (relations <code>boundary=administrative</code>, <code>admin_level=10</code>), via Overpass</td>
-<td>https://www.openstreetmap.org/relation/1458218 (Municipio I)</td>
-<td>ODbL, « © les contributeurs d'OpenStreetMap »</td>
-</tr>
-</tbody>
-</table></div>
-<p>Attributions à reprendre dans le rapport et dans la démo : « © Ville de Paris (ODbL) », « Geoportal Berlin (DL-DE Zero 2.0) », « Contains National Statistics and Ordnance Survey data © Crown copyright and database right », « © OpenStreetMap contributors (ODbL) ».</p>
-<h2 id="sources-geocodage-des-hotels">Géocodage des hôtels</h2>
-<p>Les coordonnées de <code>data/external/hotels_geocodage.csv</code> viennent d'OpenStreetMap, interrogé via Overpass et Nominatim (ODbL, « © les contributeurs d'OpenStreetMap »). Quelques adresses ont été relevées à la main sur des sites publics, puis géocodées ; elles sont notées dans <code>hotels_geocodage_corrections.csv</code>. Aucune page Booking n'a été extraite.</p>
-<p>La licence des données dérivées de Paris et de Rome est l'ODbL : les fichiers <code>quartiers_paris.geojson</code> et <code>quartiers_rome.geojson</code> restent sous ODbL, avec obligation d'attribution.</p>
+<p>À Rome, les prix des hôtels ne sont pas comparables à ceux des Airbnb : le nuage de Rome se lit avec prudence.</p>
 </section>
 <p class="to-top"><a href="#top">Haut de page</a></p>
 </main>

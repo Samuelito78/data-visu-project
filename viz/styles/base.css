@@ -59,7 +59,7 @@ body[data-vue-seule="2"] #technique-1 { display: none; }
   .panneau-lateral { position: static; }
 }
 
-/* Bandeau d'avertissement : limites des données (composants/avertissements) et fiche d'une offre. */
+/* Bandeau d'erreur de chargement (composants/avertissements). */
 .avertissement {
   margin: 6px 0;
   padding: 6px 10px;

@@ -79,7 +79,7 @@ export function creerVue(conteneur, etat) {
 
   // Les triangles à dessiner. Affichage ciblé : en mode point d'intérêt, ou en vue d'ensemble avec
   // un cercle, seules les offres du cercle ; sinon, toutes les offres visibles à l'écran.
-  // Les hôtels sans coordonnées (environ 30 %, D19) comptent dans la médiane mais n'ont pas de triangle.
+  // Les hôtels sans coordonnées (environ 30 %) comptent dans la médiane mais n'ont pas de triangle.
   function dessinerPoints() {
     if (!etat.donnees) return;
     const t = fond.transform();

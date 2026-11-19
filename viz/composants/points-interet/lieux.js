@@ -5,7 +5,7 @@
 export const TYPE_DEPOT_POI = "application/x-point-interet";
 
 // Coordonnées WGS84, longitude puis latitude, relevées dans les registres officiels du patrimoine
-// (docs/sources.md, section « Points d'intérêt »). `source` cite la fiche : elle s'affiche au survol du lieu.
+// (licences : README.md, section Sources). `source` cite la fiche : elle s'affiche au survol du lieu.
 //   Paris : base Mérimée (monuments historiques) et base Muséofile (musées de France), ministère de la Culture,
 //           champ des coordonnées WGS84 de la notice.
 //   Berlin : Denkmaldatenbank du Landesdenkmalamt (service WFS « denkmale » du Geoportal Berlin) ; le point est

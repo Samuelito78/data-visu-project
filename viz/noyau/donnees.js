@@ -1,5 +1,5 @@
 // Chargement des données préparées (data/processed/). Aucune transformation ici :
-// la préparation est faite en Python, en amont (docs/workflow.md).
+// la préparation est faite en Python, en amont (docs/3-workflow.md).
 
 import { VILLES, SEUIL_COMPARABLE } from "./charte.js";
 
@@ -21,7 +21,7 @@ function lireLigne(ligne) {
   return o;
 }
 
-// Nombre d'offres de chaque source par quartier, et zones où la comparaison a un sens (D16).
+// Nombre d'offres de chaque source par quartier, et zones où la comparaison a un sens.
 // Contient tous les quartiers du GeoJSON, même ceux sans aucune offre.
 export function couvertureQuartiers(offres, quartiers) {
   const parQuartier = new Map(
@@ -29,7 +29,7 @@ export function couvertureQuartiers(offres, quartiers) {
   );
   for (const o of offres) {
     const z = parQuartier.get(o.quartier);
-    if (!z) continue; // 1 à 5 % des hôtels n'ont pas de quartier (docs/schema.md)
+    if (!z) continue; // 1 à 5 % des hôtels n'ont pas de quartier
     if (o.source === "Hôtel") z.hotel += 1;
     else z.airbnb += 1;
   }

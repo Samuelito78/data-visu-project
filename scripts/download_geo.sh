@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Télécharge les contours de quartiers bruts dans data/raw/geo/ (sources et licences : docs/sources.md).
+# Télécharge les contours de quartiers bruts dans data/raw/geo/ (sources et licences : README.md).
 set -euo pipefail
 
 RACINE="$(cd "$(dirname "$0")/.." && pwd)"

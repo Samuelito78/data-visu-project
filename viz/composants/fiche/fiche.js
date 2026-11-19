@@ -49,10 +49,6 @@ export function creerFiche(conteneur, etat) {
     sous.append("span").attr("class", `pastille ${classeSource(o.source)}`);
     sous.append("span").text(o.source);
 
-    if (o.prix_comparable === false) {
-      racine.append("p").attr("class", "avertissement")
-        .text("Prix non comparable avec les Airbnb (hôtels de Rome, D7).");
-    }
     const dl = racine.append("dl");
     for (const [cle, valeur] of lignesFiche(o)) {
       dl.append("dt").text(cle);

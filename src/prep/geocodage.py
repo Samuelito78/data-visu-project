@@ -1,4 +1,4 @@
-"""Géolocalisation des hôtels Booking (voir docs/decisions.md, D19 et annexe G1 à G5 ; contrat d'origine : docs/archives/handoff_geocodage_hotels.md).
+"""Géolocalisation des hôtels Booking (méthode et contrôles détaillés dans notebooks/04_geocodage_hotels.ipynb).
 
 Chaîne, de la méthode la plus sûre à la plus coûteuse :
 1. OpenStreetMap (Overpass) : une requête par ville, appariement flou par nom ;
@@ -56,7 +56,7 @@ CENTRES_INITIAUX = {
     "rome": (41.8960, 12.4823),     # Piazza Venezia
 }
 
-# Seuils (justifiés dans docs/decisions.md, annexe G3).
+# Seuils (justifiés dans le notebook 04).
 # Paliers d'acceptation (similarité minimale, écart de distance maximal en km ; None = pas d'exigence).
 # Plus le nom est éloigné, plus la distance au centre doit coller. Le quartier doit toujours être cohérent
 # (sauf Rome) dès qu'une exigence de distance est posée.

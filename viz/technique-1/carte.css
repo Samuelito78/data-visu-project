@@ -171,10 +171,9 @@
 }
 .t1-legende-bloc { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .t1-legende-titre { color: var(--texte); }
-.t1-legende-item { display: inline-flex; align-items: center; gap: 6px; }
-.t1-legende-item svg { display: inline; flex: none; overflow: visible; }
-.t1-legende-barre { display: flex; align-items: center; gap: 8px; }
-.t1-legende-barre > span { width: 52px; flex: none; }
+/* Une ligne par source : le nom aligné sur la barre (en haut du SVG), pas sur l'axe en dessous. */
+.t1-legende-barre { display: flex; align-items: flex-start; gap: 8px; }
+.t1-legende-barre > span { width: 52px; flex: none; line-height: 12px; }
 .t1-legende-note { color: var(--texte-discret); max-width: 360px; }
 .t1-medianes { display: grid; grid-template-columns: auto auto; gap: 2px 14px; margin: 0; }
 .t1-medianes dt { color: var(--texte-secondaire); }
