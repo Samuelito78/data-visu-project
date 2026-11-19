@@ -90,7 +90,7 @@ pre{white-space:pre-wrap}
 <header class="top">
 <h1>Hôtel ou Airbnb ? — Documentation</h1>
 <p>Documentation du projet de visualisation de données — Luca VIZIO &amp; Samuel BOIX-SEGURA</p>
-<p>Généré le 19/11/2026 à 23:37</p>
+<p>Généré le 20/11/2026 à 00:10</p>
 </header>
 <main>
 <section id="description" class="doc-section">
@@ -131,7 +131,7 @@ pre{white-space:pre-wrap}
 <td>T1. « Ici, un hôtel coûte-t-il plus cher qu'un Airbnb ? »</td>
 <td>Sh vue d'ensemble ; KK comparer</td>
 <td><code>prix_nuit_eur</code>, <code>source</code></td>
-<td>carte, nuage</td>
+<td>nuage</td>
 </tr>
 <tr>
 <td>T2. « Les prix baissent-ils loin du centre ? »</td>
@@ -250,12 +250,14 @@ pre{white-space:pre-wrap}
 <section id="technique-1" class="doc-section">
 <h1 id="technique-1-technique-1-la-carte-des-offres">Technique 1 : la carte des offres</h1>
 <p><img alt="Carte des offres de Paris : un triangle par offre sur les arrondissements" src="images/technique-1.png" ></p>
-<p>Chaque offre qui a une position devient un triangle sur la carte des quartiers. Le triangle ne montre pas le prix lui-même, mais sa place par rapport au prix habituel de sa source dans la ville : la médiane des hôtels pour un hôtel, celle des Airbnb pour un Airbnb.</p>
+<p>Chaque offre géolocalisée devient un triangle sur la carte. Il ne montre pas son prix, mais sa place par rapport à la médiane de sa source (hôtels ou Airbnb) dans la ville.</p>
+<p>En prix absolu, les hôtels de Rome (médiane 537 €, contre 91 € pour les Airbnb) écraseraient l'échelle, d'où cette comparaison relative. La comparaison absolue hôtel / Airbnb se fait dans le nuage de points.</p>
 <h2 id="technique-1-donnees-et-variables-visuelles">Données et variables visuelles</h2>
 <div class="table-wrap"><table>
 <thead>
 <tr>
 <th>Donnée</th>
+<th>Type</th>
 <th>Variable visuelle</th>
 <th>À quoi elle sert</th>
 </tr>
@@ -263,45 +265,52 @@ pre{white-space:pre-wrap}
 <tbody>
 <tr>
 <td><code>lat</code>, <code>lon</code></td>
+<td>spatial (position)</td>
 <td>position, projection de Mercator</td>
-<td>situer l'offre dans la ville (T3)</td>
+<td>situer l'offre (T3)</td>
 </tr>
 <tr>
 <td><code>prix_nuit_eur</code> comparé à la médiane</td>
+<td>ordinal : moins cher, plus cher</td>
 <td>orientation : ▲ plus cher, ▼ moins cher</td>
-<td>voir d'un coup d'œil où l'on paie plus ou moins que d'habitude (T1, T3)</td>
+<td>voir où l'on paie plus ou moins (T3)</td>
 </tr>
 <tr>
 <td>écart à la médiane</td>
-<td>luminosité, de clair à foncé, maximale à ×2 ou ÷2</td>
-<td>repérer les offres très chères ou très bon marché</td>
+<td>quantitatif</td>
+<td>luminosité, la plus foncée à ×2 ou ÷2</td>
+<td>repérer les écarts forts</td>
 </tr>
 <tr>
 <td><code>source</code></td>
-<td>teinte : bleu pour les hôtels, rouge pour les Airbnb</td>
+<td>catégoriel</td>
+<td>teinte : bleu (hôtels), rouge (Airbnb)</td>
 <td>distinguer les deux offres</td>
 </tr>
 <tr>
 <td><code>quartier</code> et ses contours</td>
-<td>aires sur fond gris neutre, étiquettes</td>
-<td>se repérer et zoomer sur un quartier, sans orienter la lecture</td>
+<td>spatial (géométrie)</td>
+<td>aires grises neutres, étiquettes</td>
+<td>se repérer, zoomer sur un quartier</td>
 </tr>
 <tr>
 <td>toutes les colonnes</td>
+<td>tous</td>
 <td>infobulle au survol, fiche au clic</td>
 <td>détails à la demande (T6)</td>
 </tr>
 </tbody>
 </table></div>
-<p>La taille du triangle ne code pas de donnée : elle diminue quand on zoome, pour séparer les offres proches, et grandit pour l'offre sélectionnée.</p>
+<p>La luminosité, ordonnée, code une intensité ; la teinte, sans ordre perçu, le nominal ; l'orientation sépare bien deux classes. La taille ne code rien ; elle grandit au survol et à la sélection.</p>
+<p>L'infobulle donne le prix, la médiane de référence et l'écart en pourcentage.</p>
 <h2 id="technique-1-interactions">Interactions</h2>
 <ul>
-<li>Un clic entre les triangles zoome sur le quartier : c'est le zoom sémantique du cours.</li>
-<li>Le survol et le clic d'une offre la surlignent aussi dans le nuage de points.</li>
-<li>Les filtres et le changement de ville agissent sur les triangles affichés.</li>
-<li>Les points d'intérêt (technique 2) se posent sur cette carte.</li>
+<li>Un clic entre les triangles zoome sur le quartier ; la molette zoome, le glisser déplace. C'est un zoom géométrique (pan &amp; zoom) : l'encodage ne change pas, la taille des triangles diminue pour séparer les offres proches.</li>
+<li>Le survol et le clic d'une offre la surlignent aussi dans le nuage de points (brushing &amp; linking).</li>
+<li>Filtres et choix de la ville changent les triangles affichés.</li>
+<li>Les points d'intérêt (technique 2) se posent ici.</li>
 </ul>
-<p>La médiane est calculée sur toute la ville, sans filtre : la référence ne bouge pas quand on filtre.</p>
+<p>La médiane, calculée sur toute la ville, ignore les filtres.</p>
 </section>
 <section id="technique-2" class="doc-section">
 <h1 id="technique-2-technique-2-les-points-dinteret">Technique 2 : les points d'intérêt</h1>
@@ -312,6 +321,7 @@ pre{white-space:pre-wrap}
 <thead>
 <tr>
 <th>Donnée</th>
+<th>Type</th>
 <th>Variable visuelle</th>
 <th>À quoi elle sert</th>
 </tr>
@@ -319,26 +329,31 @@ pre{white-space:pre-wrap}
 <tbody>
 <tr>
 <td>position du lieu</td>
+<td>spatial (position)</td>
 <td>repère orange sur la carte</td>
 <td>situer le monument choisi (T5)</td>
 </tr>
 <tr>
 <td>distance au lieu, choisie à la souris</td>
+<td>quantitatif</td>
 <td>rayon du 1er cercle, en orange</td>
 <td>fixer à quelle distance du lieu on accepte de loger</td>
 </tr>
 <tr>
 <td>zone de recherche</td>
+<td>spatial (géométrie)</td>
 <td>2e cercle, en bleu, centré sur le 1er</td>
 <td>délimiter le secteur où l'on cherche, dans la direction choisie</td>
 </tr>
 <tr>
 <td><code>lat</code>, <code>lon</code> des offres</td>
+<td>spatial (position)</td>
 <td>seules les offres du cercle restent affichées, avec un contour foncé</td>
 <td>voir ce qui est vraiment accessible depuis le lieu</td>
 </tr>
 <tr>
 <td><code>source</code> des offres retenues</td>
+<td>catégoriel</td>
 <td>encart : nombre d'hôtels et d'Airbnb</td>
 <td>comparer les deux offres autour du lieu (T1, T5)</td>
 </tr>
@@ -364,6 +379,7 @@ pre{white-space:pre-wrap}
 <thead>
 <tr>
 <th>Donnée</th>
+<th>Type</th>
 <th>Variable visuelle</th>
 <th>À quoi elle sert</th>
 </tr>
@@ -371,26 +387,31 @@ pre{white-space:pre-wrap}
 <tbody>
 <tr>
 <td><code>dist_centre_km</code></td>
+<td>quantitatif</td>
 <td>position horizontale, échelle linéaire en km</td>
 <td>voir l'effet de l'éloignement sur le prix (T2)</td>
 </tr>
 <tr>
 <td><code>prix_nuit_eur</code></td>
+<td>quantitatif</td>
 <td>position verticale, échelle linéaire en euros</td>
 <td>comparer les prix des offres (T1)</td>
 </tr>
 <tr>
 <td><code>source</code></td>
+<td>catégoriel</td>
 <td>teinte : bleu pour les hôtels, orange pour les Airbnb</td>
 <td>comparer les deux nuages entre eux</td>
 </tr>
 <tr>
 <td>aucune</td>
+<td>—</td>
 <td>taille et opacité constantes, points semi-transparents</td>
 <td>la superposition fait apparaître les zones denses</td>
 </tr>
 <tr>
 <td>toutes les colonnes</td>
+<td>tous</td>
 <td>infobulle au survol, fiche au clic</td>
 <td>détails à la demande (T6)</td>
 </tr>
@@ -399,7 +420,7 @@ pre{white-space:pre-wrap}
 <p>La position est la variable visuelle la plus précise : elle est réservée aux deux grandeurs que l'utilisateur veut comparer. La couleur ne sert qu'à séparer les deux sources, avec la même paire bleu et orange que dans le reste de l'interface.</p>
 <h2 id="technique-3-interactions">Interactions</h2>
 <ul>
-<li>Le survol et le clic d'un point surlignent la même offre sur la carte, et le clic ouvre sa fiche.</li>
+<li>Le survol et le clic d'un point surlignent la même offre sur la carte (brushing &amp; linking), et le clic ouvre sa fiche.</li>
 <li>Les filtres communs s'appliquent ; avec le filtre de distance, l'axe horizontal s'arrête à la distance choisie.</li>
 <li>En mode point d'intérêt, l'axe horizontal mesure la distance au point choisi sur la carte, et seules les offres du 2e cercle restent affichées.</li>
 <li>Un résumé au-dessus du graphique compte les offres affichées par source.</li>

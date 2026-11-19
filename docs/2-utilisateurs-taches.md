@@ -12,7 +12,7 @@ Les tâches sont dans ses mots, classées selon Shneiderman (Sh) et Keller et Ke
 
 | Tâche | Classement | Données | Où |
 |---|---|---|---|
-| T1. « Ici, un hôtel coûte-t-il plus cher qu'un Airbnb ? » | Sh vue d'ensemble ; KK comparer | `prix_nuit_eur`, `source` | carte, nuage |
+| T1. « Ici, un hôtel coûte-t-il plus cher qu'un Airbnb ? » | Sh vue d'ensemble ; KK comparer | `prix_nuit_eur`, `source` | nuage |
 | T2. « Les prix baissent-ils loin du centre ? » | KK corréler | `dist_centre_km`, `prix_nuit_eur` | nuage |
 | T3. « Dans quels quartiers est-ce moins cher que d'habitude ? » | Sh zoom ; KK localiser | `lat`, `lon`, `quartier` | carte |
 | T4. « Seulement mon budget, une bonne note, près d'un métro. » | Sh filtrer | `prix_nuit_eur`, `note_100`, `type`, `etoiles`, `metro_proche` | filtres communs |

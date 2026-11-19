@@ -66,17 +66,14 @@ La logique de préparation est dans `src/prep/`, que les notebooks importent. Le
 
 ## Répartition du travail
 
-*À compléter par l'équipe : chacun indique la partie réalisée par l'autre.*
-
 | Partie | Réalisée par |
 |---|---|
-| Choix des datasets, problématique | |
-| Collecte et préparation des données (notebooks 01, 02, 05) | |
-| Quartiers et géolocalisation des hôtels (notebooks 03, 04) | |
-| Documentation (utilisateurs, tâches, workflow) | |
-| Technique de visualisation 1 (D3) | |
-| Technique de visualisation 2 (D3) | |
-| Rapport et soutenance | |
+| Choix des datasets, problématique | Samuel Boix-Segura & Luca Vizio |
+| Collecte et préparation des données (notebooks 01, 02, 05) | Samuel Boix-Segura & Luca Vizio |
+| Quartiers et géolocalisation des hôtels (notebooks 03, 04) | Samuel Boix-Segura & Luca Vizio |
+| Documentation (utilisateurs, tâches, workflow) | Samuel Boix-Segura & Luca Vizio |
+| Technique de visualisation 1 (D3) | Samuel Boix-Segura |
+| Technique de visualisation 2 & 3 (D3) | Luca Vizio |
 
 ## Lancer la visualisation
 

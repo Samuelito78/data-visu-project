@@ -6,13 +6,13 @@ Le voyageur part souvent d'un lieu à visiter. Il choisit un monument dans le pa
 
 ## Données et variables visuelles
 
-| Donnée | Variable visuelle | À quoi elle sert |
-|---|---|---|
-| position du lieu | repère orange sur la carte | situer le monument choisi (T5) |
-| distance au lieu, choisie à la souris | rayon du 1er cercle, en orange | fixer à quelle distance du lieu on accepte de loger |
-| zone de recherche | 2e cercle, en bleu, centré sur le 1er | délimiter le secteur où l'on cherche, dans la direction choisie |
-| `lat`, `lon` des offres | seules les offres du cercle restent affichées, avec un contour foncé | voir ce qui est vraiment accessible depuis le lieu |
-| `source` des offres retenues | encart : nombre d'hôtels et d'Airbnb | comparer les deux offres autour du lieu (T1, T5) |
+| Donnée | Type | Variable visuelle | À quoi elle sert |
+|---|---|---|---|
+| position du lieu | spatial (position) | repère orange sur la carte | situer le monument choisi (T5) |
+| distance au lieu, choisie à la souris | quantitatif | rayon du 1er cercle, en orange | fixer à quelle distance du lieu on accepte de loger |
+| zone de recherche | spatial (géométrie) | 2e cercle, en bleu, centré sur le 1er | délimiter le secteur où l'on cherche, dans la direction choisie |
+| `lat`, `lon` des offres | spatial (position) | seules les offres du cercle restent affichées, avec un contour foncé | voir ce qui est vraiment accessible depuis le lieu |
+| `source` des offres retenues | catégoriel | encart : nombre d'hôtels et d'Airbnb | comparer les deux offres autour du lieu (T1, T5) |
 
 Les distances sont à vol d'oiseau. Les triangles gardent leur encodage de la carte.
 
