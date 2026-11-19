@@ -9,11 +9,12 @@ const OPACITE = 0.72;
 export function creerPoints(svg, etat) {
   const g = svg.append("g").attr("class", "t2-points");
 
-  function dessiner(offres, { x, y }) {
+  // `distance(o)` : abscisse de l'offre, en km (au centre de la ville ou au point d'intérêt).
+  function dessiner(offres, { x, y }, distance) {
     g.selectAll("circle")
       .data(offres, (o) => o.id)
       .join("circle")
-      .attr("cx", (o) => x(o.dist_centre_km))
+      .attr("cx", (o) => x(distance(o)))
       .attr("cy", (o) => y(o.prix_nuit_eur))
       .attr("r", RAYON)
       .style("fill", (o) => couleurSource(o.source))

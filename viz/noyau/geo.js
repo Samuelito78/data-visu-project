@@ -1,4 +1,4 @@
-// Technique 1 : calculs géographiques sur la sphère terrestre, en degrés [longitude, latitude].
+// Calculs géographiques sur la sphère terrestre, en degrés [longitude, latitude].
 
 const R = 6371;              // rayon moyen de la Terre, en km
 const RAD = Math.PI / 180;
