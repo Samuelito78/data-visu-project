@@ -5,7 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hôtel ou Airbnb ?</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="style.css">
+  <!-- Styles : thème et base, puis un fichier par composant et par technique. -->
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="composants/controles/controles.css">
+  <link rel="stylesheet" href="composants/avertissements/avertissements.css">
+  <link rel="stylesheet" href="composants/fiche/fiche.css">
+  <link rel="stylesheet" href="composants/points-interet/points-interet.css">
+  <link rel="stylesheet" href="composants/infobulle/infobulle.css">
+  <link rel="stylesheet" href="technique-1/carte.css">
+  <link rel="stylesheet" href="technique-2/nuage.css">
   <!-- D3 embarqué dans le dépôt : la démo fonctionne sans réseau. -->
   <script src="lib/d3.v7.9.0.min.js"></script>
   <script type="module" src="main.js"></script>
@@ -16,27 +25,27 @@
     <p>Pour un séjour à deux, avec un budget par nuit : quel hébergement choisir, et dans quel secteur de la ville ?</p>
   </header>
 
-  <!-- Éléments communs : commun/controles.js et commun/avertissements.js -->
+  <!-- composants/controles et composants/avertissements -->
   <section id="controles" class="controles" aria-label="Ville et filtres"></section>
   <div id="avertissements" class="avertissements"></div>
 
   <main class="disposition">
     <div class="vues">
-      <!-- Technique 1 : technique-1/vue.js -->
+      <!-- Technique 1 : technique-1/ (carte des offres) -->
       <section id="technique-1" class="vue">
         <h2 class="vue-titre">Technique 1</h2>
         <div class="vue-contenu"></div>
       </section>
-      <!-- Technique 2 : technique-2/vue.js -->
+      <!-- Technique 2 : technique-2/ (nuage de points) -->
       <section id="technique-2" class="vue">
         <h2 class="vue-titre">Nuage de point : Rapport (Prix de l'offre - Distance au centre)</h2>
         <div class="vue-contenu"></div>
       </section>
     </div>
-    <aside class="detail" aria-label="Fiche de l'offre et points d'intérêt">
-      <!-- Détails à la demande : commun/detail.js -->
-      <div id="detail" aria-live="polite"></div>
-      <!-- Points d'intérêt (technique 1) : commun/points-interet.js -->
+    <aside class="panneau-lateral" aria-label="Fiche de l'offre et points d'intérêt">
+      <!-- Détails à la demande : composants/fiche -->
+      <div id="fiche" aria-live="polite"></div>
+      <!-- Points d'intérêt (technique 1) : composants/points-interet -->
       <section id="points-interet" class="poi-panneau" aria-label="Points d'intérêt"></section>
     </aside>
   </main>

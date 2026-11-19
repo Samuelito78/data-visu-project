@@ -18,7 +18,7 @@ export const TRANCHES = ["0–1 km", "1–2 km", "2–4 km", "> 4 km"];
 export const PERIODES = ["semaine", "weekend"];
 
 // Couleur de la source : la variable principale de la comparaison.
-// Les valeurs sont des variables CSS (viz/style.css) pour suivre le mode sombre :
+// Les valeurs sont des variables CSS (viz/styles/theme.css) pour suivre le mode sombre :
 // les appliquer avec .style("fill", …) ou .style("stroke", …), pas avec .attr().
 // Paire bleu / orange vérifiée : contraste ≥ 3:1 et lisible par les daltoniens, en clair et en sombre.
 export const COULEUR_SOURCE = {

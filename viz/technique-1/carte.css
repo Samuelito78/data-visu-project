@@ -1,6 +1,5 @@
-/* Styles de la technique 1 (carte des offres). Chargé par technique-1/vue.js :
-   les fichiers communs (style.css, index.html) ne sont pas modifiés.
-   Couleurs : les variables de style.css, plus celles des triangles et du fond des quartiers,
+/* Styles de la technique 1 (carte des offres), chargés par index.html.
+   Couleurs : les variables de styles/theme.css, plus celles des triangles et du fond des quartiers,
    propres à cette vue et définies ici (clair et sombre). */
 
 :root {
@@ -152,7 +151,7 @@
 }
 .t1-carte.t1-mode-poi { cursor: copy; }
 
-/* Zone de dépôt du repère « point perso » glissé depuis le panneau (commun/points-interet.js). */
+/* Zone de dépôt du repère « point perso » glissé depuis le panneau (composants/points-interet). */
 .poi-en-glisse .t1-carte { outline: 2px dashed var(--couleur-airbnb); outline-offset: 2px; }
 .poi-en-glisse .t1-carte.t1-cible-depot { outline-style: solid; }
 

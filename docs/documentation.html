@@ -296,7 +296,7 @@ pre{white-space:pre-wrap}
 <li><strong><code>main</code> reste toujours démontrable</strong> : on n'y pousse pas directement, tout passe par une pull request relue par l'autre.</li>
 <li><strong>Une branche par sujet</strong>, partie de <code>main</code> à jour (<code>git switch main &amp;&amp; git pull</code>) :<ul>
 <li><code>viz/technique-1</code>, <code>viz/technique-2</code> : chacun sa technique, dans son dossier <code>viz/technique-N/</code> ;</li>
-<li><code>viz/commun-…</code> : une modification du socle partagé (<code>viz/commun/</code>, <code>style.css</code>, <code>index.html</code>, <code>main.js</code>), dans une PR à part et courte, pour limiter les conflits ;</li>
+<li><code>viz/commun-…</code> : une modification du socle partagé (<code>viz/noyau/</code>, <code>viz/composants/</code>, <code>viz/styles/</code>, <code>index.html</code>, <code>main.js</code>), dans une PR à part et courte, pour limiter les conflits ;</li>
 <li><code>data/…</code> : une modification de la préparation.</li>
 </ul>
 </li>
@@ -335,7 +335,7 @@ const zones = await d3.json(&quot;data/processed/quartiers_paris.geojson&quot;);
 data/interim/    une table par source, au schéma commun
 data/external/   contours des quartiers, correspondance des noms Booking, géocodage des hôtels
 data/processed/  table commune et contours, chargés par D3
-viz/             application D3 : socle commun (viz/commun/) et une technique par étudiant
+viz/             application D3 : socle (viz/noyau/), composants communs (viz/composants/) et une technique par étudiant
 notebooks/       01 Airbnb, 02 Booking, 03 quartiers, 04 géocodage, 05 table commune
 src/prep/        code de préparation : schéma, transformations, quartiers, géocodage, fusion
 scripts/         téléchargement, exécution de la chaîne, serveur local, génération de la doc HTML
@@ -1295,7 +1295,7 @@ const zones  = await d3.json(&quot;data/processed/quartiers_paris.geojson&quot;)
 </tr>
 <tr>
 <td>Views</td>
-<td><code>viz/index.html</code> : deux techniques liées par un état partagé (<code>viz/commun/etat.js</code>)</td>
+<td><code>viz/index.html</code> : deux techniques liées par un état partagé (<code>viz/noyau/etat.js</code>)</td>
 </tr>
 </tbody>
 </table></div>

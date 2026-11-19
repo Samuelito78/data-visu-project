@@ -1,0 +1,25 @@
+/* Barre de contrôles (controles.js) : ville et filtres, une rangée qui passe à la ligne si besoin. */
+
+.controles {
+  max-width: 1400px;
+  margin: 8px auto;
+  padding: 10px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  align-items: flex-end;
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: 8px;
+}
+.controle { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.controle-libelle { font-size: 12px; color: var(--texte-secondaire); }
+.controle output { font-size: 12px; font-variant-numeric: tabular-nums; }
+.controle-options { display: flex; flex-wrap: wrap; gap: 4px 10px; }
+.controle-options label, label.controle-options { display: inline-flex; align-items: center; gap: 4px; }
+.controle-fin { margin-left: auto; align-items: flex-end; }
+.compteur { margin: 0; font-size: 12px; color: var(--texte-secondaire); font-variant-numeric: tabular-nums; }
+
+@media (max-width: 900px) {
+  .controle-fin { margin-left: 0; align-items: flex-start; }
+}

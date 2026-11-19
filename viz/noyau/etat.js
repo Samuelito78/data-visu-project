@@ -24,7 +24,7 @@ export function creerEtat() {
     filtres: filtresParDefaut(),
     selection: null,        // une offre (ligne de la table) ou null
     survol: null,           // une offre ou null
-    poi: null,              // point d'intérêt { id, nom, lon, lat, perso } ou null (commun/points-interet.js)
+    poi: null,              // point d'intérêt { id, nom, lon, lat, perso } ou null (composants/points-interet)
 
     get ville() {
       return this.donnees?.ville ?? null;

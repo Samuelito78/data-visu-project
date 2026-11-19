@@ -5,7 +5,7 @@ import { VILLES, SEUIL_COMPARABLE } from "./charte.js";
 
 const d3 = window.d3;
 
-// Chemin résolu depuis ce fichier (viz/commun/) : marche quelle que soit la page qui l'importe,
+// Chemin résolu depuis ce fichier (viz/noyau/) : marche quelle que soit la page qui l'importe,
 // à condition que le serveur soit lancé à la racine du dépôt (scripts/serve.sh).
 const DOSSIER = new URL("../../data/processed/", import.meta.url);
 

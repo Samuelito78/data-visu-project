@@ -1,0 +1,17 @@
+/* Infobulle partagée (infobulle.js) : une seule dans la page, placée près du pointeur. */
+
+.infobulle {
+  position: fixed;
+  z-index: 10;
+  pointer-events: none;
+  max-width: 280px;
+  padding: 6px 10px;
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+.infobulle.visible { opacity: 1; }

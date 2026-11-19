@@ -1,0 +1,10 @@
+/* Styles de la technique 2 (nuage de points). Couleurs : les variables de styles/theme.css. */
+
+.t2-resume { margin: 0 0 6px; color: var(--texte-secondaire); }
+
+/* Surlignage lié : l'offre survolée ou sélectionnée, ici ou dans la carte. */
+.t2-points circle.survolee { stroke: var(--texte); stroke-width: 1.5px; }
+.t2-points circle.selectionnee { stroke: var(--texte); stroke-width: 2.5px; r: 5px; }
+
+.t2-legende { margin: 6px 0 0; color: var(--texte-secondaire); display: flex; gap: 14px; }
+.t2-legende-item { display: inline-flex; align-items: center; }

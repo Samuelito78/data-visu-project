@@ -46,7 +46,7 @@ La licence des données dérivées de Paris et de Rome est l'ODbL : les fichiers
 
 ## Points d'intérêt
 
-Les lieux prédéfinis du panneau des points d'intérêt (`viz/commun/points-interet.js`) sont placés avec les coordonnées des registres officiels du patrimoine, relevées le 19 novembre 2026. Rome fait exception : la base « Luoghi della cultura » du ministère italien de la Culture (dati.cultura.gov.it) ne répondait pas et Roma Capitale ne publie pas de liste de monuments géolocalisés ; les lieux viennent donc d'OpenStreetMap, comme les contours des municipi. Chaque lieu garde la référence de sa fiche (champ `source`), affichée au survol de son bouton.
+Les lieux prédéfinis du panneau des points d'intérêt (`viz/composants/points-interet/lieux.js`) sont placés avec les coordonnées des registres officiels du patrimoine, relevées le 19 novembre 2026. Rome fait exception : la base « Luoghi della cultura » du ministère italien de la Culture (dati.cultura.gov.it) ne répondait pas et Roma Capitale ne publie pas de liste de monuments géolocalisés ; les lieux viennent donc d'OpenStreetMap, comme les contours des municipi. Chaque lieu garde la référence de sa fiche (champ `source`), affichée au survol de son bouton.
 
 | Ville | Source | Accès | Point retenu | Licence |
 |---|---|---|---|---|

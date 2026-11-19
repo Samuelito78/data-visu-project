@@ -106,7 +106,7 @@ Le téléchargement Kaggle est anonyme : aucun jeton n'est nécessaire. Les donn
 - **`main` reste toujours démontrable** : on n'y pousse pas directement, tout passe par une pull request relue par l'autre.
 - **Une branche par sujet**, partie de `main` à jour (`git switch main && git pull`) :
   - `viz/technique-1`, `viz/technique-2` : chacun sa technique, dans son dossier `viz/technique-N/` ;
-  - `viz/commun-…` : une modification du socle partagé (`viz/commun/`, `style.css`, `index.html`, `main.js`), dans une PR à part et courte, pour limiter les conflits ;
+  - `viz/commun-…` : une modification du socle partagé (`viz/noyau/`, `viz/composants/`, `viz/styles/`, `index.html`, `main.js`), dans une PR à part et courte, pour limiter les conflits ;
   - `data/…` : une modification de la préparation.
 - **Ne jamais modifier `data/processed/` à la main** : ces fichiers sont produits par `notebooks/05_table_commune.ipynb`. Pour changer une colonne, modifier `src/prep/` puis relancer `./scripts/build_data.sh`, et commiter les CSV régénérés avec le code.
 - **Notebooks** : lancer `.venv/bin/nbstripout --install` une fois par poste, sinon les sorties des notebooks partent dans les commits.
@@ -132,7 +132,7 @@ data/raw/        données brutes téléchargées (ignorées par Git)
 data/interim/    une table par source, au schéma commun
 data/external/   contours des quartiers, correspondance des noms Booking, géocodage des hôtels
 data/processed/  table commune et contours, chargés par D3
-viz/             application D3 : socle commun (viz/commun/) et une technique par étudiant
+viz/             application D3 : socle (viz/noyau/), composants communs (viz/composants/) et une technique par étudiant
 notebooks/       01 Airbnb, 02 Booking, 03 quartiers, 04 géocodage, 05 table commune
 src/prep/        code de préparation : schéma, transformations, quartiers, géocodage, fusion
 scripts/         téléchargement, exécution de la chaîne, serveur local, génération de la doc HTML

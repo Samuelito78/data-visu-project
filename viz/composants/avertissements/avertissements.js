@@ -1,6 +1,6 @@
 // Limites des données à rendre visibles dans l'interface (docs/utilisateurs_taches.md, section 5).
 
-import { formatEntier } from "./charte.js";
+import { formatEntier } from "../../noyau/charte.js";
 
 const d3 = window.d3;
 

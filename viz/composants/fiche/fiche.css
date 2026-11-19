@@ -1,0 +1,10 @@
+/* Fiche de l'offre sélectionnée (fiche.js). */
+
+.fiche-vide { margin: 0; color: var(--texte-secondaire); }
+.fiche-entete { display: flex; justify-content: space-between; gap: 8px; align-items: start; }
+.fiche-entete h2 { margin: 0; font-size: 16px; }
+.fiche-entete button { padding: 0 8px; line-height: 1.6; }
+.fiche-source { margin: 4px 0 8px; color: var(--texte-secondaire); display: flex; align-items: center; }
+.fiche dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0; }
+.fiche dt { color: var(--texte-secondaire); }
+.fiche dd { margin: 0; font-variant-numeric: tabular-nums; }

@@ -1,0 +1,90 @@
+/* Base : mise en forme générale, éléments de formulaire, disposition de la page
+   et petits éléments partagés par plusieurs composants (avertissement, pastille, axes).
+   Les styles propres à un composant sont dans son dossier (composants/<nom>/<nom>.css). */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0 16px 24px;
+  background: var(--fond);
+  color: var(--texte);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+body.en-chargement { cursor: progress; }
+body.en-chargement .vues { opacity: 0.6; }
+
+.entete { max-width: 1400px; margin: 0 auto; padding: 16px 0 8px; }
+.entete h1 { margin: 0; font-size: 22px; }
+.entete p { margin: 4px 0 0; color: var(--texte-secondaire); }
+
+/* Éléments de formulaire */
+select, button, input { font: inherit; color: inherit; }
+select, button {
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+button { cursor: pointer; }
+input[type="range"] { width: 140px; }
+
+/* Disposition : les deux vues à gauche, la fiche de détail à droite. */
+.disposition {
+  max-width: 1400px;
+  margin: 8px auto 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 12px;
+  align-items: start;
+}
+.vues { display: grid; gap: 12px; min-width: 0; }
+.vue, .panneau-lateral {
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: 8px;
+  padding: 12px;
+  min-width: 0;
+}
+.vue-titre { margin: 0 0 8px; font-size: 15px; }
+.vue-contenu { min-width: 0; }
+.vue-contenu svg { display: block; max-width: 100%; height: auto; }
+.panneau-lateral { position: sticky; top: 12px; }
+
+body[data-vue-seule="1"] #technique-2,
+body[data-vue-seule="2"] #technique-1 { display: none; }
+
+@media (max-width: 900px) {
+  .disposition { grid-template-columns: minmax(0, 1fr); }
+  .panneau-lateral { position: static; }
+}
+
+/* Bandeau d'avertissement : limites des données (composants/avertissements) et fiche d'une offre. */
+.avertissement {
+  margin: 6px 0;
+  padding: 6px 10px;
+  background: var(--avertissement-fond);
+  border-radius: 4px;
+  font-size: 13px;
+}
+.avertissement::before { content: "⚠ "; }
+.avertissement.erreur { color: var(--erreur); }
+
+/* Axes D3 : discrets */
+.axe { color: var(--texte-discret); }
+.axe text { fill: var(--texte-secondaire); font-size: 11px; }
+.axe line, .axe path { stroke: var(--grille); }
+
+/* Pastille de couleur d'une source (légendes, fiches, listes) */
+.pastille {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: baseline;
+  flex: none;
+}
+.pastille.hotel { background: var(--couleur-hotel); }
+.pastille.airbnb { background: var(--couleur-airbnb); }
+
+.pied { max-width: 1400px; margin: 16px auto 0; font-size: 12px; color: var(--texte-discret); }

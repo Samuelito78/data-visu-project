@@ -1,8 +1,8 @@
-// Panneau de détail : la fiche de l'offre sélectionnée (tâche T6, niveau « détails à la demande »).
+// Fiche de l'offre sélectionnée (tâche T6, niveau « détails à la demande »), en haut du panneau latéral.
 
 import {
   libelleOffre, classeSource, formatPrix, formatNote, formatKm, formatEtoiles, formatEntier,
-} from "./charte.js";
+} from "../../noyau/charte.js";
 
 const d3 = window.d3;
 
@@ -30,22 +30,22 @@ function lignesFiche(o) {
   return lignes;
 }
 
-export function creerPanneauDetail(conteneur, etat) {
-  const racine = d3.select(conteneur);
+export function creerFiche(conteneur, etat) {
+  const racine = d3.select(conteneur).classed("fiche", true);
 
   function afficher() {
     racine.selectAll("*").remove();
     const o = etat.selection;
     if (!o) {
-      racine.append("p").attr("class", "detail-vide")
+      racine.append("p").attr("class", "fiche-vide")
         .text("Cliquez sur une offre dans une vue pour afficher sa fiche.");
       return;
     }
-    const entete = racine.append("div").attr("class", "detail-entete");
+    const entete = racine.append("div").attr("class", "fiche-entete");
     entete.append("h2").text(libelleOffre(o));
     entete.append("button").attr("type", "button").attr("aria-label", "Fermer la fiche").text("×")
       .on("click", () => etat.selectionner(null));
-    const sous = racine.append("p").attr("class", "detail-source");
+    const sous = racine.append("p").attr("class", "fiche-source");
     sous.append("span").attr("class", `pastille ${classeSource(o.source)}`);
     sous.append("span").text(o.source);
 
