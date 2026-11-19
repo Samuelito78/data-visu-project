@@ -13,7 +13,7 @@
 // Ce fichier assemble la carte et la redessine quand l'état change. Les morceaux :
 //   fond.js       SVG, calques, projection, zoom          prix.js      médianes, écarts, couleurs
 //   quartiers.js  contours, étiquettes, comptages          triangles.js les offres
-//   poi.js        outil point d'intérêt                    geo.js       distances et caps
+//   poi.js        outil point d'intérêt (distances : noyau/geo.js)
 //   entete.js     résumé et boutons                        legende.js   légende
 // Les styles sont dans carte.css.
 

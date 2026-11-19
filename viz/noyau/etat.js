@@ -8,6 +8,7 @@
 //   "selection" une offre a été cliquée, ou la sélection est effacée (etat.selection vaut null)
 //   "survol"    une offre est survolée, ou plus aucune (etat.survol vaut null)
 //   "poi"       un point d'intérêt est choisi ou posé, ou effacé (etat.poi vaut null)
+//   "zonePoi"   la zone de recherche du point d'intérêt a changé (etat.zonePoi, voir plus bas)
 
 import { chargerVille } from "./donnees.js";
 import { filtresParDefaut, appliquerFiltres } from "./filtres.js";
@@ -15,7 +16,7 @@ import { filtresParDefaut, appliquerFiltres } from "./filtres.js";
 const d3 = window.d3;
 
 export function creerEtat() {
-  const evenements = d3.dispatch("donnees", "filtres", "selection", "survol", "poi", "chargement", "erreur");
+  const evenements = d3.dispatch("donnees", "filtres", "selection", "survol", "poi", "zonePoi", "chargement", "erreur");
   let compteur = 0;
   let filtreesCache = null;
 
@@ -25,6 +26,9 @@ export function creerEtat() {
     selection: null,        // une offre (ligne de la table) ou null
     survol: null,           // une offre ou null
     poi: null,              // point d'intérêt { id, nom, lon, lat, perso } ou null (composants/points-interet)
+    // En mode point d'intérêt, avec un point posé : { centre: [lon, lat] du 1er cercle, ids : Set des offres
+    // dans le 2e cercle (vide tant qu'il n'est pas tracé) }. null hors de ce mode. Écrit par technique-1/poi.js.
+    zonePoi: null,
 
     get ville() {
       return this.donnees?.ville ?? null;
@@ -51,6 +55,7 @@ export function creerEtat() {
         etat.selection = null;
         etat.survol = null;
         etat.poi = null;    // les points d'intérêt sont propres à chaque ville
+        etat.zonePoi = null;
         filtreesCache = null;
         evenements.call("donnees", null, etat);
         evenements.call("selection", null, etat);
@@ -83,6 +88,12 @@ export function creerEtat() {
     choisirPoi(poi) {
       etat.poi = poi ?? null;
       evenements.call("poi", null, etat);
+    },
+
+    // La carte publie la zone de recherche du point d'intérêt (ou null), pour les autres vues.
+    definirZonePoi(zone) {
+      etat.zonePoi = zone ?? null;
+      evenements.call("zonePoi", null, etat);
     },
 
     survoler(offre) {

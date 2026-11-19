@@ -12,7 +12,7 @@
 
 import { formatEntier, formatKm } from "../noyau/charte.js";
 import { TYPE_DEPOT_POI } from "../composants/points-interet/lieux.js";
-import { distanceKm, capInitial, destination } from "./geo.js";
+import { distanceKm, capInitial, destination } from "../noyau/geo.js";
 
 const d3 = window.d3;
 
@@ -47,6 +47,7 @@ export function creerOutilPoi({ etat, fond, zoneBoutons, cadre, calque, onChange
   let rayon2 = null;           // km
   let rayon2Fige = false;
   let resume = null;           // { total, hotel, airbnb, rayon, secondaire } de la dernière recherche
+  let signatureZone = "";      // dernière zone publiée dans l'état (pour ne publier qu'un changement)
 
   // Rayon en pixels à l'écran d'un cercle de `rayonKm` autour de `centre`, au zoom courant.
   function rayonPixels(centre, rayonKm) {
@@ -225,7 +226,7 @@ export function creerOutilPoi({ etat, fond, zoneBoutons, cadre, calque, onChange
 
   boutonMode.on("click", () => {
     modeActif = !modeActif;
-    synchroniser();
+    mettreAJour();             // la carte et le nuage changent d'affichage avec le mode
   });
   boutonEffacer.on("click", () => {
     effacer();
@@ -247,6 +248,16 @@ export function creerOutilPoi({ etat, fond, zoneBoutons, cadre, calque, onChange
     if (!fond.estVisible(point)) fond.dezoomer();
     mettreAJour();
   });
+
+  // Zone du point d'intérêt pour les autres vues (le nuage de points) : le centre du 1er cercle et les
+  // offres du 2e cercle, en mode point d'intérêt et avec un point posé ; null sinon.
+  function publierZone(ids) {
+    const zone = modeActif && point ? { centre: point, ids } : null;
+    const signature = zone ? `${point}|${rayon1Fige}|${centre2Geo}|${rayon2}|${ids.size}` : "";
+    if (signature === signatureZone) return;
+    signatureZone = signature;
+    etat.definirZonePoi(zone);
+  }
 
   synchroniser();
 
@@ -278,6 +289,7 @@ export function creerOutilPoi({ etat, fond, zoneBoutons, cadre, calque, onChange
         };
       }
       ecrireBandeau();
+      publierZone(ids);
       return { active, ids };
     },
 

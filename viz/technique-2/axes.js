@@ -7,12 +7,12 @@ const d3 = window.d3;
 export const HAUTEUR = 320;
 export const MARGES = { haut: 12, droite: 18, bas: 42, gauche: 68 };
 
-// Échelles x (distance) et y (prix) pour les offres affichées. L'axe des distances s'arrête
-// au filtre « distance max » s'il est actif, pour que le nuage occupe toute la largeur.
-export function creerEchelles(offres, filtres, largeur) {
-  const maxDistance = d3.max(offres, (o) => o.dist_centre_km) ?? 1;
+// Échelles x (distance) et y (prix) pour les offres affichées. `distance(o)` donne l'abscisse d'une offre ;
+// `distanceMax`, s'il est donné (filtre « distance max »), fixe la fin de l'axe pour que le nuage occupe la largeur.
+export function creerEchelles(offres, { distance, distanceMax }, largeur) {
+  const maxDistance = d3.max(offres, distance) ?? 1;
   const maxPrix = d3.max(offres, (o) => o.prix_nuit_eur) ?? 1;
-  const maxDistanceAffichee = filtres.distanceMax ?? maxDistance;
+  const maxDistanceAffichee = distanceMax ?? maxDistance;
   return {
     x: d3.scaleLinear([0, Math.max(1, maxDistanceAffichee)], [MARGES.gauche, largeur - MARGES.droite]).nice(),
     y: d3.scaleLinear([0, Math.max(1, maxPrix)], [HAUTEUR - MARGES.bas, MARGES.haut]).nice(),
@@ -33,7 +33,7 @@ export function creerAxes(svg) {
       .text((d) => d);
   }
 
-  function dessiner({ x, y }, largeur) {
+  function dessiner({ x, y }, largeur, titreX) {
     gGrille.attr("transform", `translate(0,${HAUTEUR - MARGES.bas})`)
       .call(d3.axisBottom(x).ticks(6).tickSize(-(HAUTEUR - MARGES.bas - MARGES.haut)).tickFormat(""))
       .call((g) => g.select(".domain").remove());
@@ -43,7 +43,7 @@ export function creerAxes(svg) {
     gAxeY.attr("transform", `translate(${MARGES.gauche},0)`)
       .call(d3.axisLeft(y).ticks(6).tickFormat(formatPrix));
 
-    titre(gAxeX, "Distance au centre")
+    titre(gAxeX, titreX)
       .attr("x", (largeur + MARGES.gauche - MARGES.droite) / 2)
       .attr("y", 34);
     titre(gAxeY, "Prix par nuit")

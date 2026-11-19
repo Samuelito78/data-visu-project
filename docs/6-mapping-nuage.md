@@ -20,6 +20,7 @@ La position est la variable visuelle la plus précise : elle est réservée aux 
 
 - Le survol et le clic d'un point surlignent la même offre sur la carte, et le clic ouvre sa fiche.
 - Les filtres communs s'appliquent ; avec le filtre de distance, l'axe horizontal s'arrête à la distance choisie.
+- En mode point d'intérêt, l'axe horizontal mesure la distance au point choisi sur la carte, et seules les offres du 2e cercle restent affichées.
 - Un résumé au-dessus du graphique compte les offres affichées par source.
 
 À Rome, les prix des hôtels ne sont pas comparables à ceux des Airbnb : le nuage de Rome se lit avec prudence.

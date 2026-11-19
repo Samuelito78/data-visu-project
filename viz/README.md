@@ -34,6 +34,7 @@ viz/
     donnees.js          chargement d'une ville (offres + contours + couverture des quartiers)
     etat.js             état partagé et événements : c'est lui qui lie les vues
     filtres.js          filtres communs (T4)
+    geo.js              distances et caps sur la sphère (point d'intérêt, nuage)
   composants/           éléments d'interface communs aux deux techniques
     controles/          barre de contrôles : ville (changer de dataset) et filtres
     avertissements/     message d'erreur quand une ville ne se charge pas
@@ -47,7 +48,6 @@ viz/
     triangles.js        les offres (un triangle par offre)
     prix.js             médianes, écart à la médiane, couleurs
     poi.js              outil point d'intérêt (cercles de recherche, dépôt du point perso)
-    geo.js              distances et caps sur la sphère
     entete.js           résumé et boutons au-dessus de la carte
     legende.js          légende
     carte.css
@@ -82,6 +82,7 @@ export function creerVue(conteneur, etat) { … }
 | `etat.filtres` | les filtres courants (`noyau/filtres.js`) |
 | `etat.selection`, `etat.survol` | l'offre cliquée et l'offre survolée, ou `null` |
 | `etat.poi` | le point d'intérêt choisi `{ id, nom, lon, lat, perso }`, ou `null` |
+| `etat.zonePoi` | en mode point d'intérêt : `{ centre, ids }`, le centre du 1er cercle et les offres du 2e ; sinon `null` |
 
 | Écrire | Effet |
 |---|---|
@@ -98,6 +99,7 @@ export function creerVue(conteneur, etat) { … }
 | `"selection"` | une offre est cliquée ou désélectionnée | mettre à jour le surlignage |
 | `"survol"` | une offre est survolée ou plus aucune | idem |
 | `"poi"` | un point d'intérêt est choisi, posé ou effacé | placer ou retirer le point |
+| `"zonePoi"` | la zone de recherche du point d'intérêt change | redessiner ce qui en dépend (le nuage) |
 
 Plusieurs vues peuvent écouter le même événement. Le fichier `technique-1/vue.js` montre aussi le redessin au redimensionnement (`ResizeObserver`), et `technique-1/triangles.js` l'infobulle.
 
